@@ -1,0 +1,2 @@
+hello	hello-module.html
+hello.__package__	hello-module.html#__package__
