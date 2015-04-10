@@ -10,8 +10,26 @@ class Query_Evaluator:
         self.id = 0
 
 
+    def match (self, node1_attrs, node2_attrs, rel_attrs):   
+        if node1_attrs is None and node2_attrs is None and rel_attrs is None:   
+            assert("Must specify either nodes or relationship")
+        else if node1_attrs is None and node2_attrs is None:
+            self.match_rel(rel_attrs)
+        else if node1_attrs is None and rel_attrs is None:
+            self.match_node(node2_attrs)
+        else if node2_attrs is None and rel_attrs is None:
+            self.match_node(node1_attrs)
+        else if node1_attrs is None:
+            self.match_node_rel(node2_attrs, rel_attrs)
+        else if node2_attrs is None:
+            self.match_node_rel(node1_attrs, rel_attrs)
+        else if rel_attrs is None:
+            self.match_find_rel(node1_attrs, node2_attrs)
+        else:
+            self.match_node_node_rel(node1_attrs, node2_attrs, rel_attrs)
+
     
-    def match(self, node_attrs):
+    def match_node(self, node_attrs):
         nodes = []
         for node_id, node_attributes in self.g.nodes(data=True):   
             if all(item in node_attributes.items() for item in 
@@ -47,6 +65,13 @@ class Query_Evaluator:
         return (node1_id, node2_id, edge_attrs)
 
 
+    def match(self, node_attrs):
+        nodes = []
+        for node_id, node_attributes in self.g.nodes(data=True):   
+            if all(item in node_attributes.items() for item in 
+            node_attrs.items()):   
+               nodes.append((node_id, node_attributes))
+        return nodes
 
 
 if __name__ == '__main__':
