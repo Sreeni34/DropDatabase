@@ -1,7 +1,8 @@
 from struct import pack, unpack
 
+
 ''' This class just defines some useful color variables for changing the
-	color of stuff printed to the terminal.'''
+    color of stuff printed to the terminal.'''
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
