@@ -47,8 +47,8 @@ class Query_Evaluator:
         @param node_attrs: All the attributes of the node, including the
                            label.
         @rtype: tuple
-        @return: a number representing the nodes unique id and a list
-                of attributes.
+        @return: a number representing the created node's unique id and 
+                a list of attributes.
         """
         self.id += 1 
         self.g.add_node(self.id, node_attrs)
@@ -56,11 +56,19 @@ class Query_Evaluator:
 
     def add_relationship(self, node1, node2, edge_attrs):
         """ 
-        Creates a relationship 
+        Creates a relationship between node1 and node2 defined by the
+        edges attributes and returns a tuple containing both the nodes
+        and the created edges attributes.
 
-        @type node_attrs: dict
-        @param node_attrs: All the attributes of the node, including the
-                           label.
+        @type node1: tuple
+        @param node1: Starting node for edge
+        @type node2: tuple
+        @param node2: Ending node for edge
+        @type edge_attrs: dict
+        @param edge_attrs: All the attributes of the edge.
+        @rtype: tuple
+        @return: tuple in the format (starting node id, ending node id, edge 
+                attributes).
         """
         node1_id, node1_props = node1
         node2_id, node2_props = node2
