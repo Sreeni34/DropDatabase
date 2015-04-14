@@ -13,17 +13,17 @@ class Query_Evaluator:
     def match (self, node1_attrs, node2_attrs, rel_attrs):   
         if node1_attrs is None and node2_attrs is None and rel_attrs is None:   
             assert("Must specify either nodes or relationship")
-        else if node1_attrs is None and node2_attrs is None:
+        elif node1_attrs is None and node2_attrs is None:
             self.match_rel(rel_attrs)
-        else if node1_attrs is None and rel_attrs is None:
+        elif node1_attrs is None and rel_attrs is None:
             self.match_node(node2_attrs)
-        else if node2_attrs is None and rel_attrs is None:
+        elif node2_attrs is None and rel_attrs is None:
             self.match_node(node1_attrs)
-        else if node1_attrs is None:
+        elif node1_attrs is None:
             self.match_node_rel(node2_attrs, rel_attrs)
-        else if node2_attrs is None:
+        elif node2_attrs is None:
             self.match_node_rel(node1_attrs, rel_attrs)
-        else if rel_attrs is None:
+        elif rel_attrs is None:
             self.match_find_rel(node1_attrs, node2_attrs)
         else:
             self.match_node_node_rel(node1_attrs, node2_attrs, rel_attrs)
@@ -47,9 +47,9 @@ class Query_Evaluator:
         @param node_attrs: All the attributes of the node, including the
                            label.
         """
-        self.g.add_node(self.id, node_attrs)
         self.id += 1 
-        return (self.id - 1, node_attrs)
+        self.g.add_node(self.id, node_attrs)
+        return (self.id, node_attrs)
 
     def add_relationship(self, node1, node2, edge_attrs):
         """ 
