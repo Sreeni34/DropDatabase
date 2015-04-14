@@ -41,11 +41,14 @@ class Query_Evaluator:
     def add_node(self, node_attrs):
         """ 
         Creates a node with the following attributes and returns 
-        the list of attributes. 
+        a tuple representing the node id and a list of attributes. 
 
         @type node_attrs: dict
         @param node_attrs: All the attributes of the node, including the
                            label.
+        @rtype: tuple
+        @return: a number representing the nodes unique id and a list
+                of attributes.
         """
         self.id += 1 
         self.g.add_node(self.id, node_attrs)
@@ -64,14 +67,6 @@ class Query_Evaluator:
         self.g.add_edge(node1_id, node2_id, edge_attrs)   
         return (node1_id, node2_id, edge_attrs)
 
-
-    def match(self, node_attrs):
-        nodes = []
-        for node_id, node_attributes in self.g.nodes(data=True):   
-            if all(item in node_attributes.items() for item in 
-            node_attrs.items()):   
-               nodes.append((node_id, node_attributes))
-        return nodes
 
 
 if __name__ == '__main__':
