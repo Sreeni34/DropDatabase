@@ -9,8 +9,23 @@ class Query_Evaluator:
         self.g = nx.Graph()
         self.id = 0
 
+    def match (self, node1_attrs, node2_attrs, rel_attrs):   
+        """ 
+        Matches the specified node attributes and and relationship by calling   
+        the appropriate match function. Returns a list of tuples of node(s)   
+        and/or relationships that were matched
 
-    def match (self, node1_attrs, node2_attrs, rel_attrs): 
+        @type node1_attrs: Dictionary
+        @param node1_attrs: Node 1 attributes to match
+        @type node2_attrs: Dictionary
+        @param node2_attrs: Node 2 attributes to match
+        @type rel_attrs: Dictionary
+        @param rel_attrs: Relationship attributes to match
+        @rtype: list of tuples
+        @return: list of tuples containing node attributes and/or relationship   
+        attributes depending on the match function called   
+        """
+
         result = []  
         if node1_attrs is None and node2_attrs is None and rel_attrs is None:   
             assert("Must specify either nodes or relationship")
@@ -30,7 +45,7 @@ class Query_Evaluator:
             result = self.match_node_node_rel(node1_attrs, node2_attrs, rel_attrs)  
         return result
 
-    def match_node_rel(node_attrs, rel_attrs):   
+    def match_node_rel(self, node_attrs, rel_attrs):   
         nodes = g.match_node(node_attrs)   
         edges = g.match_rel(rel_attrs)   
         node_rels = []
@@ -40,7 +55,7 @@ class Query_Evaluator:
                     node_rels.append(edge)   
         return node_rels      
 
-    def match_node_node_rel(node1_attrs, node2_attrs, rel_attrs):   
+    def match_node_node_rel(self, node1_attrs, node2_attrs, rel_attrs):   
         nodes1 = g.match_node(node1_attrs)   
         nodes2 = g.match_node(node2_attrs)      
         edges = g.match_rel(rel_attrs)   
@@ -52,7 +67,7 @@ class Query_Evaluator:
                         node_rels.append(edge)   
         return node_rels
 
-    def match_rel (self, rel_attrs):   
+    def match_rel(self, rel_attrs):   
         edges = []   
         for node1_id, node2_id, edge_attributes in self.g.edges(data=True):   
             if all(item in edge_attributes.items() for item in rel_attrs.items()):
