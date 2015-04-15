@@ -46,7 +46,53 @@ class Parser:
         state_machine[STATE_INIT][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
 
         # STATE_CREATE
-        # ...etc, needs to be filled in 
+        state_machine[STATE_CREATE][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_CREATE][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_CREATE][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_CREATE][TOKEN_NAME] = (STATE_NAME, self.no_op)
+        state_machine[STATE_CREATE][TOKEN_ATTR] = (STATE_ATTR, self.no_op)
+        state_machine[STATE_CREATE][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
+
+        # STATE_MATCH
+        state_machine[STATE_MATCH][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_MATCH][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_MATCH][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_MATCH][TOKEN_NAME] = (STATE_NAME, self.no_op)
+        state_machine[STATE_MATCH][TOKEN_ATTR] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_MATCH][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
+
+        # STATE_RETURN
+        state_machine[STATE_RETURN][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_RETURN][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_RETURN][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_RETURN][TOKEN_NAME] = (STATE_NAME, self.no_op)
+        state_machine[STATE_RETURN][TOKEN_ATTR] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_RETURN][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
+
+        # STATE_NAME
+        state_machine[STATE_NAME][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_NAME][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_NAME][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_NAME][TOKEN_NAME] = (STATE_NAME, self.no_op)
+        state_machine[STATE_NAME][TOKEN_ATTR] = (STATE_ATTR, self.no_op)
+        state_machine[STATE_NAME][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
+
+        # STATE_ATTR
+        state_machine[STATE_ATTR][TOKEN_CREATE] = (STATE_CREATE, self.no_op)
+        state_machine[STATE_ATTR][TOKEN_MATCH] = (STATE_MATCH, self.no_op)
+        state_machine[STATE_ATTR][TOKEN_RETURN] = (STATE_RETURN, self.no_op)
+        state_machine[STATE_ATTR][TOKEN_NAME] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_ATTR][TOKEN_ATTR] = (STATE_ATTR, self.no_op)
+        state_machine[STATE_ATTR][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
+
+        # STATE_ERROR
+        state_machine[STATE_ERROR][TOKEN_CREATE] = (STATE_END, self.no_op)
+        state_machine[STATE_ERROR][TOKEN_MATCH] = (STATE_END, self.no_op)
+        state_machine[STATE_ERROR][TOKEN_RETURN] = (STATE_END, self.no_op)
+        state_machine[STATE_ERROR][TOKEN_NAME] = (STATE_END, self.no_op)
+        state_machine[STATE_ERROR][TOKEN_ATTR] = (STATE_END, self.no_op)
+        state_machine[STATE_ERROR][TOKEN_ERROR] = (STATE_END, self.no_op)
+
 
         self.state_machine = state_machine
 
@@ -65,6 +111,10 @@ class Parser:
     def no_op(self):
         print ('no_op')
         return
+
+
+
+
 
 if __name__ == "__main__":
     commands = []
