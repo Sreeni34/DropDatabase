@@ -9,27 +9,72 @@ class Query_Evaluator:
         self.g = nx.Graph()
         self.id = 0
 
-
     def match (self, node1_attrs, node2_attrs, rel_attrs):   
+        """ 
+        Matches the specified node attributes and and relationship by calling   
+        the appropriate match function. Returns a list of tuples of node(s)   
+        and/or relationships that were matched
+
+        @type node1_attrs: Dictionary
+        @param node1_attrs: Node 1 attributes to match
+        @type node2_attrs: Dictionary
+        @param node2_attrs: Node 2 attributes to match
+        @type rel_attrs: Dictionary
+        @param rel_attrs: Relationship attributes to match
+        @rtype: list of tuples
+        @return: list of tuples containing node attributes and/or relationship   
+        attributes depending on the match function called   self.       """
+
+        result = []  
         if node1_attrs is None and node2_attrs is None and rel_attrs is None:   
             assert("Must specify either nodes or relationship")
         elif node1_attrs is None and node2_attrs is None:
-            self.match_rel(rel_attrs)
+            result = self.match_rel(rel_attrs)
         elif node1_attrs is None and rel_attrs is None:
-            self.match_node(node2_attrs)
+            result = self.match_node(node2_attrs)
         elif node2_attrs is None and rel_attrs is None:
-            self.match_node(node1_attrs)
+            result = self.match_node(node1_attrs)
         elif node1_attrs is None:
-            self.match_node_rel(node2_attrs, rel_attrs)
+            result = self.match_node_rel(node2_attrs, rel_attrs)
         elif node2_attrs is None:
-            self.match_node_rel(node1_attrs, rel_attrs)
+            result = self.match_node_rel(node1_attrs, rel_attrs)
         elif rel_attrs is None:
-            self.match_find_rel(node1_attrs, node2_attrs)
+            result = self.match_find_rel(node1_attrs, node2_attrs)
         else:
-            self.match_node_node_rel(node1_attrs, node2_attrs, rel_attrs)
+            result = self.match_node_node_rel(node1_attrs, node2_attrs, rel_attrs)  
+        return result
 
+    def match_node_rel(self, node_attrs, rel_attrs):   
+        nodes = self.match_node(node_attrs)   
+        edges = self.match_rel(rel_attrs)   
+        node_rels = []
+        for node in nodes:
+            for edge in edges:   
+                if node in edge:   
+                    node_rels.append(edge)   
+        return node_rels      
+
+    def match_node_node_rel(self, node1_attrs, node2_attrs, rel_attrs):   
+        nodes1 = self.match_node(node1_attrs)   
+        nodes2 = self.match_node(node2_attrs)      
+        edges = self.match_rel(rel_attrs)   
+        node_rels = []
+        for node in nodes1:
+            for node2 in nodes2:
+                for edge in edges:   
+                    if (node1, node2) in edge:   
+                        node_rels.append(edge)   
+        return node_rels
+
+    def match_rel(self, rel_attrs):   
+        edges = []   
+        for node1_id, node2_id, edge_attributes in self.g.edges(data=True):   
+            if all(item in edge_attributes.items() for item in rel_attrs.items()):
+                edges.append((node1_id, node2_id, rel_attrs))
+        return edges       
     
     def match_node(self, node_attrs):
+        print ("It got here")
         nodes = []
         for node_id, node_attributes in self.g.nodes(data=True):   
             if all(item in node_attributes.items() for item in 
@@ -52,7 +97,7 @@ class Query_Evaluator:
         """
         self.id += 1 
         self.g.add_node(self.id, node_attrs)
-        return (self.id, node_attrs)
+        return (self.id, node_attrs)   
 
     def add_relationship(self, node1, node2, edge_attrs):
         """ 
@@ -89,6 +134,7 @@ if __name__ == '__main__':
     print LIKE_rel
     print q.g.nodes(data=True)
     print q.g.edges(data=True)
-    # print q.match({'Label' : 'Person'})   
+    print q.match({'Label' : 'Person'}, None, None)
+    print q.match(None, None, {'Rel_Type' : 'LIKES'})   
 
 
