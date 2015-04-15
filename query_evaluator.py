@@ -23,7 +23,7 @@ class Query_Evaluator:
         @param rel_attrs: Relationship attributes to match
         @rtype: list of tuples
         @return: list of tuples containing node attributes and/or relationship   
-        attributes depending on the match function called   self.      
+        attributes depending on the match function called.         
         """
 
         result = []  
@@ -45,6 +45,20 @@ class Query_Evaluator:
             result = self.match_node_node_rel(node1_attrs, node2_attrs, rel_attrs)  
         return result
 
+    def match_find_rel(self, node1_attrs, node2_attrs):   
+        """ 
+        Finds the relationships that connect the nodes with the specified   
+        node attributes   
+
+        @type node1_attrs: Dictionary
+        @param node1_attrs: Node 1 attributes to match
+        @type node2_attrs: Dictionary
+        @param node2_attrs: Node 2 attributes to match
+        @rtype: list of tuples
+        @return: Edge tuples in the format (node1_id, node2_id, edge_attributes)       
+        """   
+        edges = self.match_node_node_rel(node1_attrs, node2_attrs, {})   
+
     def match_node_rel(self, node_attrs, rel_attrs):   
         """ 
         Finds the nodes that have relationships with nodes that have the   
@@ -55,8 +69,7 @@ class Query_Evaluator:
         @type rel_attrs: Dictionary
         @param rel_attrs: Relationship attributes to match
         @rtype: list of tuples
-        @return: list of edge tuples that have a node with the specified   
-        node attributes in the relationship        
+        @return: Edge tuples in the format (node1_id, node2_id, edge_attributes)        
         """   
         nodes = self.match_node(node_attrs)   
         edges = self.match_rel(rel_attrs)   
@@ -79,8 +92,7 @@ class Query_Evaluator:
         @type rel_attrs: Dictionary
         @param rel_attrs: Relationship attributes to match
         @rtype: list of tuples
-        @return: list of edge tuples that have both nodes with the specified   
-        node1 and node 2 attributes in the relationship        
+        @return: Edge tuples in the format (node1_id, node2_id, edge_attributes)        
         """   
         nodes1 = self.match_node(node1_attrs)   
         nodes2 = self.match_node(node2_attrs)      
@@ -100,8 +112,7 @@ class Query_Evaluator:
         @type rel_attrs: Dictionary
         @param rel_attrs: Relationship attributes to match
         @rtype: list of tuples
-        @return: list of edge tuples that have relationship attriubtes that   
-        contain the specified relationship attributes           
+        @return: Edge tuples in the format (node1_id, node2_id, edge_attributes)           
         """   
         edges = []   
         for node1_id, node2_id, edge_attributes in self.g.edges(data=True):   
@@ -116,8 +127,7 @@ class Query_Evaluator:
         @type node_attrs: Dictionary
         @param node_attrs: Node attributes to match
         @rtype: list of tuples
-        @return: list of node tuples that have node attributes that have the   
-        specified node attributes              
+        @return: Node tuples of the format (node_id, node_attributes)              
         """
         nodes = []
         for node_id, node_attributes in self.g.nodes(data=True):   
