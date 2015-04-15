@@ -109,7 +109,16 @@ class Query_Evaluator:
                 edges.append((node1_id, node2_id, edge_attributes))
         return edges       
     
-    def match_node(self, node_attrs):
+    def match_node(self, node_attrs):   
+        """ 
+        Find the nodes that have the specified node attributes      
+
+        @type node_attrs: Dictionary
+        @param node_attrs: Node attributes to match
+        @rtype: list of tuples
+        @return: list of node tuples that have node attributes that have the   
+        specified node attributes              
+        """
         nodes = []
         for node_id, node_attributes in self.g.nodes(data=True):   
             if all(item in node_attributes.items() for item in 
