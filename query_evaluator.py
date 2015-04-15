@@ -23,7 +23,8 @@ class Query_Evaluator:
         @param rel_attrs: Relationship attributes to match
         @rtype: list of tuples
         @return: list of tuples containing node attributes and/or relationship   
-        attributes depending on the match function called   self.       """
+        attributes depending on the match function called   self.      
+        """
 
         result = []  
         if node1_attrs is None and node2_attrs is None and rel_attrs is None:   
@@ -45,6 +46,18 @@ class Query_Evaluator:
         return result
 
     def match_node_rel(self, node_attrs, rel_attrs):   
+        """ 
+        Finds the nodes that have relationships with nodes that have the   
+        specified node attributes
+
+        @type node_attrs: Dictionary
+        @param node_attrs: Node attributes to match
+        @type rel_attrs: Dictionary
+        @param rel_attrs: Relationship attributes to match
+        @rtype: list of tuples
+        @return: list of edge tuples that have a node with the specified   
+        node attributes in the relationship        
+        """   
         nodes = self.match_node(node_attrs)   
         edges = self.match_rel(rel_attrs)   
         node_rels = []
@@ -55,6 +68,20 @@ class Query_Evaluator:
         return node_rels      
 
     def match_node_node_rel(self, node1_attrs, node2_attrs, rel_attrs):   
+        """ 
+        Finds the nodes that have relationships with both nodes that have the   
+        specified node 1 and node 2 attributes, respectively      
+
+        @type node1_attrs: Dictionary
+        @param node1_attrs: Node 1 attributes to match   
+        @type node2_attrs: Dictionary
+        @param node2_attrs: Node 2 attributes to match
+        @type rel_attrs: Dictionary
+        @param rel_attrs: Relationship attributes to match
+        @rtype: list of tuples
+        @return: list of edge tuples that have both nodes with the specified   
+        node1 and node 2 attributes in the relationship        
+        """   
         nodes1 = self.match_node(node1_attrs)   
         nodes2 = self.match_node(node2_attrs)      
         edges = self.match_rel(rel_attrs)   
@@ -67,14 +94,22 @@ class Query_Evaluator:
         return node_rels
 
     def match_rel(self, rel_attrs):   
+        """ 
+        Finds the relationships that have the specified relationship attributes   
+
+        @type rel_attrs: Dictionary
+        @param rel_attrs: Relationship attributes to match
+        @rtype: list of tuples
+        @return: list of edge tuples that have relationship attriubtes that   
+        contain the specified relationship attributes           
+        """   
         edges = []   
         for node1_id, node2_id, edge_attributes in self.g.edges(data=True):   
             if all(item in edge_attributes.items() for item in rel_attrs.items()):
-                edges.append((node1_id, node2_id, rel_attrs))
+                edges.append((node1_id, node2_id, edge_attributes))
         return edges       
     
     def match_node(self, node_attrs):
-        print ("It got here")
         nodes = []
         for node_id, node_attributes in self.g.nodes(data=True):   
             if all(item in node_attributes.items() for item in 
