@@ -9,7 +9,7 @@ class Query_Evaluator:
         self.g = nx.Graph()
         self.id = 0
 
-    def match (self, node1_attrs, node2_attrs, rel_attrs):   
+    def match(self, node1_attrs, node2_attrs, rel_attrs):   
         """ 
         Matches the specified node attributes and and relationship by calling   
         the appropriate match function. Returns a list of tuples of node(s)   
@@ -57,7 +57,8 @@ class Query_Evaluator:
         @rtype: list of tuples
         @return: Edge tuples in the format (node1_id, node2_id, edge_attributes)       
         """   
-        edges = self.match_node_node_rel(node1_attrs, node2_attrs, {})   
+        return self.match_node_node_rel(node1_attrs, node2_attrs, {})   
+
 
     def match_node_rel(self, node_attrs, rel_attrs):   
         """ 
@@ -101,7 +102,7 @@ class Query_Evaluator:
         for node in nodes1:
             for node2 in nodes2:
                 for edge in edges:   
-                    if ((node[0] in edge) and (node2[0] in edge)):   
+                    if ((node[0] in edge) and (node2[0] in edge) and (node[0] != node2[0])):   
                         node_rels.append(edge)   
         return node_rels
 
@@ -174,6 +175,33 @@ class Query_Evaluator:
         self.g.add_edge(node1_id, node2_id, edge_attrs)   
         return (node1_id, node2_id, edge_attrs)
 
+    def delete_node(self, node_attrs):   
+        """ 
+        Deletes the nodes containing the specified node attributes and all of   
+        their associated edges
+
+        @type node_attrs: dict
+        @param node_attrs: All the attributes of the node.
+        @rtype: None
+        @return: None
+        """   
+        nodes = self.match_node(node_attrs)   
+        for node in nodes:   
+            remove_node(node[0])   
+
+    def delete_rel(self, rel_attrs):   
+        """ 
+        Deletes the nodes containing the specified node attributes and all of   
+        their associated edges
+
+        @type node_attrs: dict
+        @param node_attrs: All the attributes of the node.
+        @rtype: None
+        @return: None
+        """   
+        nodes = self.match_node(node_attrs)   
+        for node in nodes:   
+            remove_node(node[0])  
 
 
 if __name__ == '__main__':
