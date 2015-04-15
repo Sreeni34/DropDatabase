@@ -23,7 +23,7 @@ class Query_Evaluator:
         @param rel_attrs: Relationship attributes to match
         @rtype: list of tuples
         @return: list of tuples containing node attributes and/or relationship   
-        attributes depending on the match function called   
+        attributes depending on the match function called   self.
         """
 
         result = []  
@@ -46,8 +46,8 @@ class Query_Evaluator:
         return result
 
     def match_node_rel(self, node_attrs, rel_attrs):   
-        nodes = g.match_node(node_attrs)   
-        edges = g.match_rel(rel_attrs)   
+        nodes = self.g.match_node(node_attrs)   
+        edges = self.g.match_rel(rel_attrs)   
         node_rels = []
         for node in nodes:
             for edge in edges:   
@@ -56,9 +56,9 @@ class Query_Evaluator:
         return node_rels      
 
     def match_node_node_rel(self, node1_attrs, node2_attrs, rel_attrs):   
-        nodes1 = g.match_node(node1_attrs)   
-        nodes2 = g.match_node(node2_attrs)      
-        edges = g.match_rel(rel_attrs)   
+        nodes1 = self.g.match_node(node1_attrs)   
+        nodes2 = self.g.match_node(node2_attrs)      
+        edges = self.g.match_rel(rel_attrs)   
         node_rels = []
         for node in nodes1:
             for node2 in nodes2:
