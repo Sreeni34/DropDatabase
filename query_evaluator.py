@@ -63,7 +63,7 @@ class Query_Evaluator:
         node_rels = []
         for node in nodes:
             for edge in edges:   
-                if node in edge:   
+                if node[0] in edge:   
                     node_rels.append(edge)   
         return node_rels      
 
@@ -89,7 +89,7 @@ class Query_Evaluator:
         for node in nodes1:
             for node2 in nodes2:
                 for edge in edges:   
-                    if (node1, node2) in edge:   
+                    if ((node[0] in edge) and (node2[0] in edge)):   
                         node_rels.append(edge)   
         return node_rels
 
