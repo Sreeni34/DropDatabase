@@ -6,7 +6,7 @@ class Query_Evaluator:
     """
 
     def __init__(self):
-        self.g = nx.Graph()
+        self.g = nx.DiGraph()
         self.id = 0
 
     def match(self, node1_attrs, node2_attrs, rel_attrs):   
@@ -72,7 +72,7 @@ class Query_Evaluator:
         @rtype: list of tuples
         @return: Edge tuples in the format (node1_id, node2_id, edge_attributes)        
         """   
-        nodes = self.match_node(node_attrs)   
+        nodes = self.match_node(node_attrs)
         edges = self.match_rel(rel_attrs)   
         node_rels = []
         for node in nodes:
@@ -95,16 +95,37 @@ class Query_Evaluator:
         @rtype: list of tuples
         @return: Edge tuples in the format (node1_id, node2_id, edge_attributes)        
         """   
+
         nodes1 = self.match_node(node1_attrs)   
-        nodes2 = self.match_node(node2_attrs)      
         edges = self.match_rel(rel_attrs)   
         node_rels = []
         for node in nodes1:
-            for node2 in nodes2:
+            # Finds all neighbors of node satisfying node 2 attributes
+            neighbors = self.g.neighbors(node[0])
+            for node2_id in self.filter_nodes(neighbors, node2_attrs):
                 for edge in edges:   
-                    if ((node[0] in edge) and (node2[0] in edge) and (node[0] != node2[0])):   
+                    if node[0] in edge and node2_id in edge:   
                         node_rels.append(edge)   
         return node_rels
+
+    def filter_nodes(self, node_id_lst, node_attrs):
+        """
+        Helper function that takes a list of node ids and returns
+        a filtered list of nodes that contain the attributes.
+
+        @type node_id_lst: List
+        @param node_id_lst: List of node id
+        @type node_attrs: Dictionary
+        @param node_attrs: Attributes used to filter node
+        @rtype: List
+        @return: List of nodes that contain the attributes
+        """
+
+        ret = []
+        for n in node_id_lst:
+            if all(item in self.g.node[n].items() for item in node_attrs.items()):
+                ret.append(n)
+        return ret
 
     def match_rel(self, rel_attrs):   
         """ 
@@ -187,7 +208,7 @@ class Query_Evaluator:
         """   
         nodes = self.match_node(node_attrs)   
         for node in nodes:   
-            remove_node(node[0])   
+            nx.remove_node(node[0])   
 
     def delete_rel(self, rel_attrs):   
         """ 
@@ -205,18 +226,19 @@ class Query_Evaluator:
 
 
 if __name__ == '__main__':
+
     q = Query_Evaluator()
-    node = q.add_node({'Label' : 'Person', 'Name' : 'You'})
-    # node2 = q.add_node({'Label' : 'Person', 'Name' : 'Sreeni'})
-    # node3 = q.add_node({'Label' : 'Alien', 'Gender' : 'Unknown'})
-    node4 = q.add_node({'Label' : 'neo:Database:NoSql:Graph', 'Name' : 'SARS Database'})
-    LIKE_rel = q.add_relationship(node, node4, {'Rel_Type' : 'LIKES'})   
-    print node
-    print node4
-    print LIKE_rel
-    print q.g.nodes(data=True)
-    print q.g.edges(data=True)
-    print q.match({'Label' : 'Person'}, None, None)
-    print q.match(None, None, {'Rel_Type' : 'LIKES'})   
+    # node = q.add_node({'Label' : 'Person', 'Name' : 'You'})
+    # # node2 = q.add_node({'Label' : 'Person', 'Name' : 'Sreeni'})
+    # # node3 = q.add_node({'Label' : 'Alien', 'Gender' : 'Unknown'})
+    # node4 = q.add_node({'Label' : 'neo:Database:NoSql:Graph', 'Name' : 'SARS Database'})
+    # LIKE_rel = q.add_relationship(node, node4, {'Rel_Type' : 'LIKES'})   
+    # print node
+    # print node4
+    # print LIKE_rel
+    # print q.g.nodes(data=True)
+    # print q.g.edges(data=True)
+    # print q.match({'Label' : 'Person'}, None, None)
+    # print q.match(None, None, {'Rel_Type' : 'LIKES'})   
 
 
