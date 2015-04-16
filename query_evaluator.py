@@ -203,21 +203,22 @@ class Query_Evaluator:
         """   
         nodes = self.match_node(node_attrs)   
         for node in nodes:   
-            self.g.remove_node(node[0])   
+            self.g.remove_node(node[0])      
 
     def delete_rel(self, rel_attrs):   
         """ 
-        Deletes the nodes containing the specified node attributes and all of   
-        their associated edges
+        Finds the relationships that have the specified relationship attributes
+        and deleted them   
 
-        @type node_attrs: dict
-        @param node_attrs: All the attributes of the node.
+        @type rel_attrs: Dictionary
+        @param rel_attrs: Relationship attributes to match and delete
         @rtype: None
-        @return: None
-        """   
-        nodes = self.match_node(node_attrs)   
-        for node in nodes:   
-            self.g.remove_node(node[0])  
+        @return: None           
+        """
+
+        edges = self.match_rel(rel_attrs)
+        for edge in edges:
+            self.g.remove_edge(edge[0], edge[1])   
 
 
 if __name__ == '__main__':
