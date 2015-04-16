@@ -7,7 +7,7 @@ from Command_Struct import Command_Struct
 # Global token and state definitions. 
 
 NUM_TOKENS = 7
-NUM_STATES = 9
+NUM_STATES = 8
 
 TOKEN_CREATE = 0
 TOKEN_MATCH = 1
@@ -21,11 +21,10 @@ STATE_INIT = 0
 STATE_CREATE = 1
 STATE_MATCH = 2
 STATE_RETURN = 3
-STATE_NAME_CREATE = 4
-STATE_NAME_MATCH = 5
-STATE_ATTR = 6
-STATE_ERROR = 7
-STATE_END = 8
+STATE_NAME = 4
+STATE_ATTR = 5
+STATE_ERROR = 6
+STATE_END = 7
 
 
 class Parser:
@@ -34,12 +33,10 @@ class Parser:
     def __init__(self, parsedString):
         self.parseStr = parsedString
         self.words = parsedString.split()
-        self.create_attrs = {}   # internal dict of arguments for create command
-        self.match_attrs = {}    # internal dict of arguments for match command
         self.current_token = -1  # current token being processed by the parser
         self.current_state = STATE_INIT  # current state 
         self.current_word = 0
-        self.obj_list = []
+        self.obj_list = []       #Store a list of command objects
         self.curr_obj = None
         self.done = False        # whether we are done parsing 
 
@@ -65,7 +62,7 @@ class Parser:
         state_machine[STATE_CREATE][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
         state_machine[STATE_CREATE][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
         state_machine[STATE_CREATE][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_CREATE][TOKEN_NAME] = (STATE_NAME_CREATE, self.add_create_object)
+        state_machine[STATE_CREATE][TOKEN_NAME] = (STATE_NAME, self.add_create_object)
         state_machine[STATE_CREATE][TOKEN_ATTR] = (STATE_ERROR, self.no_op)
         state_machine[STATE_CREATE][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
         state_machine[STATE_CREATE][TOKEN_END] = (STATE_ERROR, self.no_op)
@@ -74,7 +71,7 @@ class Parser:
         state_machine[STATE_MATCH][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
         state_machine[STATE_MATCH][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
         state_machine[STATE_MATCH][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_MATCH][TOKEN_NAME] = (STATE_NAME_MATCH, self.add_obj_name)
+        state_machine[STATE_MATCH][TOKEN_NAME] = (STATE_NAME, self.add_match_object)
         state_machine[STATE_MATCH][TOKEN_ATTR] = (STATE_ERROR, self.no_op)
         state_machine[STATE_MATCH][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
         state_machine[STATE_MATCH][TOKEN_END] = (STATE_ERROR, self.no_op)
@@ -88,30 +85,21 @@ class Parser:
         state_machine[STATE_RETURN][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
         state_machine[STATE_RETURN][TOKEN_END] = (STATE_ERROR, self.no_op)
 
-        # STATE_NAME_CREATE
-        state_machine[STATE_NAME_CREATE][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME_CREATE][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME_CREATE][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME_CREATE][TOKEN_NAME] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME_CREATE][TOKEN_ATTR] = (STATE_ATTR, self.add_create_attr)
-        state_machine[STATE_NAME_CREATE][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME_CREATE][TOKEN_END] = (STATE_ERROR, self.no_op)
-
-        # STATE_NAME_MATCH
-        state_machine[STATE_NAME_MATCH][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME_MATCH][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME_MATCH][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME_MATCH][TOKEN_NAME] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME_MATCH][TOKEN_ATTR] = (STATE_ATTR, self.no_op)
-        state_machine[STATE_NAME_MATCH][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME_MATCH][TOKEN_END] = (STATE_ERROR, self.no_op)
+        # STATE_NAME
+        state_machine[STATE_NAME][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_NAME][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_NAME][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_NAME][TOKEN_NAME] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_NAME][TOKEN_ATTR] = (STATE_ATTR, self.add_attr)
+        state_machine[STATE_NAME][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_NAME][TOKEN_END] = (STATE_ERROR, self.no_op)
 
         # STATE_ATTR
         state_machine[STATE_ATTR][TOKEN_CREATE] = (STATE_CREATE, self.no_op)
         state_machine[STATE_ATTR][TOKEN_MATCH] = (STATE_MATCH, self.no_op)
         state_machine[STATE_ATTR][TOKEN_RETURN] = (STATE_RETURN, self.no_op)
         state_machine[STATE_ATTR][TOKEN_NAME] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_ATTR][TOKEN_ATTR] = (STATE_ATTR, self.add_create_attr)
+        state_machine[STATE_ATTR][TOKEN_ATTR] = (STATE_ATTR, self.add_attr)
         state_machine[STATE_ATTR][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
         state_machine[STATE_ATTR][TOKEN_END] = (STATE_END, self.finish)
 
@@ -127,13 +115,10 @@ class Parser:
 
         self.state_machine = state_machine
 
-    def get_Words(self):
-        return self.words
-
-    def get_String(self):
-        return self.parseStr
 
     def get_token(self, word):
+
+
         if (word.lower() == "create"):
             return TOKEN_CREATE
         elif (word.lower() == "match"):
@@ -153,41 +138,66 @@ class Parser:
 
     ''' No operation. '''
     def no_op(self):
-        return "TODO: OPERATION"
+        print "TODO: OPERATION"
+        return 
+
+
+############################################################
+#   Functions that create Command_Struct objects
+#   and modify their data.
+############################################################
 
 
     def add_create_object(self):
+        """ 
+        Create a Command_Struct object that represents a create
+        command entered by the user. Insert current name into
+        new command struct object and append the object to list
+        of command objects. 
+        """
         self.curr_obj = Command_Struct("CREATE")
-        self.add_obj_name()
+        self.curr_obj.set_name(self.current_word)
         self.obj_list.append(self.curr_obj)
 
 
-    ''' Add object name to internal list. '''
-    def add_obj_name(self):
+    def add_match_object(self):
+        self.curr_obj = Command_Struct("MATCH")
         self.curr_obj.set_name(self.current_word)
-    
+        self.obj_list.append(self.curr_obj)
 
-    def add_create_attr(self):
-        ''' 
-        Add argument key-value pair to internal attributes dictionary for 
-        create command. 
 
-        '''
+    def add_attr(self):
+        """
+        Add argument key-value pair to internal attributes dictionary 
+        for specific command object.
+        """
         lst = self.current_word.split(":")
         self.curr_obj.insert_attr(lst[0], lst[1])
 
-    ''' Indicate the end of parsing. '''
+
+############################################################
+#   Functions that deal with running and ending the program.
+############################################################
+    
+
     def finish(self):
+        """ 
+        Indicate the end of parsing. 
+        """
         self.done = True
 
     def run(self):
         
         for word in self.words:
+            print "this is the word: " + word
             if (self.done):
                 break
                 
             self.current_word = word
             self.current_token = self.get_token(word)
+
+            print "this is current token " + str(self.current_token)
+
             # run the state machine one step forward
             tuppy = self.state_machine[self.current_state][self.current_token]
 
@@ -197,9 +207,9 @@ class Parser:
             # transition to the next state
             self.current_state = tuppy[0] 
         
-        print self.create_attrs
         print self.obj_list
-        self.obj_list[0].print_Class()
+        for obj in self.obj_list:
+            obj.print_Class()
 
 
 
