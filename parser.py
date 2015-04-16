@@ -1,4 +1,5 @@
 import sys
+from Command_Struct import Command_Struct
 
 # Format: CREATE obj_name attr1_name:attr1 ...
 # rule: can't have ':' in attributes!
@@ -38,7 +39,8 @@ class Parser:
         self.current_token = -1  # current token being processed by the parser
         self.current_state = STATE_INIT  # current state 
         self.current_word = 0
-        self.obj_names = []
+        self.obj_list = []
+        self.curr_obj = None
         self.done = False        # whether we are done parsing 
 
         # NOTE: The get token function should keep returning TOKEN_END if
@@ -63,7 +65,7 @@ class Parser:
         state_machine[STATE_CREATE][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
         state_machine[STATE_CREATE][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
         state_machine[STATE_CREATE][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_CREATE][TOKEN_NAME] = (STATE_NAME_CREATE, self.add_obj_name)
+        state_machine[STATE_CREATE][TOKEN_NAME] = (STATE_NAME_CREATE, self.add_create_object)
         state_machine[STATE_CREATE][TOKEN_ATTR] = (STATE_ERROR, self.no_op)
         state_machine[STATE_CREATE][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
         state_machine[STATE_CREATE][TOKEN_END] = (STATE_ERROR, self.no_op)
@@ -72,7 +74,7 @@ class Parser:
         state_machine[STATE_MATCH][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
         state_machine[STATE_MATCH][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
         state_machine[STATE_MATCH][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_MATCH][TOKEN_NAME] = (STATE_NAME_MATCH, self.no_op)
+        state_machine[STATE_MATCH][TOKEN_NAME] = (STATE_NAME_MATCH, self.add_obj_name)
         state_machine[STATE_MATCH][TOKEN_ATTR] = (STATE_ERROR, self.no_op)
         state_machine[STATE_MATCH][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
         state_machine[STATE_MATCH][TOKEN_END] = (STATE_ERROR, self.no_op)
@@ -151,17 +153,28 @@ class Parser:
 
     ''' No operation. '''
     def no_op(self):
-        return
+        return "TODO: OPERATION"
+
+
+    def add_create_object(self):
+        self.curr_obj = Command_Struct("CREATE")
+        self.add_obj_name()
+        self.obj_list.append(self.curr_obj)
+
 
     ''' Add object name to internal list. '''
     def add_obj_name(self):
-        self.obj_names.append(self.current_token)
+        self.curr_obj.set_name(self.current_word)
+    
 
-    ''' Add argument key-value pair to internal attributes dictionary for create 
-        command. '''
     def add_create_attr(self):
+        ''' 
+        Add argument key-value pair to internal attributes dictionary for 
+        create command. 
+
+        '''
         lst = self.current_word.split(":")
-        self.create_attrs[lst[0]] = lst[1]
+        self.curr_obj.insert_attr(lst[0], lst[1])
 
     ''' Indicate the end of parsing. '''
     def finish(self):
@@ -185,6 +198,8 @@ class Parser:
             self.current_state = tuppy[0] 
         
         print self.create_attrs
+        print self.obj_list
+        self.obj_list[0].print_Class()
 
 
 
