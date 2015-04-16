@@ -203,21 +203,55 @@ class Query_Evaluator:
         """   
         nodes = self.match_node(node_attrs)   
         for node in nodes:   
-            self.g.remove_node(node[0])   
+            self.g.remove_node(node[0])      
 
     def delete_rel(self, rel_attrs):   
         """ 
-        Deletes the nodes containing the specified node attributes and all of   
-        their associated edges
+        Finds the relationships that have the specified relationship attributes
+        and deleted them   
 
-        @type node_attrs: dict
-        @param node_attrs: All the attributes of the node.
+        @type rel_attrs: Dictionary
+        @param rel_attrs: Relationship attributes to match and delete
         @rtype: None
-        @return: None
-        """   
+        @return: None           
+        """
+
+        edges = self.match_rel(rel_attrs)
+        for edge in edges:
+            self.g.remove_edge(edge[0], edge[1])   
+
+    def modify_node(self, node_attrs, attr_change, update_type):   
         nodes = self.match_node(node_attrs)   
         for node in nodes:   
-            self.g.remove_node(node[0])  
+            current_node_attrs = nx.get_node_attributes(self.g, node[0])   
+            if not update_type:   
+                key_values = attr_change.keys()
+                for key_val in key_values:   
+                    current_node_attrs.pop(key_val)   
+                nx.set_node_attributes(self.g, node[0], current_node_attrs)   
+            else:   
+                attr_keys = attr_change.keys()
+                for key_val in attr_keys:   
+                    current_node_attrs[key_val] = attr_keys[key_val]   
+                nx.set_node_attributes(self.g, node[0], current_node_attrs)   
+
+    def modify_rel(self, rel_attrs, rel_change, update_type):   
+        edges = self.match_rel(rel_attrs)   
+        for edge in edges:   
+            current_edge_attrs = self.g[edge[0]][edge[1]]   
+            if not update_type:   
+                key_values = rel_change.keys()
+                for key_val in key_values:   
+                    current_edge_attrs.pop(key_val)   
+                self.g[edge[0]][edge[1]] = current_edge_attrs   
+            else:   
+                attr_keys = rel_change.keys()
+                for key_val in attr_keys:   
+                    current_edge_attrs[key_val] = attr_keys[key_val]   
+                self.g[edge[0]][edge[1]] = current_edge_attrs
+
+
+
 
 
 if __name__ == '__main__':
