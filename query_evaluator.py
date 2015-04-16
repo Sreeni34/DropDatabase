@@ -72,14 +72,7 @@ class Query_Evaluator:
         @rtype: list of tuples
         @return: Edge tuples in the format (node1_id, node2_id, edge_attributes)        
         """   
-        nodes = self.match_node(node_attrs)
-        edges = self.match_rel(rel_attrs)   
-        node_rels = []
-        for node in nodes:
-            for edge in edges:   
-                if node[0] in edge:   
-                    node_rels.append(edge)   
-        return node_rels      
+        return self.match_node_node_rel(node_attrs, {}, rel_attrs)
 
     def match_node_node_rel(self, node1_attrs, node2_attrs, rel_attrs):   
         """ 
@@ -101,11 +94,14 @@ class Query_Evaluator:
         node_rels = []
         for node in nodes1:
             # Finds all neighbors of node satisfying node 2 attributes
-            neighbors = self.g.neighbors(node[0])
-            for node2_id in self.filter_nodes(neighbors, node2_attrs):
+            neighbors = self.filter_nodes(self.g.neighbors(node[0]), node2_attrs)
+            for node2_id in neighbors:
+                # Iterates through out edges of first node
+                out_edges = self.g.out_edges(node[0], data=True)
                 for edge in edges:   
-                    if node[0] in edge and node2_id in edge:   
+                    if edge in out_edges and node2_id in edge:   
                         node_rels.append(edge)   
+
         return node_rels
 
     def filter_nodes(self, node_id_lst, node_attrs):
@@ -120,7 +116,6 @@ class Query_Evaluator:
         @rtype: List
         @return: List of nodes that contain the attributes
         """
-
         ret = []
         for n in node_id_lst:
             if all(item in self.g.node[n].items() for item in node_attrs.items()):
@@ -208,7 +203,7 @@ class Query_Evaluator:
         """   
         nodes = self.match_node(node_attrs)   
         for node in nodes:   
-            nx.remove_node(node[0])   
+            self.g.remove_node(node[0])   
 
     def delete_rel(self, rel_attrs):   
         """ 
@@ -222,7 +217,7 @@ class Query_Evaluator:
         """   
         nodes = self.match_node(node_attrs)   
         for node in nodes:   
-            remove_node(node[0])  
+            self.g.remove_node(node[0])  
 
 
 if __name__ == '__main__':
