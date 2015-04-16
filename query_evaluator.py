@@ -220,6 +220,39 @@ class Query_Evaluator:
         for edge in edges:
             self.g.remove_edge(edge[0], edge[1])   
 
+    def modify_node(self, node_attrs, attr_change, update_type):   
+        nodes = self.match_node(node_attrs)   
+        for node in nodes:   
+            current_node_attrs = self.g.get_node_attributes(node[0])   
+            if (!update_type):   
+                key_values = attr_change.keys()
+                for key_val in key_values:   
+                    current_node_attrs.pop(key_val)   
+                self.g.set_node_attributes(node[0], current_node_attrs)   
+            else:   
+                attr_keys = attr_change.keys()
+                for key_val in attr_keys:   
+                    current_node_attrs[key_val] = attr_keys[key_val]   
+                self.g.set_node_attributes(node[0], current_node_attrs)   
+
+    def modify_relationship(self, rel_attrs, rel_change, update_type):   
+        edges = self.match_rel(rel_attrs)   
+        for edge in edges:   
+            current_edge_attrs = self.g[edge[0]][edge[1]]   
+            if (!update_type):   
+                key_values = rel_change.keys()
+                for key_val in key_values:   
+                    current_edge_attrs.pop(key_val)   
+                self.g[edge[0]][edge[1]] = current_edge_attrs   
+            else:   
+                attr_keys = rel_change.keys()
+                for key_val in attr_keys:   
+                    current_edge_attrs[key_val] = attr_keys[key_val]   
+                self.g[edge[0]][edge[1]] = current_edge_attrs
+
+
+
+
 
 if __name__ == '__main__':
 
