@@ -222,18 +222,19 @@ class Query_Evaluator:
 
     def modify_node(self, node_attrs, attr_change, update_type):   
         nodes = self.match_node(node_attrs)   
-        for node in nodes:   
-            current_node_attrs = nx.get_node_attributes(self.g, node[0])   
+        for node1 in nodes:   
+            current_node_attrs = self.g.node[node1[0]] 
+            print current_node_attrs  
             if not update_type:   
                 key_values = attr_change.keys()
                 for key_val in key_values:   
                     current_node_attrs.pop(key_val)   
-                nx.set_node_attributes(self.g, node[0], current_node_attrs)   
+                self.g.node[node1[0]] = current_node_attrs   
             else:   
                 attr_keys = attr_change.keys()
                 for key_val in attr_keys:   
-                    current_node_attrs[key_val] = attr_keys[key_val]   
-                nx.set_node_attributes(self.g, node[0], current_node_attrs)   
+                    current_node_attrs[key_val] = attr_change[key_val]   
+                self.g.node[node1[0]] = current_node_attrs   
 
     def modify_rel(self, rel_attrs, rel_change, update_type):   
         edges = self.match_rel(rel_attrs)   
@@ -247,7 +248,7 @@ class Query_Evaluator:
             else:   
                 attr_keys = rel_change.keys()
                 for key_val in attr_keys:   
-                    current_edge_attrs[key_val] = attr_keys[key_val]   
+                    current_edge_attrs[key_val] = rel_change[key_val]   
                 self.g[edge[0]][edge[1]] = current_edge_attrs
 
 
@@ -257,11 +258,11 @@ class Query_Evaluator:
 if __name__ == '__main__':
 
     q = Query_Evaluator()
-    # node = q.add_node({'Label' : 'Person', 'Name' : 'You'})
-    # # node2 = q.add_node({'Label' : 'Person', 'Name' : 'Sreeni'})
-    # # node3 = q.add_node({'Label' : 'Alien', 'Gender' : 'Unknown'})
-    # node4 = q.add_node({'Label' : 'neo:Database:NoSql:Graph', 'Name' : 'SARS Database'})
-    # LIKE_rel = q.add_relationship(node, node4, {'Rel_Type' : 'LIKES'})   
+    node = q.add_node({'Label' : 'Person', 'Name' : 'You'})
+    # node2 = q.add_node({'Label' : 'Person', 'Name' : 'Sreeni'})
+    # node3 = q.add_node({'Label' : 'Alien', 'Gender' : 'Unknown'})
+    node4 = q.add_node({'Label' : 'neo:Database:NoSql:Graph', 'Name' : 'SARS Database'})
+    LIKE_rel = q.add_relationship(node, node4, {'Rel_Type' : 'LIKES'})   
     # print node
     # print node4
     # print LIKE_rel
@@ -269,5 +270,5 @@ if __name__ == '__main__':
     # print q.g.edges(data=True)
     # print q.match({'Label' : 'Person'}, None, None)
     # print q.match(None, None, {'Rel_Type' : 'LIKES'})   
-
+    print q.g.node[node[0]]
 
