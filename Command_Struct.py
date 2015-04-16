@@ -1,7 +1,7 @@
 class Command_Struct:
     """ 
-    This class stores the name of the command and its arguments.
-    It is used to help the parser.
+    Command_Struct stores information regarding a specific command
+    and arguments entered by the user. 
     """
 
     def __init__(self, command):
@@ -10,9 +10,16 @@ class Command_Struct:
         self.attr = {}
 
     def set_name(self, name):
+        """
+        Set the current object name. 
+        """
         self.name = name
 
     def insert_attr(self, attr1, attr2):
+        """
+        Insert the attribute to dictionary containing
+        list of attributes.
+        """
         self.attr[attr1] = attr2
 
     def get_command(self):
@@ -27,5 +34,5 @@ class Command_Struct:
     def print_Class(self):
         print "Command: " + self.command
         print "Name: " + self.name
-        print "Attributes "
+        print "Attributes ",
         print self.attr
