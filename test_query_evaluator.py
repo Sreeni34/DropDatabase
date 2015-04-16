@@ -245,12 +245,12 @@ class TestQueryEvaluator(unittest.TestCase):
         # Tests adding attributes to node
         q.modify_node(attrs1, {'Age' : '10'}, True)
         match_lst1 = q.match_node(attrs1)
-        result1 = [(1, {'Label' : 'Person', 'Name' : 'Alice', 'Age' : '10'})]
+        result1 = [(node1[0], {'Label' : 'Person', 'Name' : 'Alice', 'Age' : '10'})]
         self.assertEqual(match_lst1, result1)
         # Tests removing attributes to node
         q.modify_node(attrs1, {'Age' : '10'}, False)
         match_lst2 = q.match_node(attrs1)
-        result2 = [(1, attrs1)]
+        result2 = [(node1[0], attrs1)]
         self.assertEqual(match_lst2, result2)
 
     def test_modify_rel(self):
@@ -271,15 +271,15 @@ class TestQueryEvaluator(unittest.TestCase):
         # Tests adding attributes to relationship
         q.modify_rel(edge_attrs2, {'like' : 'no'}, True)
         match_lst1 = q.match_rel(edge_attrs2)
-        result1 = [(node1[0], node2[0], {'rel_type' : 'friend', 
+        result1 = [(node2[0], node3[0], {'rel_type' : 'friend', 
                                             'fam' : 'cousin',
                                             'like' : 'no'})]
-        self.assertEqual(match_lst1, result1)
+        self.assertEqual(sorted(match_lst1), sorted(result1))
         # Tests deleting attributes to relationship
-        q.modify_rel(edge_attrs2, {'like' : 'no'}, True)
+        q.modify_rel(edge_attrs2, {'like' : 'no'}, False)
         match_lst2 = q.match_rel(edge_attrs2)
-        result2 = [(2, 3, edge_attrs2)]
-        self.assertEqual(match_lst2, result2)
+        result2 = [(node2[0], node3[0], edge_attrs2)]
+        self.assertEqual(sorted(match_lst2), sorted(result2))
 
 
     
