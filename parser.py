@@ -1,4 +1,6 @@
 import sys
+# if below is commented NEED TO CALL rlwrap with script
+# import readline 
 from Command_Struct import Command_Struct
 
 # Format: CREATE obj_name attr1_name:attr1 ...
@@ -7,7 +9,7 @@ from Command_Struct import Command_Struct
 # Global token and state definitions. 
 
 NUM_TOKENS = 7
-NUM_STATES = 8
+NUM_STATES = 7 # number of states with actual transitions (excludes error state)
 
 TOKEN_CREATE = 0
 TOKEN_MATCH = 1
@@ -23,8 +25,8 @@ STATE_MATCH = 2
 STATE_RETURN = 3
 STATE_NAME = 4
 STATE_ATTR = 5
-STATE_ERROR = 6
-STATE_END = 7
+STATE_END = 6
+STATE_ERROR = 7
 
 
 class Parser:
@@ -35,7 +37,7 @@ class Parser:
         self.words = parsedString.split()
         self.current_token = -1  # current token being processed by the parser
         self.current_state = STATE_INIT  # current state 
-        self.current_word = 0
+        self.current_word = ''
         self.obj_list = []       #Store a list of command objects
         self.curr_obj = None
         self.done = False        # whether we are done parsing 
@@ -53,65 +55,64 @@ class Parser:
         state_machine[STATE_INIT][TOKEN_CREATE] = (STATE_CREATE, self.no_op)
         state_machine[STATE_INIT][TOKEN_MATCH] = (STATE_MATCH, self.no_op)
         state_machine[STATE_INIT][TOKEN_RETURN] = (STATE_RETURN, self.no_op)
-        state_machine[STATE_INIT][TOKEN_NAME] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_INIT][TOKEN_ATTR] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_INIT][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_INIT][TOKEN_NAME] = (STATE_ERROR, self.error)
+        state_machine[STATE_INIT][TOKEN_ATTR] = (STATE_ERROR, self.error)
+        state_machine[STATE_INIT][TOKEN_ERROR] = (STATE_ERROR, self.error)
         state_machine[STATE_INIT][TOKEN_END] = (STATE_END, self.finish)
 
         # STATE_CREATE, received create command 
-        state_machine[STATE_CREATE][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_CREATE][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_CREATE][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_CREATE][TOKEN_CREATE] = (STATE_ERROR, self.error)
+        state_machine[STATE_CREATE][TOKEN_MATCH] = (STATE_ERROR, self.error)
+        state_machine[STATE_CREATE][TOKEN_RETURN] = (STATE_ERROR, self.error)
         state_machine[STATE_CREATE][TOKEN_NAME] = (STATE_NAME, self.add_create_object)
-        state_machine[STATE_CREATE][TOKEN_ATTR] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_CREATE][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_CREATE][TOKEN_END] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_CREATE][TOKEN_ATTR] = (STATE_ERROR, self.error)
+        state_machine[STATE_CREATE][TOKEN_ERROR] = (STATE_ERROR, self.error)
+        state_machine[STATE_CREATE][TOKEN_END] = (STATE_ERROR, self.error)
 
         # STATE_MATCH
-        state_machine[STATE_MATCH][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_MATCH][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_MATCH][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_MATCH][TOKEN_CREATE] = (STATE_ERROR, self.error)
+        state_machine[STATE_MATCH][TOKEN_MATCH] = (STATE_ERROR, self.error)
+        state_machine[STATE_MATCH][TOKEN_RETURN] = (STATE_ERROR, self.error)
         state_machine[STATE_MATCH][TOKEN_NAME] = (STATE_NAME, self.add_match_object)
-        state_machine[STATE_MATCH][TOKEN_ATTR] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_MATCH][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_MATCH][TOKEN_END] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_MATCH][TOKEN_ATTR] = (STATE_ERROR, self.error)
+        state_machine[STATE_MATCH][TOKEN_ERROR] = (STATE_ERROR, self.error)
+        state_machine[STATE_MATCH][TOKEN_END] = (STATE_ERROR, self.error)
 
         # STATE_RETURN
-        state_machine[STATE_RETURN][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_RETURN][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_RETURN][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_RETURN][TOKEN_NAME] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_RETURN][TOKEN_ATTR] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_RETURN][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_RETURN][TOKEN_END] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_RETURN][TOKEN_CREATE] = (STATE_ERROR, self.error)
+        state_machine[STATE_RETURN][TOKEN_MATCH] = (STATE_ERROR, self.error)
+        state_machine[STATE_RETURN][TOKEN_RETURN] = (STATE_ERROR, self.error)
+        state_machine[STATE_RETURN][TOKEN_NAME] = (STATE_END, self.add_return_object)
+        state_machine[STATE_RETURN][TOKEN_ATTR] = (STATE_ERROR, self.error)
+        state_machine[STATE_RETURN][TOKEN_ERROR] = (STATE_ERROR, self.error)
+        state_machine[STATE_RETURN][TOKEN_END] = (STATE_ERROR, self.error)
 
         # STATE_NAME
-        state_machine[STATE_NAME][TOKEN_CREATE] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME][TOKEN_MATCH] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME][TOKEN_RETURN] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME][TOKEN_NAME] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_NAME][TOKEN_CREATE] = (STATE_ERROR, self.error)
+        state_machine[STATE_NAME][TOKEN_MATCH] = (STATE_ERROR, self.error)
+        state_machine[STATE_NAME][TOKEN_RETURN] = (STATE_ERROR, self.error)
+        state_machine[STATE_NAME][TOKEN_NAME] = (STATE_ERROR, self.error)
         state_machine[STATE_NAME][TOKEN_ATTR] = (STATE_ATTR, self.add_attr)
-        state_machine[STATE_NAME][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
-        state_machine[STATE_NAME][TOKEN_END] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_NAME][TOKEN_ERROR] = (STATE_ERROR, self.error)
+        state_machine[STATE_NAME][TOKEN_END] = (STATE_ERROR, self.error)
 
         # STATE_ATTR
         state_machine[STATE_ATTR][TOKEN_CREATE] = (STATE_CREATE, self.no_op)
         state_machine[STATE_ATTR][TOKEN_MATCH] = (STATE_MATCH, self.no_op)
         state_machine[STATE_ATTR][TOKEN_RETURN] = (STATE_RETURN, self.no_op)
-        state_machine[STATE_ATTR][TOKEN_NAME] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_ATTR][TOKEN_NAME] = (STATE_ERROR, self.error)
         state_machine[STATE_ATTR][TOKEN_ATTR] = (STATE_ATTR, self.add_attr)
-        state_machine[STATE_ATTR][TOKEN_ERROR] = (STATE_ERROR, self.no_op)
+        state_machine[STATE_ATTR][TOKEN_ERROR] = (STATE_ERROR, self.error)
         state_machine[STATE_ATTR][TOKEN_END] = (STATE_END, self.finish)
 
-        # STATE_ERROR
-        state_machine[STATE_ERROR][TOKEN_CREATE] = (STATE_END, self.finish)
-        state_machine[STATE_ERROR][TOKEN_MATCH] = (STATE_END, self.finish)
-        state_machine[STATE_ERROR][TOKEN_RETURN] = (STATE_END, self.finish)
-        state_machine[STATE_ERROR][TOKEN_NAME] = (STATE_END, self.finish)
-        state_machine[STATE_ERROR][TOKEN_ATTR] = (STATE_END, self.finish)
-        state_machine[STATE_ERROR][TOKEN_ERROR] = (STATE_END, self.finish)
-        state_machine[STATE_ERROR][TOKEN_END] = (STATE_END, self.finish)
-
+        # STATE_END
+        state_machine[STATE_END][TOKEN_CREATE] = (STATE_ERROR, self.error)
+        state_machine[STATE_END][TOKEN_MATCH] = (STATE_ERROR, self.error)
+        state_machine[STATE_END][TOKEN_RETURN] = (STATE_ERROR, self.error)
+        state_machine[STATE_END][TOKEN_NAME] = (STATE_ERROR, self.error)
+        state_machine[STATE_END][TOKEN_ATTR] = (STATE_ERROR, self.error)
+        state_machine[STATE_END][TOKEN_ERROR] = (STATE_ERROR, self.error)
+        state_machine[STATE_END][TOKEN_END] = (STATE_END, self.finish)
 
         self.state_machine = state_machine
 
@@ -124,7 +125,7 @@ class Parser:
         elif (word.lower() == "match"):
             return TOKEN_MATCH
         elif (word.lower() == "return"):
-            return TOKEN_MATCH
+            return TOKEN_RETURN
         elif (word == ";"):
             return TOKEN_END
         elif (word.count(":") == 1):
@@ -161,7 +162,25 @@ class Parser:
 
 
     def add_match_object(self):
+        """ 
+        Create a Command_Struct object that represents a match
+        command entered by the user. Insert current name into
+        new command struct object and append the object to list
+        of command objects. 
+        """
         self.curr_obj = Command_Struct("MATCH")
+        self.curr_obj.set_name(self.current_word)
+        self.obj_list.append(self.curr_obj)
+
+
+    def add_return_object(self):
+        """ 
+        Create a Command_Struct object that represents a return
+        command entered by the user. Insert current name into
+        new command struct object and append the object to list
+        of command objects. 
+        """
+        self.curr_obj = Command_Struct("RETURN")
         self.curr_obj.set_name(self.current_word)
         self.obj_list.append(self.curr_obj)
 
@@ -179,7 +198,9 @@ class Parser:
 #   Functions that deal with running and ending the program.
 ############################################################
     
-
+    def error(self):
+        print "TODO : ERROR MESSAGE HERE"
+        self.done = True
     def finish(self):
         """ 
         Indicate the end of parsing. 
@@ -191,8 +212,9 @@ class Parser:
         for word in self.words:
             print "this is the word: " + word
             if (self.done):
+                print "Error occurred in parser."
                 break
-                
+            
             self.current_word = word
             self.current_token = self.get_token(word)
 
@@ -214,22 +236,30 @@ class Parser:
 
 
 if __name__ == "__main__":
-    commands = []
     print("Welcome to microDB!")
     print("Enter commands into the interpreter below.")
-    sys.stdout.write(">>> ")
-    while True:
+    not_done = True
+    while not_done:
+        commands = []
         try:
-            command = raw_input()
-            if (len(command) != 0 and command[-1] == ";"):
-                commands.append(command)
-                break
-            commands.append(command)
+            sys.stdout.write(">>> ")
+            while True:
+                try:
+                    command = raw_input()
+                    if (len(command) != 0 and command[-1] == ";"):
+                        commands.append(command)
+                        break
+                    commands.append(command)
+                except KeyboardInterrupt:
+                    print("\nExiting microDB...")
+                    not_done = False
+                    break
+                sys.stdout.write("... ")
+            command_str = " ".join(commands)
+            parser = Parser(command_str)
+            parser.run()
+
         except KeyboardInterrupt:
             print("\nExiting microDB...")
             break
-        sys.stdout.write("... ")
-    command_str = " ".join(commands)
-    parser = Parser(command_str)
-    parser.run()
 
