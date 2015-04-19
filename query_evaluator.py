@@ -221,7 +221,7 @@ class Query_Evaluator:
             self.g.remove_edge(edge[0], edge[1])   
 
     def modify_node(self, node_attrs, attr_change, update_type):   
-         """ 
+        """ 
         Modifies the specified node by either adding or deleting the   
         attribute specified   
 
@@ -237,7 +237,7 @@ class Query_Evaluator:
         @return: None           
         """   
         nodes = self.match_node(node_attrs)   
-        for node1 in nodes:   
+        for node1 in nodes:
             current_node_attrs = self.g.node[node1[0]] 
             print current_node_attrs  
             if not update_type:   
