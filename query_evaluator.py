@@ -221,6 +221,21 @@ class Query_Evaluator:
             self.g.remove_edge(edge[0], edge[1])   
 
     def modify_node(self, node_attrs, attr_change, update_type):   
+         """ 
+        Modifies the specified node by either adding or deleting the   
+        attribute specified   
+
+        @type node_attrs: Dictionary
+        @param node_attrs: Node attributes to match and update   
+        @type attr_change: Dictionary
+        @param attr_change: Attributes to either add or delete   
+        @type update_type: Boolean
+        @param update_type: Specifies whether to add or delete an attribute.   
+        True means an attribute is being added and false means an attribute   
+        is being deleted   
+        @rtype: None
+        @return: None           
+        """   
         nodes = self.match_node(node_attrs)   
         for node1 in nodes:   
             current_node_attrs = self.g.node[node1[0]] 
@@ -237,6 +252,21 @@ class Query_Evaluator:
                 self.g.node[node1[0]] = current_node_attrs   
 
     def modify_rel(self, rel_attrs, rel_change, update_type):   
+        """ 
+        Modifies the specified relationship by either adding or deleting the   
+        attribute specified   
+
+        @type rel_attrs: Dictionary
+        @param rel_attrs: Relationship attributes to match and update   
+        @type rel_change: Dictionary
+        @param rel_change: Attributes to either add or delete   
+        @type update_type: Boolean
+        @param update_type: Specifies whether to add or delete an attribute.   
+        True means an attribute is being added and false means an attribute   
+        is being deleted   
+        @rtype: None
+        @return: None           
+        """   
         edges = self.match_rel(rel_attrs)   
         for edge in edges:   
             current_edge_attrs = self.g[edge[0]][edge[1]]   
