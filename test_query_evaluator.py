@@ -1,5 +1,6 @@
 import unittest
 from query_evaluator import QueryEvaluator
+from graph_structure import GraphStructure
 
 class TestQueryEvaluator(unittest.TestCase):
 
@@ -7,7 +8,8 @@ class TestQueryEvaluator(unittest.TestCase):
         """ 
         Tests add_node method of QueryEvaluator.
         """
-        q = QueryEvaluator()
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
         attrs1 = {'Label' : 'Person', 'Name' : 'You'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Me'}
         attrs3 = {'Label' : 'Person', 'Name' : 'She', 'Age' : 23}
@@ -28,7 +30,8 @@ class TestQueryEvaluator(unittest.TestCase):
         """
         Tests add_relationship method for QueryEvaluator.
         """
-        q = QueryEvaluator()
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -48,7 +51,8 @@ class TestQueryEvaluator(unittest.TestCase):
         """
         Tests match_node method for QueryEvaluator.
         """
-        q = QueryEvaluator()
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -66,7 +70,8 @@ class TestQueryEvaluator(unittest.TestCase):
         """
         Tests match_rel method for QueryEvaluator.
         """
-        q = QueryEvaluator()
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -91,7 +96,8 @@ class TestQueryEvaluator(unittest.TestCase):
         """
         Tests match_node_rel method for QueryEvaluator.
         """
-        q = QueryEvaluator()
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -122,7 +128,8 @@ class TestQueryEvaluator(unittest.TestCase):
         """
         Tests match_find_rel method for QueryEvaluator.
         """
-        q = QueryEvaluator()
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -146,7 +153,8 @@ class TestQueryEvaluator(unittest.TestCase):
         """
         Tests match_node_node_rel method for QueryEvaluator.
         """
-        q = QueryEvaluator()
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -177,7 +185,8 @@ class TestQueryEvaluator(unittest.TestCase):
         """
         Tests delete_node method for QueryEvaluator.
         """
-        q = QueryEvaluator()
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -204,7 +213,8 @@ class TestQueryEvaluator(unittest.TestCase):
         """
         Tests delete_rel method for QueryEvaluator.
         """
-        q = QueryEvaluator()
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -231,7 +241,8 @@ class TestQueryEvaluator(unittest.TestCase):
         """
         Tests modify_node method for QueryEvaluator.
         """
-        q = QueryEvaluator()
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -257,7 +268,8 @@ class TestQueryEvaluator(unittest.TestCase):
         """
         Test modify_rel method for QueryEvaluator.
         """
-        q = QueryEvaluator()
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -280,11 +292,6 @@ class TestQueryEvaluator(unittest.TestCase):
         match_lst2 = q.match_rel(edge_attrs2)
         result2 = [(node2[0], node3[0], edge_attrs2)]
         self.assertEqual(sorted(match_lst2), sorted(result2))
-
-
-    
-
-
 
 
 

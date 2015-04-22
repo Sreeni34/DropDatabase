@@ -2,12 +2,18 @@ import networkx as nx
 
 class QueryEvaluator:
     """
-    QueryEvaluator performs evalution of graph query language.
+    QueryEvaluator performs evalution of graph query language by 
+    modifying the in-memory graph representation of a GraphStructure
+    object.
     """
 
-    def __init__(self):
-        self.g = nx.DiGraph()
-        self.id = 0
+    def __init__(self, gs):
+        """
+        Constructor takes a GraphStructure object as an argument and 
+        stores its in-memory graph representation.
+        """
+        self.gs = gs
+        self.g = gs.get_graph()
 
     def match(self, node1_attrs, node2_attrs, rel_attrs):   
         """ 
@@ -25,7 +31,6 @@ class QueryEvaluator:
         @return: list of tuples containing node attributes and/or relationship   
         attributes depending on the match function called.         
         """
-
         result = []  
         if node1_attrs is None and node2_attrs is None and rel_attrs is None:   
             assert("Must specify either nodes or relationship")
@@ -166,9 +171,9 @@ class QueryEvaluator:
         @return: a number representing the created node's unique id and 
                 a list of attributes.
         """
-        self.id += 1 
-        self.g.add_node(self.id, node_attrs)
-        return (self.id, node_attrs)   
+        self.gs.inc_id()
+        self.g.add_node(self.gs.get_id(), node_attrs)
+        return (self.gs.get_id(), node_attrs)   
 
     def add_relationship(self, node1, node2, edge_attrs):
         """ 
@@ -239,7 +244,6 @@ class QueryEvaluator:
         nodes = self.match_node(node_attrs)   
         for node1 in nodes:
             current_node_attrs = self.g.node[node1[0]] 
-            print current_node_attrs  
             if not update_type:   
                 key_values = attr_change.keys()
                 for key_val in key_values:   
@@ -337,21 +341,21 @@ class QueryEvaluator:
 
 
 if __name__ == '__main__':
-
-    q = QueryEvaluator()
-    node = q.add_node({'Label' : 'Person', 'Name' : 'You'})
-    # node2 = q.add_node({'Label' : 'Person', 'Name' : 'Sreeni'})
-    # node3 = q.add_node({'Label' : 'Alien', 'Gender' : 'Unknown'})
-    node4 = q.add_node({'Label' : 'neo:Database:NoSql:Graph', 'Name' : 'SARS Database'})
-    # LIKE_rel = q.add_relationship(node, node4, {'rel' : 'LIKES', 'rel' : 'boss'})   
-    # print node
-    # print node4
-    # print LIKE_rel
-    # print q.g.nodes(data=True)
-    # print q.g.edges(data=True)
-    # print q.match({'Label' : 'Person'}, None, None)
-    # print q.match(None, None, {'Rel_Type' : 'LIKES'})   
-    # q.set_rel_attrs(node[0], node4[0], {'Rel_Type' : 'LOVES'}) 
-    print q.get_rel_attrs(node[0], node4[0])  
+    gs = GraphStructure()
+    # q = QueryEvaluator()
+    # node = q.add_node({'Label' : 'Person', 'Name' : 'You'})
+    # # node2 = q.add_node({'Label' : 'Person', 'Name' : 'Sreeni'})
+    # # node3 = q.add_node({'Label' : 'Alien', 'Gender' : 'Unknown'})
+    # node4 = q.add_node({'Label' : 'neo:Database:NoSql:Graph', 'Name' : 'SARS Database'})
+    # # LIKE_rel = q.add_relationship(node, node4, {'rel' : 'LIKES', 'rel' : 'boss'})   
+    # # print node
+    # # print node4
+    # # print LIKE_rel
+    # # print q.g.nodes(data=True)
+    # # print q.g.edges(data=True)
+    # # print q.match({'Label' : 'Person'}, None, None)
+    # # print q.match(None, None, {'Rel_Type' : 'LIKES'})   
+    # # q.set_rel_attrs(node[0], node4[0], {'Rel_Type' : 'LOVES'}) 
+    # print q.get_rel_attrs(node[0], node4[0])  
     #print q.g.node[node[0]]
 
