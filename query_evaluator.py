@@ -221,7 +221,7 @@ class Query_Evaluator:
             self.g.remove_edge(edge[0], edge[1])   
 
     def modify_node(self, node_attrs, attr_change, update_type):   
-         """ 
+        """ 
         Modifies the specified node by either adding or deleting the   
         attribute specified   
 
@@ -279,10 +279,61 @@ class Query_Evaluator:
                 attr_keys = rel_change.keys()
                 for key_val in attr_keys:   
                     current_edge_attrs[key_val] = rel_change[key_val]   
-                self.g[edge[0]][edge[1]] = current_edge_attrs
+                self.g[edge[0]][edge[1]] = current_edge_attrs   
+
+    def set_rel_attrs(self, node1_id, node2_id, rel_attrs):   
+        """ 
+        Sets the edge with the specified node1_id and node2_id with the   
+        specified relationship attribtues    
+
+        @type node1_id: Integer
+        @param node1_id: The first node of the edge   
+        @type node2_id: Integer
+        @param node2_id: The second node of the edge   
+        @type rel_attrs: Dictionary         
+        @param rel_attrs: Relationship attrubtes to set the edge attributes to    
+        @rtype: None
+        @return: None           
+        """   
+        self.g[node1_id][node2_id] = rel_attrs  
+
+    def get_rel_attrs(self, node1_id, node2_id):   
+        """ 
+        Get the relationship attributes from the edge (node1_id, node2_id)    
+
+        @type node1_id: Integer
+        @param node1_id: The first node of the edge   
+        @type node2_id: Integer
+        @param node2_id: The second node of the edge   
+        @rtype: Dictionary
+        @return: Relationship attributes of the edge (node1_id, node2_id)           
+        """   
+        return self.g[node1_id][node2_id]
+
+    def get_node_attrs(self, node_id):   
+        """ 
+        Get the node_id node attribtues 
+
+        @type node1_id: Integer
+        @param node1_id: The node id    
+        @rtype: Dictionary
+        @return: Node attributes of the node with id node_id           
+        """   
+        return self.g.node[node_id]
 
 
+    def set_node_attrs(self, node_id, node_attributes):   
+        """ 
+        Set the attribtues of node_id with the specified node attribtues 
 
+        @type node_id: Integer
+        @param node1_id: The node id  
+        @type node_attrs: Dictionary         
+        @param node_attrs: Node attributes to be set  
+        @rtype: None
+        @return: None           
+        """   
+        self.g.node[node_id] = node_attributes
 
 
 if __name__ == '__main__':
@@ -300,5 +351,7 @@ if __name__ == '__main__':
     # print q.g.edges(data=True)
     # print q.match({'Label' : 'Person'}, None, None)
     # print q.match(None, None, {'Rel_Type' : 'LIKES'})   
-    print q.g.node[node[0]]
+    q.set_rel_attrs(node[0], node4[0], {'Rel_Type' : 'LOVES'}) 
+    print q.get_rel_attrs(node[0], node4[0])  
+    #print q.g.node[node[0]]
 
