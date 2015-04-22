@@ -1,10 +1,10 @@
-from query_evaluator import Query_Evaluator
+from query_evaluator import QueryEvaluator
 class Linker:
     """ A basic linker class. """
 
     def __init__(self, object_list):
         self.list_objects = object_list;
-        self.query_evaluator = Query_Evaluator()
+        self.query_evaluator = QueryEvaluator()
 
 
     def print_object_list(self):

@@ -1,8 +1,8 @@
 import networkx as nx
 
-class Query_Evaluator:
+class QueryEvaluator:
     """
-    Query_Evaluator performs evalution of graph query language.
+    QueryEvaluator performs evalution of graph query language.
     """
 
     def __init__(self):
@@ -338,12 +338,12 @@ class Query_Evaluator:
 
 if __name__ == '__main__':
 
-    q = Query_Evaluator()
+    q = QueryEvaluator()
     node = q.add_node({'Label' : 'Person', 'Name' : 'You'})
     # node2 = q.add_node({'Label' : 'Person', 'Name' : 'Sreeni'})
     # node3 = q.add_node({'Label' : 'Alien', 'Gender' : 'Unknown'})
     node4 = q.add_node({'Label' : 'neo:Database:NoSql:Graph', 'Name' : 'SARS Database'})
-    LIKE_rel = q.add_relationship(node, node4, {'Rel_Type' : 'LIKES'})   
+    # LIKE_rel = q.add_relationship(node, node4, {'rel' : 'LIKES', 'rel' : 'boss'})   
     # print node
     # print node4
     # print LIKE_rel
@@ -351,7 +351,7 @@ if __name__ == '__main__':
     # print q.g.edges(data=True)
     # print q.match({'Label' : 'Person'}, None, None)
     # print q.match(None, None, {'Rel_Type' : 'LIKES'})   
-    q.set_rel_attrs(node[0], node4[0], {'Rel_Type' : 'LOVES'}) 
+    # q.set_rel_attrs(node[0], node4[0], {'Rel_Type' : 'LOVES'}) 
     print q.get_rel_attrs(node[0], node4[0])  
     #print q.g.node[node[0]]
 

@@ -1,13 +1,13 @@
 import unittest
-from query_evaluator import Query_Evaluator
+from query_evaluator import QueryEvaluator
 
 class TestQueryEvaluator(unittest.TestCase):
 
     def test_add_node(self):
         """ 
-        Tests add_node method of Query_Evaluator.
+        Tests add_node method of QueryEvaluator.
         """
-        q = Query_Evaluator()
+        q = QueryEvaluator()
         attrs1 = {'Label' : 'Person', 'Name' : 'You'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Me'}
         attrs3 = {'Label' : 'Person', 'Name' : 'She', 'Age' : 23}
@@ -26,9 +26,9 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_add_relationship(self):
         """
-        Tests add_relationship method for Query_Evaluator.
+        Tests add_relationship method for QueryEvaluator.
         """
-        q = Query_Evaluator()
+        q = QueryEvaluator()
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -46,9 +46,9 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_match_node(self):
         """
-        Tests match_node method for Query_Evaluator.
+        Tests match_node method for QueryEvaluator.
         """
-        q = Query_Evaluator()
+        q = QueryEvaluator()
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -64,9 +64,9 @@ class TestQueryEvaluator(unittest.TestCase):
         
     def test_match_rel(self):
         """
-        Tests match_rel method for Query_Evaluator.
+        Tests match_rel method for QueryEvaluator.
         """
-        q = Query_Evaluator()
+        q = QueryEvaluator()
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -89,9 +89,9 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_match_node_rel(self):
         """
-        Tests match_node_rel method for Query_Evaluator.
+        Tests match_node_rel method for QueryEvaluator.
         """
-        q = Query_Evaluator()
+        q = QueryEvaluator()
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -120,9 +120,9 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_match_find_rel(self):
         """
-        Tests match_find_rel method for Query_Evaluator.
+        Tests match_find_rel method for QueryEvaluator.
         """
-        q = Query_Evaluator()
+        q = QueryEvaluator()
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -144,9 +144,9 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_match_node_node_rel(self):
         """
-        Tests match_node_node_rel method for Query_Evaluator.
+        Tests match_node_node_rel method for QueryEvaluator.
         """
-        q = Query_Evaluator()
+        q = QueryEvaluator()
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -175,9 +175,9 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_delete_node(self):
         """
-        Tests delete_node method for Query_Evaluator.
+        Tests delete_node method for QueryEvaluator.
         """
-        q = Query_Evaluator()
+        q = QueryEvaluator()
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -202,9 +202,9 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_delete_rel(self):
         """
-        Tests delete_rel method for Query_Evaluator.
+        Tests delete_rel method for QueryEvaluator.
         """
-        q = Query_Evaluator()
+        q = QueryEvaluator()
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -229,9 +229,9 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_modify_node(self):
         """
-        Tests modify_node method for Query_Evaluator.
+        Tests modify_node method for QueryEvaluator.
         """
-        q = Query_Evaluator()
+        q = QueryEvaluator()
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
@@ -255,9 +255,9 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_modify_rel(self):
         """
-        Test modify_rel method for Query_Evaluator.
+        Test modify_rel method for QueryEvaluator.
         """
-        q = Query_Evaluator()
+        q = QueryEvaluator()
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John'}
