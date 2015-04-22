@@ -1,19 +1,39 @@
-import parser
+import sys
+from parser import Parser
+from linker import Linker
 
-# Function that asks user for input until the user
-# decides to quit the program.
-def askInput():
-	while (True):
-		query = raw_input("Query(Enter Q to quit)>>> ")
-		if (query == "Q"):
-			break
-		else:
-			parse = parser.Parser(query)
-			print parse.get_Words()
-			print parse.get_String()
+# Start our main programs
+if __name__ == "__main__":
+    print("Welcome to microDB!")
+    print("Enter commands into the interpreter below.")
+    not_done = True
+    while not_done:
+        commands = []
+        try:
+            sys.stdout.write(">>> ")
+            while True:
+                try:
+                    command = raw_input()
+                    if (len(command) != 0 and command[-1] == ";"):
+                        commands.append(command)
+                        break
+                    commands.append(command)
+                except KeyboardInterrupt:
+                    print("\nExiting microDB...")
+                    not_done = False
+                    break
+                sys.stdout.write("... ")
+            command_str = " ".join(commands)
 
-# Start our main program
-if __name__ == '__main__':
-	print "Starting Program\n"
-	askInput()
-	print "\nProgram Done!\n"
+            # Start the parser and parse the commands
+            parser = Parser(command_str)
+            parser.run()
+
+            # Store the created objects in linker and call functions
+            linker = Linker(parser.get_object_list())
+            linker.print_object_list()
+            linker.link_object()
+
+        except KeyboardInterrupt:
+            print("\nExiting microDB...")
+            break

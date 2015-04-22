@@ -237,7 +237,7 @@ class Query_Evaluator:
         @return: None           
         """   
         nodes = self.match_node(node_attrs)   
-        for node1 in nodes:   
+        for node1 in nodes:
             current_node_attrs = self.g.node[node1[0]] 
             print current_node_attrs  
             if not update_type:   
