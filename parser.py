@@ -135,6 +135,16 @@ class Parser:
         else:
             return TOKEN_ERROR
 
+    def get_object_list(self):
+        return self.obj_list
+
+    def print_object_list(self):
+        print self.obj_list
+        for obj in self.obj_list:
+            obj.print_Class()
+
+
+
     # Callback methods used in the finite state machine.
 
     ''' No operation. '''
@@ -210,15 +220,15 @@ class Parser:
     def run(self):
         
         for word in self.words:
-            print "this is the word: " + word
+            # print "this is the word: " + word
             if (self.done):
-                print "Error occurred in parser."
+                # print "Error occurred in parser."
                 break
             
             self.current_word = word
             self.current_token = self.get_token(word)
 
-            print "this is current token " + str(self.current_token)
+            # print "this is current token " + str(self.current_token)
 
             # run the state machine one step forward
             tuppy = self.state_machine[self.current_state][self.current_token]
@@ -228,38 +238,3 @@ class Parser:
 
             # transition to the next state
             self.current_state = tuppy[0] 
-        
-        print self.obj_list
-        for obj in self.obj_list:
-            obj.print_Class()
-
-
-
-if __name__ == "__main__":
-    print("Welcome to microDB!")
-    print("Enter commands into the interpreter below.")
-    not_done = True
-    while not_done:
-        commands = []
-        try:
-            sys.stdout.write(">>> ")
-            while True:
-                try:
-                    command = raw_input()
-                    if (len(command) != 0 and command[-1] == ";"):
-                        commands.append(command)
-                        break
-                    commands.append(command)
-                except KeyboardInterrupt:
-                    print("\nExiting microDB...")
-                    not_done = False
-                    break
-                sys.stdout.write("... ")
-            command_str = " ".join(commands)
-            parser = Parser(command_str)
-            parser.run()
-
-        except KeyboardInterrupt:
-            print("\nExiting microDB...")
-            break
-
