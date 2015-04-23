@@ -1,3 +1,4 @@
+from graph_structure import GraphStructure
 import networkx as nx
 
 class QueryEvaluator:
@@ -219,8 +220,7 @@ class QueryEvaluator:
         @param rel_attrs: Relationship attributes to match and delete
         @rtype: None
         @return: None           
-        """
-
+        """   
         edges = self.match_rel(rel_attrs)
         for edge in edges:
             self.g.remove_edge(edge[0], edge[1])   
@@ -339,23 +339,96 @@ class QueryEvaluator:
         """   
         self.g.node[node_id] = node_attributes
 
+    def consolidate(self, edge_list):   
+        """ 
+        Consolidates the connected nodes in the edge_list by checking if   
+        there are common nodes in the edge tuples 
+
+        @type edge_list: Dictionary
+        @param node1_id: Dictionary containing lists of edge 
+        tuples to consolidate  
+        @rtype: Dictionary
+        @return: Consolidated dictionary of lists of edge tuples.            
+        """      
+        i = 0
+        consolidated_list = {}
+        consolidated_nodes = []
+        for x in range(len(edge_list) - 1):
+            nodes1 = edge_list[x]
+            nodes2 = edge_list[x + 1]
+            for node1 in nodes1:
+                for node2 in nodes2:   
+                    if (node1[1] == node2[0]):   
+                        consolidated_nodes.append((node1[0], node2[1]))   
+            if (not consolidated_nodes):   
+                return None   
+            consolidated_list[i] = consolidated_nodes
+            i += 1
+        return consolidated_list
+    
+    def multi_match(self, node_attr_list, rel_attr_list, degree):   
+        """ 
+        Determines if there is a chain of nodes described by the node_attr_list   
+        and rel_attr_list in the graph. Then returns the first and last node   
+        of this chain.    
+
+        @type node_attr_list: List of node attributes   
+        @param node_attr_list: List of node attributes to match the nodes in 
+        the desired chain.   
+        type rel_attr_list: List of relationship attributes   
+        @param node_attr_list: List of relationship attributes to match 
+        the edes in the chain    
+        @rtype: Dictionary
+        @return: The first and last node of the chain found or None if no   
+        chain exists with the specified node attributes and   
+        the relationship attributes             
+        """   
+        i = 0   
+        edge_list = {}   
+        for x in range(len(node_attr_list) - 1):   
+            edges = self.match_node_node_rel(node_attr_list[x], node_attr_list[x + 1], rel_attr_list[x])   
+            edge_list[i] = edges   
+            i += 1
+        #print edge_list
+        while (len(edge_list) != 1):   
+            edge_list = self.consolidate(edge_list)   
+            if (edge_list == None):   
+                return None
+        return (edge_list[0])   
+            
+        
+
+
 
 if __name__ == '__main__':
     gs = GraphStructure()
     # q = QueryEvaluator()
     # node = q.add_node({'Label' : 'Person', 'Name' : 'You'})
-    # # node2 = q.add_node({'Label' : 'Person', 'Name' : 'Sreeni'})
-    # # node3 = q.add_node({'Label' : 'Alien', 'Gender' : 'Unknown'})
+    # node2 = q.add_node({'Label' : 'Person', 'Name' : 'Sreeni'})
+    # node3 = q.add_node({'Label' : 'Alien', 'Gender' : 'Unknown'})
     # node4 = q.add_node({'Label' : 'neo:Database:NoSql:Graph', 'Name' : 'SARS Database'})
-    # # LIKE_rel = q.add_relationship(node, node4, {'rel' : 'LIKES', 'rel' : 'boss'})   
-    # # print node
-    # # print node4
-    # # print LIKE_rel
-    # # print q.g.nodes(data=True)
-    # # print q.g.edges(data=True)
-    # # print q.match({'Label' : 'Person'}, None, None)
-    # # print q.match(None, None, {'Rel_Type' : 'LIKES'})   
-    # # q.set_rel_attrs(node[0], node4[0], {'Rel_Type' : 'LOVES'}) 
+    # LIKE_rel = q.add_relationship(node, node4, {'rel' : 'LIKES', 'rel' : 'boss'})   
+    # print node
+    # print node4
+    # print LIKE_rel
+    # print q.g.nodes(data=True)
+    # print q.g.edges(data=True)
+    # print q.match({'Label' : 'Person'}, None, None)
+    # print q.match(None, None, {'Rel_Type' : 'LIKES'})   
+    # q.set_rel_attrs(node[0], node4[0], {'Rel_Type' : 'LOVES'}) 
     # print q.get_rel_attrs(node[0], node4[0])  
-    #print q.g.node[node[0]]
+    #print q.g.node[node[0]]   
+    q = QueryEvaluator(gs)
+    node = q.add_node({'Label' : 'Person', 'Name' : 'You'})
+    node2 = q.add_node({'Label' : 'Person', 'Name' : 'Sreeni'})   
+    node3 = q.add_node({'Label' : 'Alien', 'Gender' : 'Unknown'})
+    node4 = q.add_node({'Label' : 'neo:Database:NoSql:Graph', 'Name' : 'SARS Database'})
+    LIKE_rel = q.add_relationship(node, node4, {'rel' : 'LIKES'})
+    owner_rel = q.add_relationship(node4, node3, {'rel' : 'OWNER'})   
+    #LIKE_rel2 = q.add_relationship(node2, node4, {'rel' : 'LIKES'})   
+    node_attr_list = [{'Label' : 'Person'}, {'Label' : 'neo:Database:NoSql:Graph'}, {'Label' : 'Alien'}]   
+    rel_attr_list = [{'rel' : 'LIKES'}, {'rel' : 'OWNER'}]
+    node_matches = q.multi_match(node_attr_list, rel_attr_list, 0)
+    print node_matches
+
 
