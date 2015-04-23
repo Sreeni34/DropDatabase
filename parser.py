@@ -3,6 +3,9 @@ import sys
 # import readline 
 from Command_Struct import Command_Struct
 
+# TODO: support for both strings and numbers 
+# TODO: MATCH query support for multiple nodes, edges 
+
 # Format: CREATE obj_name attr1_name:attr1 ...
 # rule: can't have ':' in attributes!
 
