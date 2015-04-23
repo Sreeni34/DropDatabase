@@ -33,7 +33,7 @@ class Linker:
             elif obj.command.upper() == "MATCH":
                 self.gs.set_identifier(cur_id, self.query_evaluator.match(obj.get_attr(), None, None))
             elif obj.command.upper() == "RETURN":
-                print self.gs.get_identifier(cur_id)
+                print "Return val: " + str(self.gs.get_identifier(cur_id))
 
 
 
