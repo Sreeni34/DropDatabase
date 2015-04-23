@@ -68,6 +68,7 @@ class GraphStructure:
         """
         Prints all the nodes in the form (node id, node attributes).
         """
+        print 'Nodes'
         print self.graph.nodes(data=True)
 
     def print_edges(self):
@@ -75,7 +76,21 @@ class GraphStructure:
         Prints all the edges in the form (starting node id, ending node id,
             edge attributes)
         """
+        print 'Edges'
         print self.graph.edges(data=True)
+
+    def print_id(self):
+        """
+        Prints the unique node id for the GraphStructure.
+        """
+        print 'Unique node id: ' + str(self.id)
+
+    def print_identifier_dict(self):
+        """
+        Prints the identifier dictionary.
+        """
+        print "Identifier"
+        print self.identifier
 
     def set_identifier(self, id, val):
         """
@@ -101,6 +116,16 @@ class GraphStructure:
         if id in self.identifier:
             return self.identifier[id]
         return None
+
+    def display(self):
+        """
+        Display the nodes and edges of the in-memory graph and also
+        prints out the next unique node id.
+        """
+        self.print_id()
+        self.print_nodes()
+        self.print_edges()
+        self.print_identifier_dict()
 
     
             
