@@ -2,7 +2,7 @@ import networkx as nx
 
 class GraphStructure:
     """
-    Class represents the in memory graph structure of the graph database.
+    Class represents the in memory directed graph structure of the graph database.
     It contains important information such as the internal graph library
     used by networkx and the starting point for the next unique id.
     """
@@ -43,4 +43,21 @@ class GraphStructure:
         Increments unique id for graph nodes.
         """
         self.id += 1
-        
+
+    def print_nodes(self):
+        """
+        Prints all the nodes in the form (node id, node attributes).
+        """
+        print self.graph.nodes(data=True)
+
+    def print_edges(self):
+        """
+        Prints all the edges in the form (starting node id, ending node id,
+            edge attributes)
+        """
+        print self.graph.edges(data=True)
+
+
+
+
+
