@@ -2,14 +2,18 @@ import sys
 from parser import Parser
 from linker import Linker
 from graph_structure import GraphStructure
+from graph_storage import GraphStorage
+import networkx as nx
 
 # Start our main programs
 if __name__ == "__main__":
+    gs = GraphStructure()
+    gstorage = GraphStorage(gs)
     print("Welcome to microDB!")
+    print("Loading database from disk...")
+    gstorage.load_file("TEST")
     print("Enter commands into the interpreter below.")
     not_done = True
-    gs = GraphStructure()
-    
     while True:
         commands = []
         try:
@@ -22,7 +26,9 @@ if __name__ == "__main__":
                         break
                     commands.append(command)
                 except KeyboardInterrupt:
-                    print("\nExiting microDB...")
+                    print("\nWriting database back to disk...")
+                    gstorage.write_file("TEST")
+                    print("Exiting microDB...")
                     not_done = False
                     break
                 sys.stdout.write("... ")
@@ -41,5 +47,7 @@ if __name__ == "__main__":
             linker.execute()
 
         except KeyboardInterrupt:
-            print("\nExiting microDB...")
+            print("\nWriting database back to disk...")
+            gstorage.write_file("TEST")
+            print("Exiting microDB...")
             break

@@ -30,6 +30,15 @@ class GraphStructure:
         """
         return self.graph
 
+    def set_graph(self, graph):
+        """
+        Sets the internal graph object to the one provided by the arguments.
+
+        @type graph: Graph
+        @param graph: Graph used to set to the internal GraphStructure object
+        """
+        self.graph = graph
+
     def get_id(self):
         """
         Returns unique id for graph nodes. If id is used, user must 
