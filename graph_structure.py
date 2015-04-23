@@ -17,6 +17,8 @@ class GraphStructure:
         """
         self.graph = nx.DiGraph()
         self.id = start_id
+        # Internal dictionary to store variables and values
+        self.identifier = {}
 
     def get_graph(self):
         """
@@ -56,6 +58,37 @@ class GraphStructure:
             edge attributes)
         """
         print self.graph.edges(data=True)
+
+    def set_identifier(self, id, val):
+        """
+        Stores the key : value pair id and val in the dictionary.
+
+        @type id: String
+        @param id: Key to insert in dictionary
+        @type val: Anything
+        @param val: Value for the given key 
+        """
+        self.identifier[id] = val
+
+    def get_identifier(self, id):
+        """
+        Returns the value for the given key in the dictionary. If
+        no key exists, we return None.
+
+        @type id: String
+        @param id: Key to look up in dictionary
+        @rtype: Anything or None
+        @return: Value for the key or None, if key is not present
+        """
+        if id in self.identifier:
+            return self.identifier[id]
+        return None
+
+    
+            
+
+
+
 
 
 
