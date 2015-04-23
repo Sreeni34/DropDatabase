@@ -49,6 +49,15 @@ class GraphStructure:
         """
         return self.id
 
+    def set_id(self, num):
+        """
+        Sets the unique id to the argument num.
+
+        @type num: Integer
+        @param num: Next free id to store nodes
+        """
+        self.id = num
+
     def inc_id(self):
         """
         Increments unique id for graph nodes.
