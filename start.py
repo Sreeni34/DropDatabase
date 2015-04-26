@@ -60,9 +60,12 @@ class StartDatabase:
             command_str = " ".join(commands)
 
             # Start the parser and parse the commands
-            parser = Parser(command_str)
-            parser.run()
-
+            if (command_str[-1] == ";"):
+                real_command = command_str[:-1] + " ;"
+                parser = Parser(real_command)
+                parser.run()
+            else:
+                print "ERRORRRRRRRRRRRRRRRRRRRRR"
             # Store the created objects in linker and call functions
             linker = Linker(parser.get_object_list(), self.gs)
             linker.execute()
