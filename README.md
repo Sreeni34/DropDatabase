@@ -41,6 +41,10 @@ Identifier
 The database is started by initializing the StartDatabase class. This loads the graph files from disk and starts the prompt to take input from the user. 
 The parser is then called (from parser.py) and parses commands from the user, passing in the objects parsed into the linker (from linker.py). The linker then calls the appropriate evaluation methods in query_evaluator.py.   
 
+##Libraries
+Libraries needed for this database are:
+NetworkX
+
 ##Testing
 Testing is currently only available for the query_evaluator.py methods. The python unittest library is used for testing.
 Tests for the query_evaluator methods can be run by 
