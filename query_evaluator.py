@@ -386,13 +386,23 @@ class QueryEvaluator:
         i = 0   
         edge_list = {}   
         for x in range(len(node_attr_list) - 1):   
-            edges = self.match_node_node_rel(node_attr_list[x], node_attr_list[x + 1], rel_attr_list[x])   
+            edges = self.match(node_attr_list[x], node_attr_list[x + 1], rel_attr_list[x])   
+            # Break out if no match exists between the nodes and relationship
+            if edges == []:
+                edge_list = {}
+                break
             edge_list[i] = edges   
             i += 1
+
+        # Return none if no match was found
+        if edge_list == {}:
+            return None
+
         while (len(edge_list) != 1):   
             edge_list = self.consolidate(edge_list)   
-            if (edge_list == None):   
+            if (edge_list == {}):   
                 return None
+                
         return (edge_list[0])   
 
     def check_path(self, source_id, target_id):   

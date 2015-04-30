@@ -293,7 +293,51 @@ class TestQueryEvaluator(unittest.TestCase):
         result2 = [(node2[0], node3[0], edge_attrs2)]
         self.assertEqual(sorted(match_lst2), sorted(result2))
 
+    def test_multi_match(self):
+        """
+        Test multi_match method for QueryEvaluator.
+        """
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
+        attrs1 = {'Label' : 'Person', 'Name' : 'Alice'}
+        attrs2 = {'Label' : 'Person', 'Name' : 'Bob'}
+        attrs3 = {'Label' : 'Person', 'Name' : 'John'}
+        attrs4 = {'Label' : 'Person', 'Name' : 'Rick'}
+        attrs5 = {'Label' : 'Person', 'Name' : 'Cat'}
+        node1 = q.add_node(attrs1)
+        node2 = q.add_node(attrs2)
+        node3 = q.add_node(attrs3)
+        node4 = q.add_node(attrs4)
+        node5 = q.add_node(attrs5)
+        edge_attrs1 = {'rel_type' : 'friend'}
+        edge_attrs2 = {'rel_type' : 'friend', 'fam' : 'cousin'}
+        edge_attrs3 = {'rel_type' : 'dad'}
+        edge_attrs4 = {'rel_type' : 'mom'}
+        edge1 = q.add_relationship(node1, node2, edge_attrs1)
+        edge2 = q.add_relationship(node2, node3, edge_attrs2)
+        edge3 = q.add_relationship(node3, node4, edge_attrs3)
+        edge4 = q.add_relationship(node4, node5, edge_attrs4)
+        # Test no match for multiple length query
+        result1 = q.multi_match([attrs1, attrs2, attrs3], [edge_attrs3, edge_attrs1])
+        self.assertEqual(result1, None)
+        # Test single match for multiple length query
+        result2 = q.multi_match([attrs1, attrs2, attrs3], 
+            [edge_attrs1, edge_attrs2])
+        self.assertEqual(result2, [(1, 3)])
+        # Tests many matches for multiple length query
+        result3 = q.multi_match([{'Label' : 'Person'}, {'Label' : 'Person'}], 
+            [edge_attrs1])
+        self.assertEqual(result3, [edge1, edge2])
+        # Test all matches for multiple length query
+        result4 = q.multi_match([{}, {}], [{}])
+        self.assertEqual(result4, [edge1, edge2, edge3, edge4])
+
+
 
 
 if __name__ == '__main__':
     unittest.main()
+
+
+
+
