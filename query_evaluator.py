@@ -366,7 +366,7 @@ class QueryEvaluator:
             i += 1
         return consolidated_list
     
-    def multi_match(self, node_attr_list, rel_attr_list, degree):   
+    def multi_match(self, node_attr_list, rel_attr_list):   
         """ 
         Determines if there is a chain of nodes described by the node_attr_list   
         and rel_attr_list in the graph. Then returns the first and last node   
@@ -375,8 +375,8 @@ class QueryEvaluator:
         @type node_attr_list: List of node attributes   
         @param node_attr_list: List of node attributes to match the nodes in 
         the desired chain.   
-        type rel_attr_list: List of relationship attributes   
-        @param node_attr_list: List of relationship attributes to match 
+        @type rel_attr_list: List of relationship attributes   
+        @param rel_attr_list: List of relationship attributes to match 
         the edes in the chain    
         @rtype: Dictionary
         @return: The first and last node of the chain found or None if no   
@@ -389,12 +389,38 @@ class QueryEvaluator:
             edges = self.match_node_node_rel(node_attr_list[x], node_attr_list[x + 1], rel_attr_list[x])   
             edge_list[i] = edges   
             i += 1
-        #print edge_list
         while (len(edge_list) != 1):   
             edge_list = self.consolidate(edge_list)   
             if (edge_list == None):   
                 return None
         return (edge_list[0])   
+
+    def check_path(self, source_id, target_id):   
+        """ 
+        Determines if a path exists between two nodes. 
+
+        @type source_id: Integer   
+        @param source_id: Id of the source node     
+        @type target_id: Integer   
+        @param target_id: Id of the target node   
+        @rtype: Boolean
+        @return: Returns true if a path exists between the source and target   
+        node in the graph. Otherwise, returns false.                
+        """   
+        return nx.has_path(self.g, source_id, target_id)   
+
+    def get_shortest_path(self, source_id, target_id):   
+        """ 
+        Get the shortest path between two nodes 
+
+        @type source_id: Integer   
+        @param source_id: Id of the source node     
+        @type target_id: Integer   
+        @param target_id: Id of the target node   
+        @rtype: Array
+        @return: Array of nodes in the path between the source and target node                   
+        """   
+        return nx.shortest_path(self.g, source_id, target_id)      
             
         
 
@@ -429,6 +455,9 @@ if __name__ == '__main__':
     node_attr_list = [{'Label' : 'Person'}, {'Label' : 'neo:Database:NoSql:Graph'}, {'Label' : 'Alien'}]   
     rel_attr_list = [{'rel' : 'LIKES'}, {'rel' : 'OWNER'}]
     node_matches = q.multi_match(node_attr_list, rel_attr_list, 0)
-    print node_matches
+    #print nx.has_path(gs.get_graph(), node2[0], node3[0])
+    print nx.shortest_path(gs.get_graph(), node[0], node3[0])
+
+    #print node_matches
 
 
