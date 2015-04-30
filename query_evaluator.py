@@ -420,7 +420,20 @@ class QueryEvaluator:
         @rtype: Array
         @return: Array of nodes in the path between the source and target node                   
         """   
-        return nx.shortest_path(self.g, source_id, target_id)      
+        return nx.shortest_path(self.g, source_id, target_id)   
+
+    # def get_neighbors(self, ):   
+    #     """ 
+    #     Get the shortest path between two nodes 
+
+    #     @type source_id: Integer   
+    #     @param source_id: Id of the source node     
+    #     @type target_id: Integer   
+    #     @param target_id: Id of the target node   
+    #     @rtype: Array
+    #     @return: Array of nodes in the path between the source and target node                   
+    #     """   
+    #     return nx.shortest_path(self.g, source_id, target_id)       
             
         
 
@@ -454,10 +467,11 @@ if __name__ == '__main__':
     #LIKE_rel2 = q.add_relationship(node2, node4, {'rel' : 'LIKES'})   
     node_attr_list = [{'Label' : 'Person'}, {'Label' : 'neo:Database:NoSql:Graph'}, {'Label' : 'Alien'}]   
     rel_attr_list = [{'rel' : 'LIKES'}, {'rel' : 'OWNER'}]
-    node_matches = q.multi_match(node_attr_list, rel_attr_list, 0)
+    node_matches = q.multi_match(node_attr_list, rel_attr_list)
     #print nx.has_path(gs.get_graph(), node2[0], node3[0])
-    print nx.shortest_path(gs.get_graph(), node[0], node3[0])
-
+    #print nx.shortest_path(gs.get_graph(), node[0], node3[0])   
+    #print nx.all_neighbors(gs.get_graph(), node[0])
+    print gs.get_graph().neighbors(node[0])
     #print node_matches
 
 
