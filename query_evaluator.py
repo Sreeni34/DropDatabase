@@ -432,18 +432,49 @@ class QueryEvaluator:
         """   
         return nx.shortest_path(self.g, source_id, target_id)   
 
-    # def get_neighbors(self, ):   
-    #     """ 
-    #     Get the shortest path between two nodes 
+    def get_neighbors(self, node_id):   
+        """ 
+        Get all of the neighbors of a node
 
-    #     @type source_id: Integer   
-    #     @param source_id: Id of the source node     
-    #     @type target_id: Integer   
-    #     @param target_id: Id of the target node   
-    #     @rtype: Array
-    #     @return: Array of nodes in the path between the source and target node                   
-    #     """   
-    #     return nx.shortest_path(self.g, source_id, target_id)       
+        @type node_id: Integer   
+        @param node_id: Id of the node to find neighbors of     
+        @rtype: Array
+        @return: Array of neighbors' node_ids                      
+        """   
+        return self.g.neighbors(node_id)   
+
+    def get_common_neighbors(self, node1_id, node2_id):   
+        """ 
+        Get the common neighbors of two nodes
+
+        @type node1_id: Integer   
+        @param node1_id: Id of the first node   
+        @type node2_id: Integer   
+        @param node2_id: Id of the second node     
+        @rtype: iterator
+        @return: iterator of the common neighbors of u and v in the graph                      
+        """   
+        return nx.common_neighbors(self.g, node1_id, node2_id)   
+
+    def clear(self):   
+        """ 
+        Clear the graph of all nodes and edges
+                      
+        """   
+        return self.g.clear()   
+
+    def is_connected(self, node1_id, node2_id):   
+        """ 
+        Check if two nodes are connected in the graph.   
+        
+        @type node1_id: Integer   
+        @param node1_id: Id of the first node   
+        @type node2_id: Integer   
+        @param node2_id: Id of the second node     
+        @rtype: Boolean
+        @return: True if an edge exists between the nodes, false otherwise                 
+        """   
+        return self.g.has_edge(node1_id, node2_id)           
             
         
 
@@ -481,7 +512,8 @@ if __name__ == '__main__':
     #print nx.has_path(gs.get_graph(), node2[0], node3[0])
     #print nx.shortest_path(gs.get_graph(), node[0], node3[0])   
     #print nx.all_neighbors(gs.get_graph(), node[0])
-    print gs.get_graph().neighbors(node[0])
+    q.clear()
+    print gs.get_graph().nodes()
     #print node_matches
 
 
