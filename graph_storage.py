@@ -32,7 +32,8 @@ class GraphStorage:
             return
 
         # Stores graph data from file and loads it to internal graph
-        self.gs.set_graph(nx.read_graphml(graph_file))
+        # self.gs.set_graph(nx.read_graphml(graph_file))
+        self.gs.set_graph(nx.read_gpickle(graph_file))
 
         # Read current id from file to GraphStructure
         f = open(id_file, 'r')
@@ -49,7 +50,8 @@ class GraphStorage:
         will contain the in-memory graph data while the second file will
         contain the unique id number. 
         """
-        nx.write_graphml(self.gs.get_graph(), file1)
+        # nx.write_graphml(self.gs.get_graph(), file1)
+        nx.write_gpickle(self.gs.get_graph(), file1)
 
         # Write current Id to another file
         f = open(file2, 'w')
