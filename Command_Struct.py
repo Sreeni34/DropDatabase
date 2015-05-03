@@ -4,66 +4,203 @@ class Command_Struct:
     and arguments entered by the user. 
     """
 
+    """
+    REL ATTR = e: a b:c
+    ID ATTR = n: a a:b
+    BOOL = b: a val:0/1
+    ID = n: a () ()
+
+
+    CREATE          ID ATTR
+    CREATEEDGE      ID ATTR REL ATTR ID ATTR
+    MATCH           ID ATTR REL ATTR ID ATTR REL ATTR ID ATTR ...
+    MODIFYNODE      ID ATTR ID ATTR BOOL
+    MODIFYEDGE      REL ATTR REL ATTR BOOL
+    DELETENODE      ID ATTR
+    DELETEEDGE      REL ATTR
+    RETURN          ID ID ...
+    HASPATH         ID ATTR ID ATTR
+    CLEAR
+    SHORTESTPATH    ID ATTR ID ATTR
+    NEIGHBOR        ID ATTR
+    HASEDGE         ID ATTR ID ATTR
+    COMMONNEIGHBORS ID ATTR ID ATTR
+    RESET
+    FLUSH
+
+    # EXTRA
+    AGG             [id attr (<, >, =) id attr () val ...]
+    """
+
+
     def __init__(self, command):
         """
         Constructor that takes in name of command to create and
-        initializes the command, name and list of attributes. In 
-        the case of the command "createEdge", a list of dictionaries
-        would also be used.
+        initializes the command, name, boolean value(for special
+        cases only) and list of attributes.
         """
         self.command = command
-        self.name = ""
-        self.attr = {}
+        self.name = []
+        self.attr = []  # List of List [type, id, dict(key - attr1, val - attr2)]
+        self.bool = -1
 
-        # Variable to hold list of dictionary of attributes
-        # Specific to createEdge command
-        self.attr_list = []
+        # [[type, id, {attr1:attr2, attr3:attr4}], 
+        #  [type2, id2, {attr5:attr6, attr7:attr8}]]
+        # [[n:, a, {b:c, d:e, e:f}], [e:, b, {c:d, e:f, f:g}]]
+
+        # List of List[type, identifier, dictionary(key-attr1, value-attr2)]
 
 
-    def set_name(self, name):
+##
+##  Methods for self.name
+##
+
+    def insert_name(self, name):
         """
-        Set the current object name. 
+        Inserts the current object name into list.
 
         @type name: String
         @param name: String representing name of Command Struct object
         """
-        self.name = name
+
+        self.name.append(name)
+
+
+    def get_names(self):
+        """
+        Returns a list containing the names specified in the
+        commmand. 
+
+        @rtype: List of String
+        @return: List of names specified in command 
+        """
+
+        return self.name
+
+
+    def get_names_size(self):
+        """
+        Returns the number of names specified in the command.
+
+        @rtype: Integer
+        @return: Integer representing the size of names in list.
+        """
+
+        return len(self.name)
+
+##
+##  Methods for self.attr
+##
+
+    def insert_attr_type(self, attr_type):
+        """
+        Inserts the type which identifies whether the list of attributes
+        belong to a node or an edge.
+
+        @type name: String
+        @param name: String representing the type of attributes
+        """
+
+        self.attr.append([attr_type, "", {}])
+
+
+    def insert_attr_name(self, name):
+        """
+        Inserts the name which identifies the list of attributes.
+
+        @type name: String
+        @param name: String representing the name to identify attributes
+        """
+
+        last_idx = len(self.attr) - 1
+        self.attr[last_idx][1] = name
 
 
     def insert_attr(self, attr1, attr2):
         """
-        Insert the attribute to dictionary containing
-        list of attributes.
+        Inserts the attributes into the last element
+        of the list.
 
         @type attr1: String
-        @param attr1: The key to add to dictionary
-        @type attr2: String 
-        @param attr2: The value to add to dictionary
+        @param attr1: String representing first half of an attribute
+        @type attr2: String
+        @param attr2: String representing second half of an attribute
         """
-        self.attr[attr1] = attr2
+
+        last_idx = len(self.attr) - 1
+        self.attr[last_idx][2][attr1] = attr2
 
 
-    def insert_attr_list(self, ind):
+    def get_attr_type(self):
         """
-        Method adds the current attribute dictionary to list of 
-        dictionaries at specified index location.
+        This method returns the type of the last attribute
+        entered into the list of list of types, names and dictionaries.
 
-        @type ind: Integer
-        @param ind: Index location to insert the dictionary into list
+        @rtype: String
+        @return: Type of last attribute
         """
-        if (ind >= len(self.attr_list)):
-            self.attr_list.append(self.attr)
-        else:
-            self.attr_list[ind] = self.attr
+
+        last_idx = len(self.attr) - 1
+        return self.attr[last_idx][0]
 
 
-    def clear_attr(self):
+    def get_attr_name(self):
         """
-        Clears the attribute list.
+        This method returns the name of the last attribute
+        entered into the list of list of types, names and dictionaries.
+
+        @rtype: String
+        @return: Name of last attribute
         """
-        self.attr = {}
+
+        last_idx = len(self.attr) - 1
+        return self.attr[last_idx][1]
 
 
+    def get_attr_name_attrs(self):
+        """
+        This method returns the dictionary containing the list
+        of attributes belonging to a certain name.
+
+        @rtype: Dictionary
+        @return: Dictionary of attributes related to the last identifier.
+        """
+
+        last_idx = len(self.attr) - 1
+        return self.attr[last_idx][2]
+
+
+##
+##  Methods for self.bool
+##
+
+    def set_bool(self, bool_val):
+        """
+        This method updates the boolean value to the value
+        specified by the user.
+
+        @type name: Boolean
+        @param name: Boolean value further used in query evaluator. 
+        """
+
+        self.bool = bool_val
+
+
+    def get_bool(self):
+        """
+        This method returns the boolean value pertaining to 
+        the specific command.
+
+        @rtype Boolean
+        @return Boolean value (-1 if none set)
+        """
+
+        return self.bool
+
+##
+##  Methods for self.command
+##
+    
     def get_command(self):
         """
         Returns the command of this object.
@@ -71,70 +208,44 @@ class Command_Struct:
         @rtype: String
         @return: String representing command of object
         """
+
         return self.command
 
 
-    def get_name(self):
+##
+##  Methods to reset data values
+##
+
+    def clear_name(self):
         """
-        Returns the name of the object if the object has one.
-        "NO NAME" is supplied if none exits.
-
-        @rtype: String 
-        @return: String representing the name of object
+        Clears the name list.
         """
-        return self.name
+        self.name = []
 
 
-    def get_attr(self):
+    def clear_attr(self):
         """
-        Returns the list of attributes for the command. Method 
-        works for commands CREATE, MATCH, and RETURN.
-
-        @rtype: dictionary
-        @return: List of attributes in dictionary format
+        Clears the attribute list.
         """
-        return self.attr
+        self.attr = []
 
 
-    def get_attr_list(self):
-        """
-        Returns the list of dictionaries that represents attributes.
-        Method works for command CREATEEDGE.
-
-        @rtype: List of dictionaries
-        @return: List of dictionaries representing attributes for 
-        createEdge command.
-        """
-        return self.attr_list
-
-
-    def get_attr_size(self):
-        """
-        Returns the size of the attribute dictionary.
-
-        @rtype: Integer
-        @return: Integer representing size of dictionary.
-        """
-        return len(self.attr)
-
-
-    def get_attr_list_size(self):
-        """
-        Returns the number of dictionaries in list.
-
-        @rtype: Integer
-        @return: Number of dictionaries in list.
-        """
-        return len(self.attr_list)
-
+##
+##  Methods to print values
+##
 
     def print_Class(self):
+        """
+        Prints information about the specific commands and
+        its attributes.
+        """
         print "Command: " + self.command
-        print "Name: " + self.name
+        print "Names: ", 
+        print self.name
         print "Attributes: ",
         print self.attr
+        print "Bool: ",
+        print self.bool
+        print
         
-        if (self.command == "CREATEEDGE"):
-            print "List of Attributes: ",
-            print self.attr_list
 
