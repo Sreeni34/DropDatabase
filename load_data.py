@@ -1,5 +1,8 @@
 from query_evaluator import QueryEvaluator
 from graph_structure import GraphStructure
+from graph_storage import GraphStorage
+from utilities import Utilities
+
 
 class LoadData:
     """
@@ -16,14 +19,30 @@ class LoadData:
         edges in.
         """
         self.gs = gs
+        self.gstorage = GraphStorage(self.gs)
+
+        # Loads data on disk
+        self.graph_file = 'graph_file'
+        self.id_file = 'id_file'
+        self.load_data()
+
         # Sets up a QueryEvaluator object to perform the loading operations
         self.q_eval = QueryEvaluator(gs)
+
+    def load_data(self):
+        """
+        Loads persisted data on disk, if it exists, into our GraphStructure
+        object.
+        """
+        if Utilities.files_exist(self.graph_file, self.id_file):
+            self.gstorage.load_graph(self.graph_file, self.id_file)
 
 
     def load_text_file(self, text_file):
         """
         Loads the data from the text file into the in memory graph 
-        structure stored in the QueryEvaluator object.
+        structure stored in the QueryEvaluator object and saves the
+        data onto disk.
         """
         f = open(text_file, 'r')
         for line in f:
@@ -38,6 +57,9 @@ class LoadData:
             e1 = self.q_eval.add_relationship(n1, n2, {})
 
         f.close()
+
+        # Saves the file to disk
+        self.gstorage.write_graph(self.graph_file, self.id_file)
 
 if __name__ == '__main__':
     file_name = 'Wiki-Vote.txt'
