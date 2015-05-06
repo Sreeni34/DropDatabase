@@ -52,6 +52,37 @@ class Linker:
                                     self.query_evaluator.add_relationship(node1,
                                      node2, edge_attrs))
                     counter += 1   
+            if command_name == "MATCH":   
+                if (len(attribute_list) == 1):   
+                    item = attribute_list[0]   
+                    if (item[0] == "n:"):   
+                        nodes = self.query_evaluator.match(item[2], None, None)   
+                        print nodes   
+                    elif (item[0] == "e:"):   
+                        edges = self.query_evaluator.match(None, None, item[2])   
+                        for edge in edges:   
+                            edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
+                            print(edge_tup)   
+                elif(len(attribute_list) == 2):   
+                    item1 = attribute_list[0]   
+                    item2 = attribute_list[1]   
+                    if (item1[0] == "n:"):   
+                        edges = self.query_evaluator.match(None, item1[2], item2[2])   
+                        for edge in edges:   
+                            edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
+                    else:   
+                        edges = self.query_evaluator.match(None, item2[2], item1[2])   
+                        for edge in edges:   
+                            edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
+                elif(len(attribute_list) == 3):   
+                    item1 = attribute_list[0]   
+                    item2 = attribute_list[1]   
+                    item3 = attribute_list[2]   
+                    edges = self.query_evaluator.match(item1[2], item3[2], item2[2])   
+                        for edge in edges:   
+                            edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
+                    
+
                 # if command_name == "MATCH":   
                 #     if len(attribute_list) == 1:   
                 #         item = attribute_list[0]
