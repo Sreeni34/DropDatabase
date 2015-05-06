@@ -27,13 +27,56 @@ class Linker:
         """
         # iterate through objects returned by parser to execute queries
         for obj in self.list_objects:
-            cur_id = obj.get_name()
-            if obj.command.upper() == "CREATE":
-                self.gs.set_identifier(cur_id, self.query_evaluator.add_node(obj.get_attr()))
-            elif obj.command.upper() == "MATCH":
-                self.gs.set_identifier(cur_id, self.query_evaluator.match(obj.get_attr(), None, None))
-            elif obj.command.upper() == "RETURN":
-                print "Return val: " + str(self.gs.get_identifier(cur_id))
+            command_name = obj.get_command()
+            attribute_list = obj.get_attr_list()
+            if command_name == "CREATE":
+                for node in attribute_list:
+                    curr_id = node[1]   
+                    curr_attrs = node[2]
+                    self.gs.set_identifier(curr_id, self.query_evaluator.add_node(curr_attrs))   
+            if command_name == "CREATEEDGE":   
+                counter = 0
+                [nodes1_identifier, nodes1, edge_identifier, edge_attrs, 
+                nodes1_identifier, nodes2] = [0]*6
+                for item in attribute_list:
+                    if ((counter % 3) == 0):   
+                        nodes1 = self.query_evaluator.match_node(item[2])
+                    elif ((counter % 2) == 1):
+                        edge_identifier = item[1]
+                        edge_attrs = item[2]   
+                    elif((counter % 3) == 2):   
+                        nodes2 = self.query_evaluator.match_node(item[2])   
+                        for node1 in nodes1:
+                            for node2 in nodes2:  
+                                self.gs.set_identifier(edge_identifier, 
+                                    self.query_evaluator.add_relationship(node1,
+                                     node2, edge_attrs))
+                    counter += 1   
+                # if command_name == "MATCH":   
+                #     if len(attribute_list) == 1:   
+                #         item = attribute_list[0]
+                #         if item[0] == "n:":
+                #             nodes = self.query_evaluator.match_node(item[2])   
+                #             print nodes
+                #         elif item[0] == "e:":   
+                #             edges = self.query_evaluator.match_rel(item[2])   
+                #             print edges   
+                #     elif len(attribute_list) == 2:   
+                #         item1 = attribute_list[0]   
+                #         item2 = attribute_list[1]   
+                #         if item1[0] == "n:":   
+                #             edges = self.query_evaluator.match(None, items1[2], items2[2])   
+                #             for edge in edges:   
+                #                 print (self.query_evaluator.get_node_attrs(edge[0]), 
+                #                     edge[2], self.query_evaluator.get_node_attrs(edge[1])   
+                #         else:   
+                              
 
 
+
+
+            # elif obj.command.upper() == "MATCH":
+            #     self.gs.set_identifier(cur_id, self.query_evaluator.match(obj.get_attr(), None, None))
+            # elif obj.command.upper() == "RETURN":
+            #     print "Return val: " + str(self.gs.get_identifier(cur_id))   
 
