@@ -169,6 +169,16 @@ class Command_Struct:
         last_idx = len(self.attr) - 1
         return self.attr[last_idx][2]
 
+    def get_attr_list(self):
+        """
+        This method returns the list which contains our type,
+        identifier, and attributes. 
+
+        @rtype: List
+        @return: List of type, id, and attributes
+        """
+        return self.attr
+
 
 ##
 ##  Methods for self.bool
