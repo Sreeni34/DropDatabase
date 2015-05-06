@@ -1,5 +1,10 @@
 import networkx as nx 
 from utilities import Utilities
+try:
+    # use C version of pickle if possible, since this is much faster 
+   import cPickle as pickle 
+except:
+   import pickle
 
 class GraphStorage:
     """
@@ -33,15 +38,18 @@ class GraphStorage:
 
         # Stores graph data from file and loads it to internal graph
         # self.gs.set_graph(nx.read_graphml(graph_file))
-        self.gs.set_graph(nx.read_gpickle(graph_file))
+        # self.gs.set_graph(nx.read_gpickle(graph_file))
+        f1 = open(graph_file, 'r')
+        self.gs.set_graph(pickle.load(f1))
+        f1.close()
 
         # Read current id from file to GraphStructure
-        f = open(id_file, 'r')
-        val = f.readline().strip()
+        f2 = open(id_file, 'r')
+        val = f2.readline().strip()
         if val == "":
             val = 0
         self.gs.set_id(int(val))
-        f.close()
+        f2.close()
 
 
     def write_graph(self, file1, file2):
@@ -51,12 +59,15 @@ class GraphStorage:
         contain the unique id number. 
         """
         # nx.write_graphml(self.gs.get_graph(), file1)
-        nx.write_gpickle(self.gs.get_graph(), file1)
+        # nx.write_gpickle(self.gs.get_graph(), file1)
+        f1 = open(file1, 'w')
+        pickle.dump(self.gs.get_graph(), f1)
+        f1.close()
 
         # Write current Id to another file
-        f = open(file2, 'w')
-        f.write(str(self.gs.get_id()))
-        f.close()
+        f2 = open(file2, 'w')
+        f2.write(str(self.gs.get_id()))
+        f2.close()
 
 
 
