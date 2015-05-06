@@ -22,6 +22,7 @@ ID = n: a () ()
 
 CREATE          ID ATTR
 CREATEEDGE      ID ATTR REL ATTR ID ATTR
+CREATEALLEDGE   ID ATTR ID ATTR ... ID ATTR REL ATTR
 MATCH           ID ATTR REL ATTR ID ATTR REL ATTR ID ATTR ...
 MODIFYNODE      ID ATTR ID ATTR BOOL
 MODIFYEDGE      REL ATTR REL ATTR BOOL
@@ -214,6 +215,7 @@ class Parser:
 
         CREATE
         CREATEEDGE
+        CREATEALLEDGE
         MATCH 
         MODIFYNODE
         MODIFYEDGE
@@ -237,7 +239,7 @@ class Parser:
         @return: An integer which represents a specific token command
         """
 
-        commands_list = ["create", "createedge", "match", "modifynode", 
+        commands_list = ["create", "createedge", "createalledge", "match", "modifynode", 
             "modifyedge", "deletenode", "deleteedge", "haspath",
             "shortestpath", "neighbor", "hasedge", "commmonneighbors",
             "return", "clear", "reset", "flush"]
