@@ -34,7 +34,7 @@ class Linker:
                     curr_id = node[1]   
                     curr_attrs = node[2]
                     self.gs.set_identifier(curr_id, self.query_evaluator.add_node(curr_attrs))   
-            if command_name == "CREATEEDGE":   
+            elif command_name == "CREATEEDGE":   
                 counter = 0
                 [nodes1_identifier, nodes1, edge_identifier, edge_attrs, 
                 nodes1_identifier, nodes2] = [0]*6
@@ -52,7 +52,7 @@ class Linker:
                                     self.query_evaluator.add_relationship(node1,
                                      node2, edge_attrs))
                     counter += 1   
-            if command_name == "MATCH":   
+            elif command_name == "MATCH":   
                 if (len(attribute_list) == 1):   
                     item = attribute_list[0]   
                     if (item[0] == "n:"):   
@@ -81,7 +81,74 @@ class Linker:
                     edges = self.query_evaluator.match(item1[2], item3[2], item2[2])   
                         for edge in edges:   
                             edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
-                    
+                else:   
+                    counter = 0   
+                    node_attr_list = []   
+                    edge_attr_list = []   
+                    for item in attribute_list:   
+                        if ((counter) % 2 == 0):   
+                            node_attr_list.append(item[2])   
+                        elif((counter) % 2 == 1):   
+                            edge_attr_list.append(item[2])   
+                    nodes = self.query_evaluator.multi_match(node_attr_list, edge_attr_list)   
+                    if (nodes == None):   
+                        print("No nodes exist")   
+                    else:   
+                        for node in nodes:   
+                            print(node[0], self.query_evaluator.get_node_attrs(node[0]))      
+            elif command_name == "MODIFYNODE":   
+                nodes_modified = attribute_list[0]   
+                attrs_changed = attribute_list[1]   
+                modify_boolean = attribute_list[2]   
+                self.query_evaluator(nodes_modified[2], attrs_changed[2], modify_boolean[2])   
+                print("Updated Nodes: ")   
+                print(self.query_evaluator.match_node(nodes_modified[2]))   
+            elif command_name == "MODIFYEDGE":   
+                edges_modified = attribute_list[0]   
+                attrs_changed = attribute_list[1]   
+                modify_boolean = attribute_list[2]   
+                self.query_evaluator(eges_modified[2], attrs_changed[2], modify_boolean[2])   
+                print("Updated Relationships: ")   
+                print(self.query_evaluator.match_rel(edges_modified[2]))   
+            elif command_name == "DELETENODE":   
+                node_deleted = attribute_list[0]   
+                self.query_evaluator.delete_node(node_deleted[2])   
+            elif command_name == "DELETEEDGE":   
+                edge_deleted = attribute_list[0]   
+                self.query_evaluator.delete_rel(edge_deleted[2])   
+            elif command_name == "RETURN":  
+                for item in attribute_list:    
+                    print (item[1] + " = " + str(self.gs.get_identifier(item[1])))   
+            elif command_name == "HASPATH":   
+                item1 = attribute_list[0]   
+                item2 = attribute_list[1]   
+                nodes1 = self.query_evaluator.match(item1[2], None, None)   
+                nodes2 = self.query_evaluator.match(item2[2], None, None)      
+                for node1 in nodes1:   
+                    for node2 in nodes2:   
+                        if (self.query_evaluator.check_path(node1[0], node2[0])):   
+                            print("A path exists between " + node1 + " and " + node2)   
+                        else:   
+                            print("No path exists between " + node1 + " and " + node2)   
+            elif command_name == "CLEAR":   
+                self.query_evaluator.clear()   
+            elif command_name == "SHORTESTPATH":   
+                item1 = attribute_list[0]   
+                item2 = attribute_list[1]   
+                nodes1 = self.query_evaluator.match(item1[2], None, None)   
+                nodes2 = self.query_evaluator.match(item2[2], None, None)      
+                for node1 in nodes1:   
+                    for node2 in nodes2:   
+                        if (self.query_evaluator.check_path(node1[0], node2[0])):
+                            path_list = self.query_evaluator.get_shortest_path(node1[0], node2[0])
+                            print ("The nodes in the path between " + node1 + " and " + node2 + " are: ")   
+                            for node_id in path_list:   
+                                print (node_id, self.query_evaluator.get_node_attrs(node_id))   
+                        else:   
+                            print("No path exists between " + node1 + " and " + node2)   
+            
+
+
 
                 # if command_name == "MATCH":   
                 #     if len(attribute_list) == 1:   
