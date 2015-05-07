@@ -4,6 +4,7 @@ from graph_storage import GraphStorage
 from utilities import Utilities
 
 
+
 class LoadData:
     """
     Class is responsible for taking a text file in a certain format
@@ -44,19 +45,34 @@ class LoadData:
         structure stored in the QueryEvaluator object and saves the
         data onto disk.
         """
+        # Stores a set of nodes and edges
+        node = set()
+        edge = set()
+
         f = open(text_file, 'r')
         for line in f:
             # Skips commented lines in text file
             if line[0][0] == '#':
                 continue
-            # Adds node and edges between the nodes in our graph database
+            # Stores nodes and edges in our set data structure
             line = line.strip().split('\t')
-            node1, node2 = int(line[0]), int(line[1])
-            n1 = self.q_eval.add_node({'id' : node1})
-            n2 = self.q_eval.add_node({'id' : node2})
-            e1 = self.q_eval.add_relationship(n1, n2, {})
+            node1, node2 = line[0], line[1]
+            node.add(node1)
+            node.add(node2)
+            edge.add((node1, node2))
 
         f.close()
+
+        # Stores return value when a node is added
+        node_dict = {}
+
+        # Adds node and edges between the nodes in our graph database
+        for n in node:
+            n1 = self.q_eval.add_node({'id' : n})
+            node_dict[n] = n1
+
+        for node1,node2 in edge:
+            self.q_eval.add_relationship(node_dict[node1], node_dict[node2], {})
 
         # Saves the file to disk
         self.gstorage.write_graph(self.graph_file, self.id_file)
