@@ -100,16 +100,12 @@ class Linker:
                 nodes_modified = attribute_list[0]   
                 attrs_changed = attribute_list[1]   
                 modify_boolean = attribute_list[2]   
-                self.query_evaluator(nodes_modified[2], attrs_changed[2], modify_boolean[2])   
-                print("Updated Nodes: ")   
-                print(self.query_evaluator.match_node(nodes_modified[2]))   
+                self.query_evaluator.modify_node(nodes_modified[2], attrs_changed[2], (modify_boolean[2])["val"])     
             elif command_name == "MODIFYEDGE":   
                 edges_modified = attribute_list[0]   
                 attrs_changed = attribute_list[1]   
-                modify_boolean = attribute_list[2]   
-                self.query_evaluator(eges_modified[2], attrs_changed[2], modify_boolean[2])   
-                print("Updated Relationships: ")   
-                print(self.query_evaluator.match_rel(edges_modified[2]))   
+                modify_boolean = attribute_list[2]
+                self.query_evaluator.modify_rel(eges_modified[2], attrs_changed[2], (modify_boolean[2])["val"])    
             elif command_name == "DELETENODE":   
                 node_deleted = attribute_list[0]   
                 self.query_evaluator.delete_node(node_deleted[2])   
