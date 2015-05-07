@@ -17,23 +17,23 @@ Commands are terminated by a space followed by a semicolon. For example:
 
 Here are some examples of usage:  
 ```
->>> create A asdf:12 ;
-Nodes
-[(1, {'asdf': '12'})]
-Edges
-[]
-Identifier
-{'A': (1, {'asdf': '12'})}
->>> 
->>> return A ;
-Return val: (1, {'asdf': '12'})
+>>> create n: a b:c;
 Unique node id: 1
 Nodes
-[(1, {'asdf': '12'})]
+[(1, {'b': 'c'})]
 Edges
 []
 Identifier
-{'A': (1, {'asdf': '12'})}
+{'a': (1, {'b': 'c'})}
+>>> return n: a;
+a = (1, {'b': 'c'})
+Unique node id: 1
+Nodes
+[(1, {'b': 'c'})]
+Edges
+[]
+Identifier
+{'a': (1, {'b': 'c'})}
 >>>
 ```   
 
@@ -45,6 +45,7 @@ The parser is then called (from parser.py) and parses commands from the user, pa
 Libraries needed for this database are:
 
 NetworkX
+matplotlib
 
 ##Testing
 Testing is currently only available for the query_evaluator.py methods. The python unittest library is used for testing.

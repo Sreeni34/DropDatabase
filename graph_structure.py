@@ -117,10 +117,9 @@ class GraphStructure:
             return self.identifier[id]
         return None   
 
-    def clear_identifiers(self):   
-        """
-        Clears the identifier list.
-        """
+    def clear_all(self):   
+        self.id = 0
+        # Internal dictionary to store variables and values
         self.identifier = {}
 
     def display(self):

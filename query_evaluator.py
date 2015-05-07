@@ -1,5 +1,6 @@
 from graph_structure import GraphStructure
 import networkx as nx
+from visualize_graph import VisualizeGraph
 
 class QueryEvaluator:
     """
@@ -15,6 +16,10 @@ class QueryEvaluator:
         """
         self.gs = gs
         self.g = gs.get_graph()
+
+        # Set up visual
+        # newVis = VisualizeGraph(self.gs)
+        # newVis.draw_graph()
 
     def match(self, node1_attrs, node2_attrs, rel_attrs):   
         """ 
@@ -461,7 +466,7 @@ class QueryEvaluator:
         Clear the graph of all nodes and edges
                       
         """   
-        self.gs.clear_identifiers()
+        self.gs.clear_all()
         return self.g.clear()   
 
 

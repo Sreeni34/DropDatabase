@@ -13,4 +13,8 @@ clear;
 create n: a Label:dog create n: b Label:dog 
 create n: c Label:catdog 
 createedge n: a Label:dog e: b Type:Label n: c Label:catdog 
-modifyedge n: 
+modifyedge e: b Type:Label e: a Type:animal b: a val:1;
+
+create n: a Label:dog create n: b Label:dog create n: c Label:catdog createedge n: a Label:dog e: b Type:Label n: c Label:catdog 
+
+clear;

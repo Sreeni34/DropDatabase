@@ -1,4 +1,5 @@
 from query_evaluator import QueryEvaluator
+from bcolors import bcolors
 
 class Linker:
     """ A basic linker class. """
@@ -56,8 +57,12 @@ class Linker:
                 if (len(attribute_list) == 1):   
                     item = attribute_list[0]   
                     if (item[0] == "n:"):   
-                        nodes = self.query_evaluator.match(item[2], None, None)   
-                        print nodes   
+                        nodes = self.query_evaluator.match(item[2], None, None) 
+                        print (bcolors.OKBLUE + "NODE MATCHES:")  
+                        if nodes == []:   
+                            print bcolors.FAIL + "No matches found" + bcolors.ENDC
+                        else:
+                            print bcolors.OKBLUE + str(nodes) + bcolors.ENDC
                     elif (item[0] == "e:"):   
                         edges = self.query_evaluator.match(None, None, item[2])   
                         for edge in edges:   
@@ -105,7 +110,7 @@ class Linker:
                 edges_modified = attribute_list[0]   
                 attrs_changed = attribute_list[1]   
                 modify_boolean = attribute_list[2]
-                self.query_evaluator.modify_rel(eges_modified[2], attrs_changed[2], (modify_boolean[2])["val"])    
+                self.query_evaluator.modify_rel(edges_modified[2], attrs_changed[2], (modify_boolean[2])["val"])    
             elif command_name == "DELETENODE":   
                 node_deleted = attribute_list[0]   
                 self.query_evaluator.delete_node(node_deleted[2])   

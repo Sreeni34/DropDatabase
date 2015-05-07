@@ -14,4 +14,5 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 if __name__ == "__main__":
-	print(bcolors.OKGREEN + "TRYING BINARY" + bcolors.ENDC)
+    print(bcolors.OKGREEN + "TRYING BINARY" + bcolors.ENDC)
+    print bcolors.WARNING + "Warning: No active frommets remain. Continue?" + bcolors.ENDC
