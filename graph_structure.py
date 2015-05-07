@@ -121,6 +121,7 @@ class GraphStructure:
         self.id = 0
         # Internal dictionary to store variables and values
         self.identifier = {}
+        self.graph = nx.DiGraph()
 
     def display(self):
         """

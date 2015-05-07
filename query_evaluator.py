@@ -467,8 +467,6 @@ class QueryEvaluator:
                       
         """   
         self.gs.clear_all()
-        return self.g.clear()   
-
 
     def is_connected(self, node1_id, node2_id):   
         """ 
