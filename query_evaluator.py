@@ -236,8 +236,8 @@ class QueryEvaluator:
         @param attr_change: Attributes to either add or delete   
         @type update_type: Boolean
         @param update_type: Specifies whether to add or delete an attribute.   
-        True means an attribute is being added and false means an attribute   
-        is being deleted   
+        True/1 means an attribute is being added and false/0 means an attribute   
+        is being deleted.    
         @rtype: None
         @return: None           
         """   
@@ -461,7 +461,9 @@ class QueryEvaluator:
         Clear the graph of all nodes and edges
                       
         """   
+        self.gs.clear_identifiers()
         return self.g.clear()   
+
 
     def is_connected(self, node1_id, node2_id):   
         """ 

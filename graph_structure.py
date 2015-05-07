@@ -115,7 +115,13 @@ class GraphStructure:
         """
         if id in self.identifier:
             return self.identifier[id]
-        return None
+        return None   
+
+    def clear_identifiers(self):   
+        """
+        Clears the identifier list.
+        """
+        self.identifier = {}
 
     def display(self):
         """
