@@ -1,6 +1,7 @@
 import unittest
 from query_evaluator import QueryEvaluator
 from graph_structure import GraphStructure
+from predicates import Predicates
 
 class TestQueryEvaluator(unittest.TestCase):
 
@@ -331,6 +332,31 @@ class TestQueryEvaluator(unittest.TestCase):
         # Test all matches for multiple length query
         result4 = q.multi_match([{}, {}], [{}])
         self.assertEqual(result4, [edge1, edge2, edge3, edge4])
+
+    def test_match_node_predicate(self):
+        """
+        Tests applying a predicate to a simple match node query for QueryEvaluator.
+        """
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
+        pred = Predicates(gs)
+        attrs1 = {'Label' : 'Person', 'Name' : 'Alice', 'Salary' : '500'}
+        attrs2 = {'Label' : 'Person', 'Name' : 'Bob', 'Salary' : '1000'}
+        attrs3 = {'Label' : 'Person', 'Name' : 'John', 'Salary' : '20000'}
+        attrs4 = {'Label' : 'Person', 'Name' : 'Donnie', 'Salary' : '100000000'}
+        node1 = q.add_node(attrs1)
+        node2 = q.add_node(attrs2)
+        node3 = q.add_node(attrs3)
+        node4 = q.add_node(attrs4)
+        # Test matching all nodes and then filtering with a predicate
+        match_lst1 = q.match_node({'Label' : 'Person'})
+        # The predicate is salary > 2000 
+        filtered_lst1 = pred.filter(match_lst1, 'Salary', '2000', '>')
+        self.assertEqual(filtered_lst1, [node3, node4])
+        # Test matching a single node and then filtering with a predicate
+        match_lst2 = q.match_node({'Name' : 'Alice'})
+        filtered_lst2 = pred.filter(match_lst2, 'Salary', '500', '=')
+        self.assertEqual(filtered_lst2, [node1])
 
 
 

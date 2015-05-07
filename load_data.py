@@ -52,7 +52,7 @@ class LoadData:
         f = open(text_file, 'r')
         for line in f:
             # Skips commented lines in text file
-            if line[0][0] == '#':
+            if line[0] == '#':
                 continue
             # Stores nodes and edges in our set data structure
             line = line.strip().split('\t')

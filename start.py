@@ -5,6 +5,7 @@ from graph_structure import GraphStructure
 from graph_storage import GraphStorage
 import networkx as nx
 from utilities import Utilities
+from BatchExecute import BatchExecute
 
 class StartDatabase:
     """
@@ -12,7 +13,7 @@ class StartDatabase:
     the entire interaction from user input to printing out data. 
     """
 
-    def __init__(self):
+    def __init__(self, flag):
         """ 
         Initializes the graph database by reading persisted data on disk
         and setting up the internal in-memory graph file.
@@ -25,6 +26,10 @@ class StartDatabase:
         self.graph_file = 'graph_file'
         self.id_file = 'id_file'
         self.load_persistent_data()
+
+        # If flag is set, need to execute commands in file that user passed.
+        if flag:
+            BatchExecute(self.gs, sys.argv[1])
 
 
     def load_persistent_data(self):
@@ -46,7 +51,7 @@ class StartDatabase:
         """
         while True:
             # Prints out the graph structure for testing purposes
-            self.gs.display()
+            #self.gs.display()
 
             commands = []
             sys.stdout.write(">>> ")
@@ -61,7 +66,7 @@ class StartDatabase:
 
             # Start the parser and parse the commands
             if (command_str[-1] == ";"):
-                real_command = command_str[:-1] + " ;"
+                real_command = command_str[:-1] + " ;" # need to add space for parser 
                 parser = Parser(real_command)
                 parser.run()
             else:
@@ -88,7 +93,18 @@ class StartDatabase:
 
 # Start our main programs
 if __name__ == "__main__":
-    start = StartDatabase()
+
+    batch_flag = False
+
+    # Check if user supplied a file of commands to execute in a batch. 
+    # If so, indicate that they should be executed during initialization. 
+    if len(sys.argv) == 2:
+        batch_flag = True
+
+    # Do all necessary initialization on start-up.
+    start = StartDatabase(batch_flag)
+
+    # Then run the interpreter. 
     try:
         start.run()
     except KeyboardInterrupt:

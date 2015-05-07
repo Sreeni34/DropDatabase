@@ -1,0 +1,8 @@
+
+# Some basic create commands. 
+create n: a attr1:20;
+create n: b attr1:50;
+create n: c attr1:100;
+create n: d attr1:5000;
+create n: e attr1:287;
+create n: f attr1:23897329;

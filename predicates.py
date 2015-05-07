@@ -40,7 +40,8 @@ class Predicates:
         value and operation. 
 
         @type node_list: List
-        @param node_list: List of node ids
+        @param node_list: List of nodes. Each node is a tuples consisting 
+        of an id and a dictionary of attributes.
         @type attr: String
         @param attr: Attribute used to filter node
         @type value: String that represents a number.
@@ -51,7 +52,7 @@ class Predicates:
         @rtype: List
         @return: Filtered list of nodes that satisfy the predicate. 
         """
-        val = str2float(value)
+        val = self.str2float(value)
         if val == "ERROR":
             print "ERROR : Comparison Value must be an number..."
             return []
@@ -73,7 +74,8 @@ class Predicates:
         are less than the passed value. 
 
         @type node_list: List
-        @param node_list: List of node ids
+        @param node_list: List of nodes. Each node is a tuples consisting 
+        of an id and a dictionary of attributes.
         @type attr: String
         @param attr: Attribute used to filter node
         @type value: Float
@@ -83,7 +85,7 @@ class Predicates:
         """
         ret = []
         for n in node_list:
-            attr_val = str2float(self.g[n][attr])
+            attr_val = self.str2float(n[1][attr])
             if attr_val == "ERROR":
                 print "ERROR : Got attribute value that is not a number..."
                 continue
@@ -99,7 +101,8 @@ class Predicates:
         are greater than the passed value. 
 
         @type node_list: List
-        @param node_list: List of node ids
+        @param node_list: List of nodes. Each node is a tuples consisting 
+        of an id and a dictionary of attributes.
         @type attr: String
         @param attr: Attribute used to filter node
         @type value: Float
@@ -109,7 +112,7 @@ class Predicates:
         """
         ret = []
         for n in node_list:
-            attr_val = str2float(self.g[n][attr])
+            attr_val = self.str2float(n[1][attr])
             if attr_val == "ERROR":
                 print "ERROR : Got attribute value that is not a number..."
                 continue
@@ -125,7 +128,8 @@ class Predicates:
         are equal to the passed value. 
 
         @type node_list: List
-        @param node_list: List of node ids
+        @param node_list: List of nodes. Each node is a tuples consisting 
+        of an id and a dictionary of attributes.
         @type attr: String
         @param attr: Attribute used to filter node
         @type value: Float
@@ -135,7 +139,7 @@ class Predicates:
         """
         ret = []
         for n in node_list:
-            attr_val = str2float(self.g[n][attr])
+            attr_val = self.str2float(n[1][attr])
             if attr_val == "ERROR":
                 print "ERROR : Got attribute value that is not a number..."
                 continue
