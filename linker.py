@@ -79,8 +79,8 @@ class Linker:
                     item2 = attribute_list[1]   
                     item3 = attribute_list[2]   
                     edges = self.query_evaluator.match(item1[2], item3[2], item2[2])   
-                        for edge in edges:   
-                            edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
+                    for edge in edges:   
+                        edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
                 else:   
                     counter = 0   
                     node_attr_list = []   
