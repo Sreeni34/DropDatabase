@@ -12,7 +12,7 @@ This will load any graph database files from disk to restore the graph state, if
 Commands can be entered at the prompt ">>>".   
 Commands are terminated by a space followed by a semicolon. For example:
 ```
->>> Create A asdf:12 ;
+>>> Create n: a asdf:12;
 ```
 
 Here are some examples of usage:  
