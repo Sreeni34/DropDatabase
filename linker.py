@@ -66,7 +66,151 @@ class Linker:
 
         self.list_objects = object_list;
         self.gs = gs
-        self.query_evaluator = QueryEvaluator(gs)
+        self.query_evaluator = QueryEvaluator(gs)   
+
+    def PrintNodes(self, nodes):   
+        """
+        Prints a list of nodes.       
+
+        @type nodes: List 
+        @param nodes: Node tuples to be printed.     
+        """   
+        if nodes == [] or nodes == None:   
+            print bcolors.FAIL + "No matches found" + bcolors.ENDC
+        else:
+            print bcolors.OKGREEN + "NODE MATCHES:" + bcolors.ENDC  
+            print bcolors.OKBLUE + str(nodes) + bcolors.ENDC   
+
+    def PrintEdges(self, Edges):   
+        """
+        Prints a list of edges.       
+
+        @type nodes: List 
+        @param nodes: Edge tuples to be printed.     
+        """   
+        if edges == []:   
+            print bcolors.FAIL + "No matches found" + bcolors.ENDC
+        else:   
+            print bcolors.OKGREEN + "EDGE MATCHES:" + bcolors.ENDC
+            edge_num = 1   
+            for edge in edges:   
+                edge_tup = (self.query_evaluator.get_node_attrs(
+                    edge[0]), edge[2], 
+                    self.query_evaluator.get_node_attrs(edge[1]))   
+                print bcolors.OKBLUE + "Edge " + str(edge_num) + " = " + str(edge_tup) + bcolors.ENDC   
+                edge_num += 1
+
+    def CreateNode(self, attribute_list):   
+        """
+        Creates a node and sets the identifier to   
+        refer to the created node using the passed   
+        in parsed attribute list.    
+
+        @type attribute_list: List 
+        @param attribute_list: List of parsed objects, where each
+        element is of the form "Type: Identifier dictionary_attributes".  
+        """   
+        for node in attribute_list:
+            curr_id = node[1]   
+            curr_attrs = node[2]
+            self.gs.set_identifier(curr_id, self.query_evaluator.add_node(curr_attrs))   
+
+    def CreateEdge(self, attribute_list):   
+        """
+        Creates an edge between the specified nodes and with   
+        the specified relationship attributes, all contained   
+        in the parsed attribute list    
+
+        @type attribute_list: List 
+        @param attribute_list: List of parsed objects, where each
+        element is of the form "Type: Identifier dictionary_attributes".  
+        """   
+        counter = 0
+        [nodes1_identifier, nodes1, edge_identifier, edge_attrs, 
+        nodes1_identifier, nodes2] = [0]*6
+        for item in attribute_list:
+            if (counter % 3) == 0:   
+                nodes1 = self.query_evaluator.match_node(item[2])
+            elif (counter % 2) == 1:
+                edge_identifier = item[1]
+                edge_attrs = item[2]   
+            elif (counter % 3) == 2:   
+                nodes2 = self.query_evaluator.match_node(item[2])   
+                for node1 in nodes1:
+                    for node2 in nodes2:  
+                        self.gs.set_identifier(edge_identifier, 
+                            self.query_evaluator.add_relationship(node1,
+                             node2, edge_attrs))
+            counter += 1   
+
+    def MatchSingleItem(self, attribute_list):   
+        """
+        Matches a single item, either a node or a relationship, by   
+        calling the appropriate query_evaltor method.   
+        Then prints out the results of the match query     
+
+        @type attribute_list: List 
+        @param attribute_list: List of parsed objects, where each
+        element is of the form "Type: Identifier dictionary_attributes".   
+        """   
+        item = attribute_list[0]   
+        if item[0] == "n:":   
+            nodes = self.query_evaluator.match(item[2], None, None)   
+            self.PrintNodes(nodes);    
+        elif item[0] == "e:":   
+            edges = self.query_evaluator.match(None, None, item[2])   
+            self.PrintEdges(edges)   
+
+    def MatchTwoItems(self, attribute_list):   
+        """
+        Matches a pair of nodes and edges.     
+
+        @type attribute_list: List 
+        @param attribute_list: List of parsed objects, where each
+        element is of the form "Type: Identifier dictionary_attributes".  
+        """   
+        item1 = attribute_list[0]   
+        item2 = attribute_list[1]   
+        if item1[0] == "n:":   
+            edges = self.query_evaluator.match(None, item1[2], item2[2])   
+            self.PrintEdges(edges)   
+        else:   
+            edges = self.query_evaluator.match(None, item2[2], item1[2])   
+            self.PrintEdges(edges)   
+
+    def MatchThreeItems(self, attribute_list):   
+        """
+        Matches a node, edge, node sequence in that order     
+
+        @type attribute_list: List 
+        @param attribute_list: List of parsed objects, where each
+        element is of the form "Type: Identifier dictionary_attributes".  
+        """   
+        item1 = attribute_list[0]   
+        item2 = attribute_list[1]   
+        item3 = attribute_list[2]   
+        edges = self.query_evaluator.match(item1[2], item3[2], item2[2])   
+        self.PrintEdges(edges)   
+
+    def MatchChain(self, attribute_list):   
+        """
+        Matches a chain of node, edge, node, edge, node...     
+
+        @type attribute_list: List 
+        @param attribute_list: List of parsed objects, where each
+        element is of the form "Type: Identifier dictionary_attributes".  
+        """   
+        counter = 0   
+        node_attr_list = []   
+        edge_attr_list = []   
+        for item in attribute_list:   
+            if (counter) % 2 == 0:   
+                node_attr_list.append(item[2])   
+            elif (counter) % 2 == 1:   
+                edge_attr_list.append(item[2])   
+            counter += 1   
+        nodes = self.query_evaluator.multi_match(node_attr_list, edge_attr_list)   
+        self.PrintNodes(nodes)      
 
     def execute(self):
         """
@@ -77,109 +221,18 @@ class Linker:
             command_name = obj.get_command()
             attribute_list = obj.get_attr_list()
             if command_name == "CREATE":
-                for node in attribute_list:
-                    curr_id = node[1]   
-                    curr_attrs = node[2]
-                    self.gs.set_identifier(curr_id, self.query_evaluator.add_node(curr_attrs))   
+                self.CreateNode(attribute_list)   
             elif command_name == "CREATEEDGE":   
-                counter = 0
-                [nodes1_identifier, nodes1, edge_identifier, edge_attrs, 
-                nodes1_identifier, nodes2] = [0]*6
-                for item in attribute_list:
-                    if ((counter % 3) == 0):   
-                        nodes1 = self.query_evaluator.match_node(item[2])
-                    elif ((counter % 2) == 1):
-                        edge_identifier = item[1]
-                        edge_attrs = item[2]   
-                    elif((counter % 3) == 2):   
-                        nodes2 = self.query_evaluator.match_node(item[2])   
-                        for node1 in nodes1:
-                            for node2 in nodes2:  
-                                self.gs.set_identifier(edge_identifier, 
-                                    self.query_evaluator.add_relationship(node1,
-                                     node2, edge_attrs))
-                    counter += 1   
+                self.CreateEdge(attribute_list)   
             elif command_name == "MATCH":   
                 if (len(attribute_list) == 1):   
-                    item = attribute_list[0]   
-                    if (item[0] == "n:"):   
-                        nodes = self.query_evaluator.match(item[2], None, None) 
-                        if nodes == []:   
-                            print bcolors.FAIL + "No matches found" + bcolors.ENDC
-                        else:
-                            print bcolors.OKGREEN + "NODE MATCHES:" + bcolors.ENDC  
-                            print bcolors.OKBLUE + str(nodes) + bcolors.ENDC
-                    elif (item[0] == "e:"):   
-                        edges = self.query_evaluator.match(None, None, item[2])
-                        if edges == []:   
-                            print bcolors.FAIL + "No matches found" + bcolors.ENDC
-                        else:   
-                            print bcolors.OKGREEN + "EDGE MATCHES:" + bcolors.ENDC
-                            edge_num = 1   
-                            for edge in edges:   
-                                edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
-                                print bcolors.OKBLUE + "Edge " + str(edge_num) + " = " + str(edge_tup) + bcolors.ENDC   
-                                edge_num += 1      
-                elif(len(attribute_list) == 2):   
-                    item1 = attribute_list[0]   
-                    item2 = attribute_list[1]   
-                    if (item1[0] == "n:"):   
-                        edges = self.query_evaluator.match(None, item1[2], item2[2])   
-                        if edges == []:   
-                            print bcolors.FAIL + "No matches found" + bcolors.ENDC   
-                        else:   
-                            print bcolors.OKGREEN + "EDGE MATCHES:" + bcolors.ENDC   
-                            edge_num = 1       
-                            for edge in edges:   
-                                edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
-                                print bcolors.OKBLUE + "Edge " + str(edge_num) + " = " + str(edge_tup) + bcolors.ENDC   
-                                edge_num += 1   
-                    else:   
-                        edges = self.query_evaluator.match(None, item2[2], item1[2])   
-                        if edges == []:   
-                            print bcolors.FAIL + "No matches found" + bcolors.ENDC   
-                        else:   
-                            print bcolors.OKGREEN + "EDGE MATCHES:" + bcolors.ENDC   
-                            edge_num = 1   
-                            for edge in edges:   
-                                edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
-                                print bcolors.OKBLUE + "Edge " + str(edge_num) + " = " + str(edge_tup) + bcolors.ENDC   
-                                edge_num += 1   
-
+                    self.MatchSingleItem(attribute_list)      
+                elif(len(attribute_list) == 2):      
+                    self.MatchTwoItems(attribute_list)
                 elif(len(attribute_list) == 3):   
-                    item1 = attribute_list[0]   
-                    item2 = attribute_list[1]   
-                    item3 = attribute_list[2]   
-                    edges = self.query_evaluator.match(item1[2], item3[2], item2[2])   
-                    if edges == []:   
-                        print bcolors.FAIL + "No matches found" + bcolors.ENDC   
-                    else:   
-                        print bcolors.OKGREEN + "EDGE MATCHES:" + bcolors.ENDC   
-                        edge_num = 1      
-                        for edge in edges:   
-                            edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
-                            print bcolors.OKBLUE + "Edge " + str(edge_num) + " = " + str(edge_tup) + bcolors.ENDC   
-                            edge_num += 1   
+                    self.MatchThreeItems(attribute_list)  
                 else:   
-                    counter = 0   
-                    node_attr_list = []   
-                    edge_attr_list = []   
-                    for item in attribute_list:   
-                        if ((counter) % 2 == 0):   
-                            node_attr_list.append(item[2])   
-                        elif((counter) % 2 == 1):   
-                            edge_attr_list.append(item[2])   
-                        counter += 1   
-                    nodes = self.query_evaluator.multi_match(node_attr_list, edge_attr_list)   
-                    if (nodes == None):   
-                        print bcolors.FAIL + "No matches found" + bcolors.ENDC   
-                    else:   
-                        print bcolors.OKGREEN + "NODE MATCHES:" + bcolors.ENDC   
-                        node_num = 1   
-                        for node in nodes:   
-                            node_tup = node[0], self.query_evaluator.get_node_attrs(node[0])
-                            print bcolors.OKBLUE + "Node " + str(node_num) + " = " + str(node_tup) + bcolors.ENDC   
-                            node_num += 1      
+                    self.MatchChain(attribute_list)
             elif command_name == "MODIFYNODE":   
                 nodes_modified = attribute_list[0]   
                 attrs_changed = attribute_list[1]   
