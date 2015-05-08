@@ -104,36 +104,62 @@ class Linker:
                     item = attribute_list[0]   
                     if (item[0] == "n:"):   
                         nodes = self.query_evaluator.match(item[2], None, None) 
-                        print (bcolors.OKBLUE + "NODE MATCHES:")  
                         if nodes == []:   
                             print bcolors.FAIL + "No matches found" + bcolors.ENDC
                         else:
+                            print bcolors.OKGREEN + "NODE MATCHES:" + bcolors.ENDC  
                             print bcolors.OKBLUE + str(nodes) + bcolors.ENDC
                     elif (item[0] == "e:"):   
                         edges = self.query_evaluator.match(None, None, item[2])
                         if edges == []:   
-                            print bcolors.FAIL + "No matches found" + bcolors.ENDC   
-                        for edge in edges:   
-                            edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
-                            print bcolors.OKBLUE + str(edge_tup) + bcolors.ENDC      
+                            print bcolors.FAIL + "No matches found" + bcolors.ENDC
+                        else:   
+                            print bcolors.OKGREEN + "EDGE MATCHES:" + bcolors.ENDC
+                            edge_num = 1   
+                            for edge in edges:   
+                                edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
+                                print bcolors.OKBLUE + "Edge " + str(edge_num) + " = " + str(edge_tup) + bcolors.ENDC   
+                                edge_num += 1      
                 elif(len(attribute_list) == 2):   
                     item1 = attribute_list[0]   
                     item2 = attribute_list[1]   
                     if (item1[0] == "n:"):   
                         edges = self.query_evaluator.match(None, item1[2], item2[2])   
-                        for edge in edges:   
-                            edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
+                        if edges == []:   
+                            print bcolors.FAIL + "No matches found" + bcolors.ENDC   
+                        else:   
+                            print bcolors.OKGREEN + "EDGE MATCHES:" + bcolors.ENDC   
+                            edge_num = 1       
+                            for edge in edges:   
+                                edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
+                                print bcolors.OKBLUE + "Edge " + str(edge_num) + " = " + str(edge_tup) + bcolors.ENDC   
+                                edge_num += 1   
                     else:   
                         edges = self.query_evaluator.match(None, item2[2], item1[2])   
-                        for edge in edges:   
-                            edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
+                        if edges == []:   
+                            print bcolors.FAIL + "No matches found" + bcolors.ENDC   
+                        else:   
+                            print bcolors.OKGREEN + "EDGE MATCHES:" + bcolors.ENDC   
+                            edge_num = 1   
+                            for edge in edges:   
+                                edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
+                                print bcolors.OKBLUE + "Edge " + str(edge_num) + " = " + str(edge_tup) + bcolors.ENDC   
+                                edge_num += 1   
+
                 elif(len(attribute_list) == 3):   
                     item1 = attribute_list[0]   
                     item2 = attribute_list[1]   
                     item3 = attribute_list[2]   
                     edges = self.query_evaluator.match(item1[2], item3[2], item2[2])   
-                    for edge in edges:   
-                        edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
+                    if edges == []:   
+                        print bcolors.FAIL + "No matches found" + bcolors.ENDC   
+                    else:   
+                        print bcolors.OKGREEN + "EDGE MATCHES:" + bcolors.ENDC   
+                        edge_num = 1      
+                        for edge in edges:   
+                            edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
+                            print bcolors.OKBLUE + "Edge " + str(edge_num) + " = " + str(edge_tup) + bcolors.ENDC   
+                            edge_num += 1   
                 else:   
                     counter = 0   
                     node_attr_list = []   
@@ -143,12 +169,17 @@ class Linker:
                             node_attr_list.append(item[2])   
                         elif((counter) % 2 == 1):   
                             edge_attr_list.append(item[2])   
+                        counter += 1   
                     nodes = self.query_evaluator.multi_match(node_attr_list, edge_attr_list)   
                     if (nodes == None):   
-                        print("No nodes exist")   
+                        print bcolors.FAIL + "No matches found" + bcolors.ENDC   
                     else:   
+                        print bcolors.OKGREEN + "NODE MATCHES:" + bcolors.ENDC   
+                        node_num = 1   
                         for node in nodes:   
-                            print(node[0], self.query_evaluator.get_node_attrs(node[0]))      
+                            node_tup = node[0], self.query_evaluator.get_node_attrs(node[0])
+                            print bcolors.OKBLUE + "Node " + str(node_num) + " = " + str(node_tup) + bcolors.ENDC   
+                            node_num += 1      
             elif command_name == "MODIFYNODE":   
                 nodes_modified = attribute_list[0]   
                 attrs_changed = attribute_list[1]   
@@ -167,7 +198,7 @@ class Linker:
                 self.query_evaluator.delete_rel(edge_deleted[2])   
             elif command_name == "RETURN":  
                 for item in attribute_list:    
-                    print (item[1] + " = " + str(self.gs.get_identifier(item[1])))   
+                    print bcolors.OKBLUE + str(item[1]) + " = " + str(self.gs.get_identifier(item[1])) + bcolors.ENDC   
             elif command_name == "HASPATH":   
                 item1 = attribute_list[0]   
                 item2 = attribute_list[1]   

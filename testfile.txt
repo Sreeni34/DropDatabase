@@ -1,6 +1,7 @@
 
 # Create 3 nodes, match edge from two to one
-create n: a Label:dog create n: b Label:dog 
+create n: a Label:dog 
+create n: b Label:dog 
 create n: c Label:catdog 
 createedge n: a Label:dog e: b Type:Label n: c Label:catdog 
 modifynode n: a Label:dog n: a Label:catdog b: a val:1;
@@ -10,7 +11,8 @@ create n: a Label:dog create n: b Label:dog create n: c Label:catdog createedge 
 clear;
 
 # Test modifyedge
-create n: a Label:dog create n: b Label:dog 
+create n: a Label:dog 
+create n: b Label:dog 
 create n: c Label:catdog 
 createedge n: a Label:dog e: b Type:Label n: c Label:catdog 
 modifyedge e: b Type:Label e: a Type:animal b: a val:1;
@@ -20,4 +22,44 @@ create n: a Label:dog create n: b Label:dog create n: c Label:catdog createedge 
 clear;
 
 
-# 
+# Basic query
+
+create n: a Label:dog Name:good
+create n: b Label:dog Name:bad
+create n: c Label:catdog Name:mild
+create n: d Label:person Name:kite
+create n: e Label:person Name:food
+createedge n: a Label:dog e: b Type:friend n: c Label:person
+createedge n: a Label:dog e: b Type:enemy n: c Label:catdog
+createedge n: a Name:food e: b Type:owner n: c Name:mild
+match n: f Label:dog e: f Type:enemy
+match n: f Name:mild e: f Type:owner
+match e: f Type:friend
+clear
+
+create n: a Label:dog Name:good create n: b Label:dog Name:bad create n: c Label:catdog Name:mild create n: d Label:person Name:kite create n: e Label:person Name:food
+createedge n: a Label:dog e: b Type:friend n: c Label:person createedge n: a Label:dog e: b Type:enemy n: c Label:catdog createedge n: a Name:food e: b Type:owner n: c Name:mild
+match n: f Label:dog e: f Type:enemy
+match n: f Name:mild e: f Type:owner -- No matches
+match e: f Type:friend
+clear
+
+
+
+# Super depth with return
+create n: a Label:dog Name:good
+create n: b Label:dog Name:bad
+create n: c Label:catdog Name:mild
+create n: d Label:person Name:kite
+create n: e Label:dogcat Name:food
+createedge n: a Label:dog e: b Type:friend n: c Label:person
+createedge n: c Label:person e: b Type:owner n: c Name:mild 
+createedge n: c Name:mild e: b Type:enemy n: c Label:dogcat
+match n: a Name:good e: b Type:friend n: b Name:kite e: c Type:owner n: c Label:catdog
+return n: a;
+
+
+create n: a Label:dog Name:good create n: b Label:dog Name:bad create n: c Label:catdog Name:mild create n: d Label:person Name:kite create n: e Label:dogcat Name:food
+createedge n: a Label:dog e: b Type:friend n: c Label:person createedge n: c Label:person e: b Type:owner n: c Name:mild  createedge n: c Name:mild e: b Type:enemy n: c Label:dogcat
+match n: a Name:good e: b Type:friend n: b Name:kite e: c Type:owner n: c Label:catdog
+return n: a;
