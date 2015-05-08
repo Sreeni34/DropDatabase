@@ -99,8 +99,8 @@ class Command_Struct:
         Inserts the type which identifies whether the list of attributes
         belong to a node or an edge.
 
-        @type name: String
-        @param name: String representing the type of attributes
+        @type attr_type: String
+        @param attr_type: String representing the type of attributes
         """
 
         self.attr.append([attr_type, "", {}])
@@ -191,8 +191,8 @@ class Command_Struct:
         This method updates the boolean value to the value
         specified by the user.
 
-        @type name: Boolean
-        @param name: Boolean value further used in query evaluator. 
+        @type bool_val: Boolean
+        @param bool_val: Boolean value further used in query evaluator. 
         """
 
         self.bool = bool_val
@@ -203,8 +203,8 @@ class Command_Struct:
         This method returns the boolean value pertaining to 
         the specific command.
 
-        @rtype Boolean
-        @return Boolean value (-1 if none set)
+        @rtype: Boolean
+        @return: Boolean value (-1 if none set)
         """
 
         return self.bool

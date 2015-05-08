@@ -320,8 +320,8 @@ class QueryEvaluator:
         """ 
         Get the node_id node attribtues 
 
-        @type node1_id: Integer
-        @param node1_id: The node id    
+        @type node_id: Integer
+        @param node_id: The node id    
         @rtype: Dictionary
         @return: Node attributes of the node with id node_id           
         """   
@@ -333,9 +333,9 @@ class QueryEvaluator:
         Set the attribtues of node_id with the specified node attribtues 
 
         @type node_id: Integer
-        @param node1_id: The node id  
-        @type node_attrs: Dictionary         
-        @param node_attrs: Node attributes to be set  
+        @param node_id: The node id  
+        @type node_attributes: Dictionary         
+        @param node_attributes: Node attributes to be set  
         @rtype: None
         @return: None           
         """   
@@ -347,7 +347,7 @@ class QueryEvaluator:
         there are common nodes in the edge tuples 
 
         @type edge_list: Dictionary
-        @param node1_id: Dictionary containing lists of edge 
+        @param edge_list: Dictionary containing lists of edge 
         tuples to consolidate  
         @rtype: Dictionary
         @return: Consolidated dictionary of lists of edge tuples.            

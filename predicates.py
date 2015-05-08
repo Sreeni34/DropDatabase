@@ -19,8 +19,8 @@ class Predicates:
         to a floating point number. If the string does not represent a 
         number, returns the string "ERROR". 
 
-        @type val: String that represents a number.
-        @param val: String to convert to a float. 
+        @type value: String that represents a number.
+        @param value: String to convert to a float. 
         @rtype: Float
         @return: The converted string as a float, or 
                  "ERROR" if an error occurred. 
@@ -78,8 +78,8 @@ class Predicates:
         of an id and a dictionary of attributes.
         @type attr: String
         @param attr: Attribute used to filter node
-        @type value: Float
-        @param value: Value to compare the node attributes against. 
+        @type val: Float
+        @param val: Value to compare the node attributes against. 
         @rtype: List
         @return: Filtered list of nodes that satisfy the predicate. 
         """
@@ -105,8 +105,8 @@ class Predicates:
         of an id and a dictionary of attributes.
         @type attr: String
         @param attr: Attribute used to filter node
-        @type value: Float
-        @param value: Value to compare the node attributes against. 
+        @type val: Float
+        @param val: Value to compare the node attributes against. 
         @rtype: List
         @return: Filtered list of nodes that satisfy the predicate. 
         """
@@ -132,8 +132,8 @@ class Predicates:
         of an id and a dictionary of attributes.
         @type attr: String
         @param attr: Attribute used to filter node
-        @type value: Float
-        @param value: Value to compare the node attributes against. 
+        @type val: Float
+        @param val: Value to compare the node attributes against. 
         @rtype: List
         @return: Filtered list of nodes that satisfy the predicate. 
         """

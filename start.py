@@ -1,5 +1,5 @@
 import sys
-from parser import Parser
+from parser import *
 from linker import Linker
 from graph_structure import GraphStructure
 from graph_storage import GraphStorage
