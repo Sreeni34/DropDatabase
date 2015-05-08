@@ -1,6 +1,6 @@
 from query_evaluator import QueryEvaluator
 from graph_structure import GraphStructure
-from parser import Parser
+from parser import *
 from linker import Linker
 
 class BatchExecute:   

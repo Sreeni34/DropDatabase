@@ -74,7 +74,7 @@ class GraphStructure:
     def print_edges(self):
         """
         Prints all the edges in the form (starting node id, ending node id,
-            edge attributes)
+        edge attributes)
         """
         print 'Edges'
         print self.graph.edges(data=True)
