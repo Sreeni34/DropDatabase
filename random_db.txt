@@ -1,0 +1,15 @@
+create n: null_id employee_id:779 salary:223802 ;
+create n: null_id employee_id:263 salary:599255 ;
+create n: null_id employee_id:90 salary:775546 ;
+create n: null_id employee_id:61 salary:647828 ;
+create n: null_id employee_id:355 salary:539726 ;
+create n: null_id employee_id:548 salary:15832 ;
+create n: null_id employee_id:362 salary:678229 ;
+create n: null_id employee_id:33 salary:525794 ;
+create n: null_id employee_id:403 salary:626493 ;
+create n: null_id employee_id:269 salary:341062 ;
+createedge n: null_id employee_id:269 salary:341062 e: null_id friendship:546 n: null_id employee_id:355 salary:539726 ;
+createedge n: null_id employee_id:355 salary:539726 e: null_id friendship:659 n: null_id employee_id:779 salary:223802 ;
+createedge n: null_id employee_id:355 salary:539726 e: null_id friendship:194 n: null_id employee_id:548 salary:15832 ;
+createedge n: null_id employee_id:263 salary:599255 e: null_id friendship:729 n: null_id employee_id:362 salary:678229 ;
+createedge n: null_id employee_id:779 salary:223802 e: null_id friendship:431 n: null_id employee_id:61 salary:647828 ;
