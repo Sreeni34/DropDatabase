@@ -75,11 +75,14 @@ class Linker:
         @type nodes: List 
         @param nodes: Node tuples to be printed.     
         """   
-        if nodes == [] or nodes == None:   
+        if nodes == []:   
             print bcolors.FAIL + "No matches found" + bcolors.ENDC
         else:
-            print bcolors.OKGREEN + "NODE MATCHES:" + bcolors.ENDC  
-            print bcolors.OKBLUE + str(nodes) + bcolors.ENDC   
+            print bcolors.OKGREEN + "NODE MATCHES:" + bcolors.ENDC   
+            node_num = 1
+            for node in nodes:  
+                print bcolors.OKBLUE + "Node " + str(node_num) + " = " + str(nodes) + bcolors.ENDC   
+                node_num += 1   
 
     def PrintEdges(self, Edges):   
         """
@@ -209,8 +212,16 @@ class Linker:
             elif (counter) % 2 == 1:   
                 edge_attr_list.append(item[2])   
             counter += 1   
-        nodes = self.query_evaluator.multi_match(node_attr_list, edge_attr_list)   
-        self.PrintNodes(nodes)      
+        nodes = self.query_evaluator.multi_match(node_attr_list, edge_attr_list)
+        if nodes == None:   
+             print bcolors.FAIL + "No matches found" + bcolors.ENDC  
+        for node in nodes:   
+            print bcolors.OKGREEN + "NODE MATCHES:" + bcolors.ENDC   
+            node_num = 1
+            for node in nodes:
+                node_tup = (node[0], self.query_evaluator.get_node_attrs(node[0]))  
+                print bcolors.OKBLUE + "Node " + str(node_num) + " = " + str(node_tup) + bcolors.ENDC   
+                node_num += 1      
 
     def execute(self):
         """
