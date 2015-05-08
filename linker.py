@@ -84,12 +84,12 @@ class Linker:
                 print bcolors.OKBLUE + "Node " + str(node_num) + " = " + str(nodes) + bcolors.ENDC   
                 node_num += 1   
 
-    def PrintEdges(self, Edges):   
+    def PrintEdges(self, edges):   
         """
         Prints a list of edges.       
 
-        @type nodes: List 
-        @param nodes: Edge tuples to be printed.     
+        @type edges: List 
+        @param edges: Edge tuples to be printed.     
         """   
         if edges == []:   
             print bcolors.FAIL + "No matches found" + bcolors.ENDC
