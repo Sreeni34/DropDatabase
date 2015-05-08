@@ -29,7 +29,9 @@ class StartDatabase:
 
         # If flag is set, need to execute commands in file that user passed.
         if flag:
+            print "Loading batch file..."
             BatchExecute(self.gs, sys.argv[1])
+            print "Done executing batch file!"
 
 
     def load_persistent_data(self):

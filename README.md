@@ -12,7 +12,7 @@ This will load any graph database files from disk to restore the graph state, if
 Commands can be entered at the prompt ">>>".   
 Commands are terminated by a space followed by a semicolon. For example:
 ```
->>> Create A asdf:12 ;
+>>> Create n: a asdf:12;
 ```
 
 Here are some examples of usage:  
@@ -37,6 +37,35 @@ Identifier
 >>>
 ```   
 
+##Query Language   
+The query language takes the form:   
+```
+    CREATE          ID ATTR
+    CREATEEDGE      ID ATTR REL ATTR ID ATTR
+    MATCH           ID ATTR REL ATTR ID ATTR REL ATTR ID ATTR ...
+    MODIFYNODE      ID ATTR ID ATTR BOOL
+    MODIFYEDGE      REL ATTR REL ATTR BOOL
+    DELETENODE      ID ATTR
+    DELETEEDGE      REL ATTR
+    RETURN          ID ID ...
+    HASPATH         ID ATTR ID ATTR
+    CLEAR
+    SHORTESTPATH    ID ATTR ID ATTR
+    NEIGHBOR        ID ATTR
+    HASEDGE         ID ATTR ID ATTR
+    COMMONNEIGHBORS ID ATTR ID ATTR
+    RESET
+    FLUSH
+    SHOW
+    VISUALIZE   
+      
+    REL ATTR = e: a b:c
+    ID ATTR = n: a a:b
+    BOOL = b: a val:0/1
+    ID = n: a () () 
+```
+
+
 ##Framework   
 The database is started by initializing the StartDatabase class. This loads the graph files from disk and starts the prompt to take input from the user. 
 The parser is then called (from parser.py) and parses commands from the user, passing in the objects parsed into the linker (from linker.py). The linker then calls the appropriate evaluation methods in query_evaluator.py.   
@@ -45,6 +74,7 @@ The parser is then called (from parser.py) and parses commands from the user, pa
 Libraries needed for this database are:
 
 NetworkX
+
 matplotlib
 
 ##Testing
