@@ -17,9 +17,6 @@ class QueryEvaluator:
         self.gs = gs
         self.g = gs.get_graph()
 
-        # Set up visual
-        # newVis = VisualizeGraph(self.gs)
-        # newVis.draw_graph()
 
     def match(self, node1_attrs, node2_attrs, rel_attrs):   
         """ 
@@ -480,6 +477,15 @@ class QueryEvaluator:
         @return: True if an edge exists between the nodes, false otherwise                 
         """   
         return self.g.has_edge(node1_id, node2_id)           
+
+    def create_visual(self):
+        """
+        Creates a diagram that represents the nodes and
+        edges of our graph database.
+        """
+        # Set up visual
+        newVis = VisualizeGraph(self.gs)
+        newVis.draw_graph()
             
         
 

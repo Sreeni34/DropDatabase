@@ -4,6 +4,52 @@ from bcolors import bcolors
 class Linker:
     """ A basic linker class. """
 
+    """
+    REL ATTR = e: a b:c
+    ID ATTR = n: a a:b
+    BOOL = b: a val:0/1
+    ID = n: a () ()
+
+    METHODS TO IMPLEMENT
+    CREATE          ID ATTR ..
+    CREATEEDGE      ID ATTR REL ATTR ID ATTR
+    MATCH           ID ATTR REL ATTR ID ATTR REL ATTR ID ATTR ...
+    MODIFYNODE      ID ATTR ID ATTR BOOL
+    MODIFYEDGE      REL ATTR REL ATTR BOOL
+    DELETENODE      ID ATTR
+    DELETEEDGE      REL ATTR
+    RETURN          ID ID ...
+    HASPATH         ID ATTR ID ATTR
+    CLEAR
+    SHORTESTPATH    ID ATTR ID ATTR
+    NEIGHBOR        ID ATTR
+    HASEDGE         ID ATTR ID ATTR
+    COMMONNEIGHBORS ID ATTR ID ATTR
+    RESET
+    FLUSH
+
+    # EXTRA
+    AGG             [id attr (<, >, =) id attr () val ...]
+
+    METHODS IMPLEMENTED
+    CREATE          ID ATTR ..
+    CREATEEDGE      ID ATTR REL ATTR ID ATTR
+    MATCH           ID ATTR REL ATTR ID ATTR REL ATTR ID ATTR ...
+    MODIFYNODE      ID ATTR ID ATTR BOOL
+    MODIFYEDGE      REL ATTR REL ATTR BOOL
+
+    DELETENODE      ID ATTR
+    DELETEEDGE      REL ATTR
+    RETURN          ID ID ...
+    HASPATH         ID ATTR ID ATTR
+    CLEAR
+    SHORTESTPATH    ID ATTR ID ATTR
+
+    """
+
+
+
+
     def __init__(self, object_list, gs):
         """
         This class is the linker for microDB. It takes in a list of 
@@ -64,10 +110,12 @@ class Linker:
                         else:
                             print bcolors.OKBLUE + str(nodes) + bcolors.ENDC
                     elif (item[0] == "e:"):   
-                        edges = self.query_evaluator.match(None, None, item[2])   
+                        edges = self.query_evaluator.match(None, None, item[2])
+                        if edges == []:   
+                            print bcolors.FAIL + "No matches found" + bcolors.ENDC   
                         for edge in edges:   
                             edge_tup = (self.query_evaluator.get_node_attrs(edge[0]), edge[2], self.query_evaluator.get_node_attrs(edge[1]))   
-                            print(edge_tup)   
+                            print bcolors.OKBLUE + str(edge_tup) + bcolors.ENDC      
                 elif(len(attribute_list) == 2):   
                     item1 = attribute_list[0]   
                     item2 = attribute_list[1]   
@@ -147,7 +195,10 @@ class Linker:
                                 print (node_id, self.query_evaluator.get_node_attrs(node_id))   
                         else:   
                             print("No path exists between " + node1 + " and " + node2)   
-            
+            elif (command_name == "SHOW"):
+                self.gs.display()
+            elif (command_name == "VISUALIZE"):
+                self.query_evaluator.create_visual()
 
 
 

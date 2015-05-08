@@ -37,6 +37,7 @@ HASEDGE         ID ATTR ID ATTR
 COMMONNEIGHBORS ID ATTR ID ATTR
 RESET
 FLUSH
+SHOW
 
 # EXTRA
 AGG             [id attr (<, >, =) id attr () val ...]
@@ -230,6 +231,8 @@ class Parser:
         CLEAR 
         RESET
         FLUSH
+        SHOW
+        VISUALIZE
 
 
 
@@ -239,10 +242,11 @@ class Parser:
         @return: An integer which represents a specific token command
         """
 
-        commands_list = ["create", "createedge", "createalledge", "match", "modifynode", 
-            "modifyedge", "deletenode", "deleteedge", "haspath",
-            "shortestpath", "neighbor", "hasedge", "commmonneighbors",
-            "return", "clear", "reset", "flush"]
+        commands_list = ["create", "createedge", "createalledge", 
+            "match", "modifynode", "modifyedge", "deletenode", 
+            "deleteedge", "haspath", "shortestpath", "neighbor", 
+            "hasedge", "commmonneighbors", "return", "clear", 
+            "reset", "flush", "show", "visualize"]
 
         if (word.lower() in commands_list):
             return TOKEN_COMMAND

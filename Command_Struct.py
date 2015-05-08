@@ -27,6 +27,8 @@ class Command_Struct:
     COMMONNEIGHBORS ID ATTR ID ATTR
     RESET
     FLUSH
+    SHOW
+    VISUALIZE
 
     # EXTRA
     AGG             [id attr (<, >, =) id attr () val ...]
