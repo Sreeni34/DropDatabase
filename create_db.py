@@ -5,7 +5,9 @@ import random
 '''This script just outputs a txt file with a list of commands
    that create a database for testing purposes.'''
 
-# some global constants
+# The global constants below are used to specify the number of nodes and
+# edges to generate, the output file for the batch script, the node 
+# attributes and their ranges, and the edge attributes and their ranges. 
 NUM_NODES = 10
 NUM_EDGES = 5
 FILE = 'random_db.txt'
