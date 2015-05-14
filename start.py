@@ -14,7 +14,7 @@ class StartDatabase:
     the entire interaction from user input to printing out data. 
     """
 
-    def __init__(self, flag):
+    def __init__(self, flag, verbose):
         """ 
         Initializes the graph database by reading persisted data on disk
         and setting up the internal in-memory graph file.
@@ -27,6 +27,9 @@ class StartDatabase:
         self.graph_file = 'graph_file'
         self.id_file = 'id_file'
         self.load_persistent_data()
+
+        # Stores verbose flag
+        self.verbose = verbose
 
         # If flag is set, need to execute commands in file that user passed.
         if flag:
@@ -83,8 +86,10 @@ class StartDatabase:
         and parses the input.
         """
         while True:
-            # Prints out the graph structure for testing purposes
-            #self.gs.display()
+
+            if verbose:
+                # Prints out the graph structure for verbose output
+                self.gs.display()
 
             commands = []
             sys.stdout.write(">>> ")
@@ -141,14 +146,18 @@ class StartDatabase:
 if __name__ == "__main__":
 
     batch_flag = False
+    verbose = False
 
-    # Check if user supplied a file of commands to execute in a batch. 
-    # If so, indicate that they should be executed during initialization. 
-    if len(sys.argv) == 2:
+    # Initialize options supplied by user for extra options
+    if "-b" in sys.argv:
+        # Executes batch file into our database
         batch_flag = True
+    if "-v" in sys.argv:
+        # Displays show for every command
+        verbose = True
 
     # Do all necessary initialization on start-up.
-    start = StartDatabase(batch_flag)
+    start = StartDatabase(batch_flag, verbose)
 
     # Then run the interpreter. 
     try:
