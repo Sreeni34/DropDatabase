@@ -66,8 +66,9 @@ TOKEN_NAME = 2      # Ex. a, b, c, etc., any name
 TOKEN_ATTR = 3      # Ex. a:b, c:d, ef:gh, etc.
 TOKEN_EDGE = 4      # Ex. e:
 TOKEN_BOOL = 5      # Ex. b:
-TOKEN_END = 6       # Ex. ; - semicolon indicates termination
-TOKEN_ERROR = 7     # Ex. CREATE MATCH
+TOKEN_PRED = 6      # Ex. >, <, =
+TOKEN_END = 7       # Ex. ; - semicolon indicates termination
+TOKEN_ERROR = 8     # Ex. CREATE MATCH
 
 
 # Possible machine states
@@ -78,8 +79,9 @@ STATE_NAME = 3
 STATE_ATTR = 4
 STATE_EDGE = 5
 STATE_BOOL = 6
-STATE_END = 7
-STATE_ERROR = 8
+STATE_PRED = 7
+STATE_END = 8
+STATE_ERROR = 9
 
 
 NUM_TOKENS = TOKEN_ERROR - TOKEN_COMMAND + 1
@@ -102,7 +104,8 @@ class Parser:
         self.curr_state = STATE_INIT  # current state 
         self.curr_word = ""
 
-        self.curr_command = ""
+        self.curr_command = ""      # Used for error checking
+        self.errors = 0             # Initialize to no errors
 
         self.obj_list = []       # Store a list of command objects
 
@@ -126,6 +129,7 @@ class Parser:
         state_machine[STATE_INIT][TOKEN_ATTR] = (STATE_ERROR, self.error)
         state_machine[STATE_INIT][TOKEN_EDGE] = (STATE_ERROR, self.error)
         state_machine[STATE_INIT][TOKEN_BOOL] = (STATE_ERROR, self.error)
+        state_machine[STATE_INIT][TOKEN_PRED] = (STATE_ERROR, self.error)
         state_machine[STATE_INIT][TOKEN_END] = (STATE_ERROR, self.finish)
         state_machine[STATE_INIT][TOKEN_ERROR] = (STATE_ERROR, self.error)
 
@@ -137,6 +141,7 @@ class Parser:
         state_machine[STATE_COMMAND][TOKEN_ATTR] = (STATE_ERROR, self.error)
         state_machine[STATE_COMMAND][TOKEN_EDGE] = (STATE_EDGE, self.create_edge)
         state_machine[STATE_COMMAND][TOKEN_BOOL] = (STATE_BOOL, self.create_bool)
+        state_machine[STATE_COMMAND][TOKEN_PRED] = (STATE_ERROR, self.error)
         state_machine[STATE_COMMAND][TOKEN_END] = (STATE_END, self.finish)
         state_machine[STATE_COMMAND][TOKEN_ERROR] = (STATE_ERROR, self.error)
 
@@ -148,6 +153,7 @@ class Parser:
         state_machine[STATE_NODE][TOKEN_ATTR] = (STATE_ERROR, self.error)
         state_machine[STATE_NODE][TOKEN_EDGE] = (STATE_ERROR, self.error)
         state_machine[STATE_NODE][TOKEN_BOOL] = (STATE_ERROR, self.error)
+        state_machine[STATE_NODE][TOKEN_PRED] = (STATE_ERROR, self.error)
         state_machine[STATE_NODE][TOKEN_END] = (STATE_END, self.finish)
         state_machine[STATE_NODE][TOKEN_ERROR] = (STATE_ERROR, self.error)
 
@@ -159,6 +165,7 @@ class Parser:
         state_machine[STATE_NAME][TOKEN_ATTR] = (STATE_ATTR, self.add_attr)
         state_machine[STATE_NAME][TOKEN_EDGE] = (STATE_EDGE, self.create_edge)
         state_machine[STATE_NAME][TOKEN_BOOL] = (STATE_BOOL, self.create_bool)
+        state_machine[STATE_NAME][TOKEN_PRED] = (STATE_PRED, self.add_pred)
         state_machine[STATE_NAME][TOKEN_END] = (STATE_END, self.finish)
         state_machine[STATE_NAME][TOKEN_ERROR] = (STATE_ERROR, self.error)
 
@@ -170,6 +177,7 @@ class Parser:
         state_machine[STATE_ATTR][TOKEN_ATTR] = (STATE_ATTR, self.add_attr)
         state_machine[STATE_ATTR][TOKEN_EDGE] = (STATE_EDGE, self.create_edge)
         state_machine[STATE_ATTR][TOKEN_BOOL] = (STATE_BOOL, self.create_bool)
+        state_machine[STATE_ATTR][TOKEN_PRED] = (STATE_PRED, self.add_pred)
         state_machine[STATE_ATTR][TOKEN_END] = (STATE_END, self.finish)
         state_machine[STATE_ATTR][TOKEN_ERROR] = (STATE_ERROR, self.error)
 
@@ -181,8 +189,10 @@ class Parser:
         state_machine[STATE_EDGE][TOKEN_ATTR] = (STATE_ERROR, self.error)
         state_machine[STATE_EDGE][TOKEN_EDGE] = (STATE_ERROR, self.error)
         state_machine[STATE_EDGE][TOKEN_BOOL] = (STATE_ERROR, self.error)
+        state_machine[STATE_EDGE][TOKEN_PRED] = (STATE_ERROR, self.error)
         state_machine[STATE_EDGE][TOKEN_END] = (STATE_END, self.finish)
         state_machine[STATE_EDGE][TOKEN_ERROR] = (STATE_ERROR, self.error)
+
 
         # STATE_BOOL
         state_machine[STATE_BOOL][TOKEN_COMMAND] = (STATE_ERROR, self.error)
@@ -191,8 +201,21 @@ class Parser:
         state_machine[STATE_BOOL][TOKEN_ATTR] = (STATE_ERROR, self.error)
         state_machine[STATE_BOOL][TOKEN_EDGE] = (STATE_ERROR, self.error)
         state_machine[STATE_BOOL][TOKEN_BOOL] = (STATE_ERROR, self.error)
+        state_machine[STATE_BOOL][TOKEN_PRED] = (STATE_ERROR, self.error)
         state_machine[STATE_BOOL][TOKEN_END] = (STATE_END, self.finish)
         state_machine[STATE_BOOL][TOKEN_ERROR] = (STATE_ERROR, self.error)
+
+
+        # STATE_PRED
+        state_machine[STATE_PRED][TOKEN_COMMAND] = (STATE_COMMAND, self.create_cmd_obj)
+        state_machine[STATE_PRED][TOKEN_NODE] = (STATE_NODE, self.create_node)
+        state_machine[STATE_PRED][TOKEN_NAME] = (STATE_ERROR, self.error)
+        state_machine[STATE_PRED][TOKEN_ATTR] = (STATE_ATTR, self.add_attr)
+        state_machine[STATE_PRED][TOKEN_EDGE] = (STATE_EDGE, self.create_edge)
+        state_machine[STATE_PRED][TOKEN_BOOL] = (STATE_BOOL, self.create_bool)
+        state_machine[STATE_PRED][TOKEN_PRED] = (STATE_PRED, self.add_pred)
+        state_machine[STATE_PRED][TOKEN_END] = (STATE_END, self.finish)
+        state_machine[STATE_PRED][TOKEN_ERROR] = (STATE_ERROR, self.error)
 
 
         # STATE_END
@@ -202,6 +225,7 @@ class Parser:
         state_machine[STATE_END][TOKEN_ATTR] = (STATE_ERROR, self.error)
         state_machine[STATE_END][TOKEN_EDGE] = (STATE_ERROR, self.error)
         state_machine[STATE_END][TOKEN_BOOL] = (STATE_ERROR, self.error)
+        state_machine[STATE_END][TOKEN_PRED] = (STATE_ERROR, self.error)
         state_machine[STATE_END][TOKEN_END] = (STATE_ERROR, self.finish)
         state_machine[STATE_END][TOKEN_ERROR] = (STATE_ERROR, self.error)
 
@@ -260,6 +284,9 @@ class Parser:
             return TOKEN_END
         elif (word.count(":") == 1):
             return TOKEN_ATTR
+        elif (word.count(">") == 1 or word.count("<") == 1 or
+                 word.count("=") == 1):
+            return TOKEN_PRED
         elif (isinstance(word, basestring)):
             return TOKEN_NAME
         else:
@@ -289,6 +316,8 @@ class Parser:
         command = self.curr_word.upper()
         self.curr_obj = Command_Struct(command)
         self.obj_list.append(self.curr_obj)
+
+        self.curr_command = command
 
 
     def create_node(self):
@@ -338,17 +367,24 @@ class Parser:
         if (self.curr_obj.get_attr_type() == "b:"):
             self.curr_obj.set_bool(int(lst[1]))
 
+    def add_pred(self):
+        self.curr_obj.insert_name(self.curr_word)
+
 
 
 ############################################################
 #   Functions that deal with running and ending the program.
 ############################################################
-    
+
+
+
     def error(self):
         """
         Prints out an error and exits the program.
         """
         print "TODO : ERROR MESSAGE HERE"
+        self.errors = 1
+        self.error_Message(self.curr_command)
         self.done = True
 
 
@@ -358,12 +394,29 @@ class Parser:
         where the error had occurred. Program will stop
         immediately. 
 
-        @type message: string
+        @type message: String
         @param message: Error message to print our to user
         """
 
-        print "ERROR: " + message
+        if message == "":
+            print "ERROR: No command entered"
+        else:
+            print "ERROR in command " + message
         self.done = True
+
+    def get_Errors(self):
+        """
+        Checks whether any errors have been called when
+        going through the state machine. If there are errors,
+        return true.
+
+        @rtype: Boolean
+        @return: Indicates if there is an error with state machine
+        """
+
+        if (self.errors == 1):
+            return True
+        return False
 
 
     def finish(self):

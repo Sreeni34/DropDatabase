@@ -31,6 +31,8 @@ class Command_Struct:
     VISUALIZE
 
     # EXTRA
+    PRED            match n: a b:c d:e b<5 d>10
+
     AGG             [id attr (<, >, =) id attr () val ...]
     """
 

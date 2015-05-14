@@ -6,6 +6,7 @@ from graph_storage import GraphStorage
 import networkx as nx
 from utilities import Utilities
 from BatchExecute import BatchExecute
+from error_checking import Error_Checking
 
 class StartDatabase:
     """
@@ -46,6 +47,36 @@ class StartDatabase:
         else:
             print "No files to load from."
 
+    def has_Errors(self, parser):
+        """
+        This method checks the command entered by the user
+        for any errors and if there are any, don't create
+        a linker.
+
+        @type parser: Object
+        @param parser: Parser instance used to check for errors
+        @rtype: Boolean
+        @return: Boolean indicating whether errors exist
+        """
+
+        # First check if state machine produced any error
+        # If errors exist, then don't create linker
+        if (parser.get_Errors()):
+            return True
+
+        errorCheck = Error_Checking(parser.get_object_list())
+        #errorCheck.check_commands()
+
+
+        # # Create error class instance
+        # errorCheck = Error_Checking(parser.get_object_list())
+        # # If there are errors, don't create linker 
+        # if (errorCheck.check_obj(parser.get_object_list())):
+        #     return True
+        
+
+        return False
+
     def run(self):
         """
         Keeps the graph database and continously running in the terminal
@@ -73,9 +104,22 @@ class StartDatabase:
                 parser.run()
             else:
                 print "ERRORRRRRRRRRRRRRRRRRRRRR"
-            # Store the created objects in linker and call functions
-            linker = Linker(parser.get_object_list(), self.gs)
-            linker.execute()
+            
+
+            # Check if user entered any errors in query.
+            # If there are no errors, then create linker
+            if (not(self.has_Errors(parser))):
+                linker = Linker(parser.get_object_list(), self.gs)
+                linker.execute()
+            # Else, print the error
+            else:
+                print "Invalid Query"
+            #print "what"
+            #linker = Linker(parser.get_object_list(), self.gs)
+            #print "cool"
+            #linker.execute()
+            #print "done"
+
 
     def exit(self):
         """
