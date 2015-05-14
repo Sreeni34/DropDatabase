@@ -13,10 +13,10 @@ class LoadData:
 
     def __init__(self, gs):
         """
-        Takes a GraphStructure object to load the data into.
+        Takes a L{GraphStructure} object to load the data into.
 
-        @type gs: GraphStructure object
-        @param gs: GraphStructure object that is used to store nodes and 
+        @type gs: L{GraphStructure} object
+        @param gs: L{GraphStructure} object that is used to store nodes and 
         edges in.
         """
         self.gs = gs
@@ -32,7 +32,7 @@ class LoadData:
 
     def load_data(self):
         """
-        Loads persisted data on disk, if it exists, into our GraphStructure
+        Loads persisted data on disk, if it exists, into our L{GraphStructure}
         object.
         """
         if Utilities.files_exist(self.graph_file, self.id_file):
@@ -42,7 +42,7 @@ class LoadData:
     def load_text_file(self, text_file):
         """
         Loads the data from the text file into the in memory graph 
-        structure stored in the QueryEvaluator object and saves the
+        structure stored in the L{QueryEvaluator} object and saves the
         data onto disk.
         """
         # Stores a set of nodes and edges

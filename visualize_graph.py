@@ -4,15 +4,15 @@ from graph_structure import *
 
 class VisualizeGraph:
     """
-    Class allows a GraphStructure object to be displayed in a user-friendly
+    Class allows a L{GraphStructure} object to be displayed in a user-friendly
     format.
     """
     def __init__(self, gs):
         """
-        Stores the GraphStructure object to visually display.
+        Stores the L{GraphStructure} object to visually display.
 
-        @type gs: GraphStructure object
-        @param gs: GraphStructure object to visually display.
+        @type gs: L{GraphStructure} object
+        @param gs: L{GraphStructure} object to visually display.
         """
         self.gs = gs
         self.g = self.gs.get_graph()

@@ -1,4 +1,5 @@
 import networkx as nx
+from pprint import pprint
 
 class GraphStructure:
     """
@@ -35,7 +36,7 @@ class GraphStructure:
         Sets the internal graph object to the one provided by the arguments.
 
         @type graph: Graph
-        @param graph: Graph used to set to the internal GraphStructure object
+        @param graph: Graph used to set to the internal L{GraphStructure} object
         """
         self.graph = graph
 
@@ -69,7 +70,7 @@ class GraphStructure:
         Prints all the nodes in the form (node id, node attributes).
         """
         print 'Nodes'
-        print self.graph.nodes(data=True)
+        pprint(self.graph.nodes(data=True))
 
     def print_edges(self):
         """
@@ -77,11 +78,11 @@ class GraphStructure:
         edge attributes)
         """
         print 'Edges'
-        print self.graph.edges(data=True)
+        pprint(self.graph.edges(data=True))
 
     def print_id(self):
         """
-        Prints the unique node id for the GraphStructure.
+        Prints the unique node id for the L{GraphStructure}.
         """
         print 'Unique node id: ' + str(self.id)
 
@@ -90,7 +91,7 @@ class GraphStructure:
         Prints the identifier dictionary.
         """
         print "Identifier"
-        print self.identifier
+        pprint(self.identifier)
 
     def set_identifier(self, id, val):
         """

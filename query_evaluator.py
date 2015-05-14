@@ -4,14 +4,14 @@ from visualize_graph import VisualizeGraph
 
 class QueryEvaluator:
     """
-    QueryEvaluator performs evalution of graph query language by 
-    modifying the in-memory graph representation of a GraphStructure
+    L{QueryEvaluator} performs evalution of graph query language by 
+    modifying the in-memory graph representation of a L{GraphStructure}
     object.
     """
 
     def __init__(self, gs):
         """
-        Constructor takes a GraphStructure object as an argument and 
+        Constructor takes a L{GraphStructure} object as an argument and 
         stores its in-memory graph representation.
         """
         self.gs = gs

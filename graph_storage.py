@@ -8,21 +8,21 @@ except:
 
 class GraphStorage:
     """
-    This class handles writing and reading the GraphStructure object 
+    This class handles writing and reading the L{GraphStructure} object 
     to disk.
     """
     def __init__(self, gs):
         """ 
-        Takes a GraphStructure object to store on disk.
+        Takes a L{GraphStructure} object to store on disk.
 
-        @type gs: GraphStructure
-        @param gs: GraphStructure object to store on disk.
+        @type gs: L{GraphStructure}
+        @param gs: L{GraphStructure} object to store on disk.
         """
         self.gs = gs
         
     def load_graph(self, graph_file, id_file):
         """
-        Loads the GraphStructure object from two files. The first file
+        Loads the L{GraphStructure} object from two files. The first file
         persists the in-memory graph data while the second file persists
         the unique ids. The two files must exist or else nothing will happen.
 
@@ -54,7 +54,7 @@ class GraphStorage:
 
     def write_graph(self, file1, file2):
         """
-        Writes the GraphStructure object to two files. The first file
+        Writes the L{GraphStructure} object to two files. The first file
         will contain the in-memory graph data while the second file will
         contain the unique id number. 
         """
