@@ -1,4 +1,5 @@
 import networkx as nx
+from pprint import pprint
 
 class GraphStructure:
     """
@@ -69,7 +70,7 @@ class GraphStructure:
         Prints all the nodes in the form (node id, node attributes).
         """
         print 'Nodes'
-        print self.graph.nodes(data=True)
+        pprint(self.graph.nodes(data=True))
 
     def print_edges(self):
         """
@@ -77,7 +78,7 @@ class GraphStructure:
         edge attributes)
         """
         print 'Edges'
-        print self.graph.edges(data=True)
+        pprint(self.graph.edges(data=True))
 
     def print_id(self):
         """
@@ -90,7 +91,7 @@ class GraphStructure:
         Prints the identifier dictionary.
         """
         print "Identifier"
-        print self.identifier
+        pprint(self.identifier)
 
     def set_identifier(self, id, val):
         """
