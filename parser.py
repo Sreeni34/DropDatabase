@@ -209,7 +209,7 @@ class Parser:
         # STATE_PRED
         state_machine[STATE_PRED][TOKEN_COMMAND] = (STATE_COMMAND, self.create_cmd_obj)
         state_machine[STATE_PRED][TOKEN_NODE] = (STATE_NODE, self.create_node)
-        state_machine[STATE_PRED][TOKEN_NAME] = (STATE_ERROR, self.error)
+        state_machine[STATE_PRED][TOKEN_NAME] = (STATE_PRED, self.add_pred)
         state_machine[STATE_PRED][TOKEN_ATTR] = (STATE_ATTR, self.add_attr)
         state_machine[STATE_PRED][TOKEN_EDGE] = (STATE_EDGE, self.create_edge)
         state_machine[STATE_PRED][TOKEN_BOOL] = (STATE_BOOL, self.create_bool)
@@ -368,7 +368,9 @@ class Parser:
             self.curr_obj.set_bool(int(lst[1]))
 
     def add_pred(self):
-        if (">" in self.curr_word):
+        if (self.curr_word.lower() == "and" or self.curr_word.lower() == "or"):
+            self.curr_obj.insert_name(self.curr_word.upper())
+        elif (">" in self.curr_word):
             lst = self.curr_word.split(">")
             self.curr_obj.insert_name([lst[0], ">", lst[1]])
         elif ("<" in self.curr_word):
@@ -377,9 +379,8 @@ class Parser:
         elif ("=" in self.curr_word):
             lst = self.curr_word.split("=")
             self.curr_obj.insert_name([lst[0], "=", lst[1]])
-
-        #self.curr_obj.insert_name(self.curr_word)
-
+        else:
+            self.error()
 
 
 ############################################################

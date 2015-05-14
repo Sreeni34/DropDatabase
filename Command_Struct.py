@@ -9,6 +9,7 @@ class Command_Struct:
     ID ATTR = n: a a:b
     BOOL = b: a val:0/1
     ID = n: a () ()
+    PRED = a(pred)b
 
 
     CREATE          ID ATTR

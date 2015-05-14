@@ -65,7 +65,7 @@ class StartDatabase:
             return True
 
         errorCheck = Error_Checking(parser.get_object_list())
-        #errorCheck.check_commands()
+        errorCheck.check_commands()
 
 
         # # Create error class instance
