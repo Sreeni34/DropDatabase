@@ -1,6 +1,6 @@
 class Command_Struct:
     """ 
-    Command_Struct stores information regarding a specific command
+    L{Command_Struct} stores information regarding a specific command
     and arguments entered by the user. 
     """
 
@@ -31,6 +31,8 @@ class Command_Struct:
     VISUALIZE
 
     # EXTRA
+    PRED            match n: a b:c d:e b<5 d>10
+
     AGG             [id attr (<, >, =) id attr () val ...]
     """
 
