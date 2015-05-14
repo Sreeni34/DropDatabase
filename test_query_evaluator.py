@@ -2,6 +2,7 @@ import unittest
 from query_evaluator import QueryEvaluator
 from graph_structure import GraphStructure
 from predicates import Predicates
+from project import Project
 
 class TestQueryEvaluator(unittest.TestCase):
 
@@ -339,7 +340,7 @@ class TestQueryEvaluator(unittest.TestCase):
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
-        pred = Predicates(gs)
+        pred = Predicates()
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice', 'Salary' : '500'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob', 'Salary' : '1000'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John', 'Salary' : '20000'}
@@ -357,6 +358,34 @@ class TestQueryEvaluator(unittest.TestCase):
         match_lst2 = q.match_node({'Name' : 'Alice'})
         filtered_lst2 = pred.filter(match_lst2, 'Salary', '500', '=')
         self.assertEqual(filtered_lst2, [node1])
+
+    def test_match_node_project_node(self):
+        """
+        Tests applying a project to a simple match node query for L{QueryEvaluator}.
+        """
+        gs = GraphStructure()
+        q = QueryEvaluator(gs)
+        proj = Project()
+        attrs1 = {'Label' : 'Person', 'Name' : 'Alice', 'Salary' : '500'}
+        attrs2 = {'Label' : 'Person', 'Name' : 'Bob', 'Salary' : '1000'}
+        attrs3 = {'Label' : 'Person', 'Name' : 'John', 'Salary' : '20000'}
+        attrs4 = {'Label' : 'Person', 'Name' : 'Donnie', 'Salary' : '100000000'}
+        node1 = q.add_node(attrs1)
+        node2 = q.add_node(attrs2)
+        node3 = q.add_node(attrs3)
+        node4 = q.add_node(attrs4)
+        # Test matching all nodes and then projecting to a single attribute. 
+        match_lst1 = q.match_node({'Label' : 'Person'})
+        # Project on salary field. 
+        filtered_lst1 = proj.project(match_lst1, ['Salary'])
+        self.assertEqual(filtered_lst1, [{'Salary' : '500'}, 
+                                         {'Salary' : '1000'}, 
+                                         {'Salary' : '20000'}, 
+                                         {'Salary' : '100000000'}])
+        # Test matching a single node and then projecting to a single attribute. 
+        match_lst2 = q.match_node({'Name' : 'Alice'})
+        filtered_lst2 = proj.project(match_lst2, ['Salary'])
+        self.assertEqual(filtered_lst2, [{'Salary' : '500'}])
 
 
 
