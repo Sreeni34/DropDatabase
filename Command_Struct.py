@@ -1,6 +1,6 @@
 class Command_Struct:
     """ 
-    Command_Struct stores information regarding a specific command
+    L{Command_Struct} stores information regarding a specific command
     and arguments entered by the user. 
     """
 
