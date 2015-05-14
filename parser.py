@@ -368,7 +368,17 @@ class Parser:
             self.curr_obj.set_bool(int(lst[1]))
 
     def add_pred(self):
-        self.curr_obj.insert_name(self.curr_word)
+        if (">" in self.curr_word):
+            lst = self.curr_word.split(">")
+            self.curr_obj.insert_name([lst[0], ">", lst[1]])
+        elif ("<" in self.curr_word):
+            lst = self.curr_word.split("<")
+            self.curr_obj.insert_name([lst[0], "<", lst[1]])
+        elif ("=" in self.curr_word):
+            lst = self.curr_word.split("=")
+            self.curr_obj.insert_name([lst[0], "=", lst[1]])
+
+        #self.curr_obj.insert_name(self.curr_word)
 
 
 
