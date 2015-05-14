@@ -77,6 +77,8 @@ NetworkX
 
 matplotlib
 
+pprint
+
 ##Testing
 Testing is currently only available for the query_evaluator.py methods. The python unittest library is used for testing.
 Tests for the query_evaluator methods can be run by 

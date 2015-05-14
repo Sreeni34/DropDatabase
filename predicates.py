@@ -7,7 +7,7 @@ class Predicates:
 
     def __init__(self, gs):   
         """
-        Constructor takes a GraphStructure object as an argument and 
+        Constructor takes a L{GraphStructure} object as an argument and 
         stores its in-memory graph representation.
         """
         self.gs = gs
