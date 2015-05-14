@@ -62,7 +62,7 @@ class Command_Struct:
         Inserts the current object name into list.
 
         @type name: String
-        @param name: String representing name of Command Struct object
+        @param name: String representing name of L{Command_Struct} object
         """
 
         self.name.append(name)

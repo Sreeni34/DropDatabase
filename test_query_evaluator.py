@@ -7,7 +7,7 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_add_node(self):
         """ 
-        Tests add_node method of QueryEvaluator.
+        Tests L{QueryEvaluator.add_node} method of L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
@@ -29,7 +29,7 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_add_relationship(self):
         """
-        Tests add_relationship method for QueryEvaluator.
+        Tests L{QueryEvaluator.add_relationship} method for L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
@@ -50,7 +50,7 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_match_node(self):
         """
-        Tests match_node method for QueryEvaluator.
+        Tests L{QueryEvaluator.match_node} method for L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
@@ -69,7 +69,7 @@ class TestQueryEvaluator(unittest.TestCase):
         
     def test_match_rel(self):
         """
-        Tests match_rel method for QueryEvaluator.
+        Tests L{QueryEvaluator.match_rel} method for L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
@@ -95,7 +95,7 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_match_node_rel(self):
         """
-        Tests match_node_rel method for QueryEvaluator.
+        Tests L{QueryEvaluator.match_node_rel} method for L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
@@ -127,7 +127,7 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_match_find_rel(self):
         """
-        Tests match_find_rel method for QueryEvaluator.
+        Tests L{QueryEvaluator.match_find_rel} method for L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
@@ -152,7 +152,7 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_match_node_node_rel(self):
         """
-        Tests match_node_node_rel method for QueryEvaluator.
+        Tests L{QueryEvaluator.match_node_node_rel} method for L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
@@ -184,7 +184,7 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_delete_node(self):
         """
-        Tests delete_node method for QueryEvaluator.
+        Tests L{QueryEvaluator.delete_node} method for L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
@@ -212,7 +212,7 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_delete_rel(self):
         """
-        Tests delete_rel method for QueryEvaluator.
+        Tests L{QueryEvaluator.delete_rel} method for L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
@@ -240,7 +240,7 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_modify_node(self):
         """
-        Tests modify_node method for QueryEvaluator.
+        Tests L{QueryEvaluator.modify_node} method for L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
@@ -267,7 +267,7 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_modify_rel(self):
         """
-        Test modify_rel method for QueryEvaluator.
+        Test L{QueryEvaluator.modify_rel} method for L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
@@ -296,7 +296,7 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_multi_match(self):
         """
-        Test multi_match method for QueryEvaluator.
+        Test L{QueryEvaluator.multi_match} method for L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
@@ -335,7 +335,7 @@ class TestQueryEvaluator(unittest.TestCase):
 
     def test_match_node_predicate(self):
         """
-        Tests applying a predicate to a simple match node query for QueryEvaluator.
+        Tests applying a predicate to a simple match node query for L{QueryEvaluator}.
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)

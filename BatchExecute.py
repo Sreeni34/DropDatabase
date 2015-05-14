@@ -11,7 +11,7 @@ class BatchExecute:
 
     def __init__(self, gs, filename):   
         """
-        Constructor takes a GraphStructure object, a parser object, and  
+        Constructor takes a L{GraphStructure} object, a parser object, and  
         a file name as arguments. It will execute all of the commands that are 
         in the file. 
         """

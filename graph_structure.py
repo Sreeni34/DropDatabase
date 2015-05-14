@@ -35,7 +35,7 @@ class GraphStructure:
         Sets the internal graph object to the one provided by the arguments.
 
         @type graph: Graph
-        @param graph: Graph used to set to the internal GraphStructure object
+        @param graph: Graph used to set to the internal L{GraphStructure} object
         """
         self.graph = graph
 
@@ -81,7 +81,7 @@ class GraphStructure:
 
     def print_id(self):
         """
-        Prints the unique node id for the GraphStructure.
+        Prints the unique node id for the L{GraphStructure}.
         """
         print 'Unique node id: ' + str(self.id)
 
