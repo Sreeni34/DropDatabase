@@ -293,7 +293,28 @@ class Linker:
             elif (command_name == "SHOW"):
                 self.gs.display()
             elif (command_name == "VISUALIZE"):
-                self.query_evaluator.create_visual()
+                self.query_evaluator.create_visual()   
+            elif (command_name == "NEIGHBOR"):
+                item1 = attribute_list[0]   
+                nodes1 = self.query_evaluator.match(item1[2], None, None)   
+                if nodes == None:   
+                    print bcolors.FAIL + "No Node matches found" + bcolors.ENDC   
+                else:   
+                    print bcolors.OKGREEN + "NODE Neighbors:" + bcolors.ENDC   
+                    node_num = 1       
+                    for node1 in nodes1:           
+                        neighbor_id = self.query_evaluator.get_neighbors(node1[0])   
+                        if (neighbor_id == []): 
+                            print bcolors.OKBLUE + "Neighbors for Node " + str(node_num) + " = " + "No neighbors for Node(s)" + bcolors.ENDC   
+                        else:   
+                            neighbors = []   
+                            neighbors.append(neighbor_id, self.query_evaluator.get_node_attrs(neighbor_id))   
+                            print bcolors.OKBLUE + "Neighbors for Node " + str(node_num) + " = " + neighbors + bcolors.ENDC   
+                    node_num += 1
+            # elif (command_name = "HASEDGE"):   
+            #     item1 = attribute_list[0]   
+            #     item2 = attribute_list[1]   
+            #     self.query_evaluator()
 
 
 
