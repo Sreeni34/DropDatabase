@@ -18,10 +18,12 @@ class Error_Checking:
 
     def check_commands(self):
         for cmd in self.cmd_obj:
+            print cmd.get_command()
             if self.any_errors(cmd):
                 print "WE HAVE AN ERROR"
-                print cmd.get_command
+                print cmd.get_command()
                 return True
+        print "No errors"
         return False
 
 
@@ -35,19 +37,36 @@ class Error_Checking:
         err = 0
 
         if (cmd == "CREATE"):
-            err = unchanged_bool(cmdBool)
+            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
+                    or self.has_edge_attr(attrList)
 
             print "good"
             print nameList
             print attrList
-            return True
+            return err
+
 
     def print_command_objects(self):
         for cmd in self.cmd_obj:
             cmd.print_Class()
 
 
-    def unchanged_bool(self, boolVal):
-        if (boolVal == -1):
-            return True
+    def changed_bool(self, boolVal):
+        return boolVal != -1
+
+
+    def not_empty_names(self, names):
+        return (names != [])
+
+
+    def has_edge_attr(self, attrList):
+        for lst in attrList:
+            if lst[0] == "e:":
+                return True
+        return False
+
+    def has_node_attr(self, attrList):
+        for lst in attrList:
+            if lst[0] == "n:":
+                return True
         return False

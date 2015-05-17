@@ -67,16 +67,11 @@ class StartDatabase:
         if (parser.get_Errors()):
             return True
 
+        # Create error class instance
         errorCheck = Error_Checking(parser.get_object_list())
-        errorCheck.check_commands()
-
-
-        # # Create error class instance
-        # errorCheck = Error_Checking(parser.get_object_list())
-        # # If there are errors, don't create linker 
-        # if (errorCheck.check_obj(parser.get_object_list())):
-        #     return True
-        
+        # If there are errors, don't create linker 
+        if errorCheck.check_commands():
+            return True       
 
         return False
 
