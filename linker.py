@@ -67,6 +67,7 @@ class Linker:
         self.list_objects = object_list;
         self.gs = gs
         self.query_evaluator = QueryEvaluator(gs)   
+        self.pred = Predicates(gs)   
 
     def PrintNodes(self, nodes):   
         """
@@ -146,7 +147,7 @@ class Linker:
                              node2, edge_attrs))
             counter += 1   
 
-    def MatchSingleItem(self, attribute_list):   
+    def MatchSingleItem(self, attribute_list, predicates):   
         """
         Matches a single item, either a node or a relationship, by   
         calling the appropriate query_evaluator method.   
@@ -159,12 +160,49 @@ class Linker:
         item = attribute_list[0]   
         if item[0] == "n:":   
             nodes = self.query_evaluator.match(item[2], None, None)   
+            if (predicates != []):
+                for p in predicates:   
+                    filtered_ids = pred.filter(nodes, p[0], p[2], p[1])         
             self.PrintNodes(nodes);    
         elif item[0] == "e:":   
             edges = self.query_evaluator.match(None, None, item[2])   
             self.PrintEdges(edges)   
 
-    def MatchTwoItems(self, attribute_list):   
+    def Filter_Preds(self, nodeids, predicates):   
+        if len(predicates) < 2:   
+            return pred.filter(nodeids, predicates[0][0], predicates[0][2], predicates[0][1])   
+        else:
+            lenpred = len(predicates)
+            counter = 0   
+            pred_list = []   
+            bool_list = []   
+            for item in predicates:   
+                if (counter) % 2 == 0:   
+                    pred_list.append(item)   
+                elif (counter) % 2 == 1:   
+                    bool_list.append(item)   
+                counter += 1   
+            filtered_nodes = []  
+            for x in range(len(pred_list) - 1):   
+                if x == 0:   
+                    pred0 = pred_list[x]   
+                    pred1 = pred_list[x + 1]
+                    filter1 = pred.filter(nodeids, pred0[0], pred0[2], pred0[1]) 
+                    filter2 = pred.filter(nodeids, pred1[0], pred1[2], pred1[1])
+                    if bool_list[x] == 'AND':      
+                        filtered_nodes = [val for val in filter1 if val in filter2]   
+                    elif bool_list[x] == 'OR':   
+                        filtered_nodes = list(set(filter1 + filter2))   
+                else:   
+                    pred = pred_list[x + 1]   
+                    fltr = pred.filter(filtered_nodes, pred[0], pred[2], pred[1])   
+                    if bool_list[x] == 'AND':      
+                        filtered_nodes = [val for val in filtered_nodes if val in fltr]   
+                    elif bool_list[x] == 'OR':   
+                        filtered_nodes = list(set(filtered_nodes + fltr))   
+            return filtered_nodes   
+
+    def MatchTwoItems(self, attribute_list, predicates):   
         """
         Matches a pair of nodes and edges.     
 
@@ -181,7 +219,7 @@ class Linker:
             edges = self.query_evaluator.match(None, item2[2], item1[2])   
             self.PrintEdges(edges)   
 
-    def MatchThreeItems(self, attribute_list):   
+    def MatchThreeItems(self, attribute_list, predicates):   
         """
         Matches a node, edge, node sequence in that order     
 
@@ -195,7 +233,7 @@ class Linker:
         edges = self.query_evaluator.match(item1[2], item3[2], item2[2])   
         self.PrintEdges(edges)   
 
-    def MatchChain(self, attribute_list):   
+    def MatchChain(self, attribute_list, predicates):   
         """
         Matches a chain of node, edge, node, edge, node...     
 
@@ -230,20 +268,21 @@ class Linker:
         # iterate through objects returned by parser to execute queries
         for obj in self.list_objects:
             command_name = obj.get_command()
-            attribute_list = obj.get_attr_list()
+            attribute_list = obj.get_attr_list()   
+            predicates = obj.get_names()
             if command_name == "CREATE":
                 self.CreateNode(attribute_list)   
             elif command_name == "CREATEEDGE":   
                 self.CreateEdge(attribute_list)   
             elif command_name == "MATCH":   
                 if (len(attribute_list) == 1):   
-                    self.MatchSingleItem(attribute_list)      
+                    self.MatchSingleItem(attribute_list, predicates)      
                 elif(len(attribute_list) == 2):      
-                    self.MatchTwoItems(attribute_list)
+                    self.MatchTwoItems(attribute_list, predicates)
                 elif(len(attribute_list) == 3):   
-                    self.MatchThreeItems(attribute_list)  
+                    self.MatchThreeItems(attribute_list, predicates)  
                 else:   
-                    self.MatchChain(attribute_list)
+                    self.MatchChain(attribute_list, predicates)
             elif command_name == "MODIFYNODE":   
                 nodes_modified = attribute_list[0]   
                 attrs_changed = attribute_list[1]   
@@ -280,7 +319,8 @@ class Linker:
                 item1 = attribute_list[0]   
                 item2 = attribute_list[1]   
                 nodes1 = self.query_evaluator.match(item1[2], None, None)   
-                nodes2 = self.query_evaluator.match(item2[2], None, None)      
+                nodes2 = self.query_evaluator.match(item2[2], None, None)   
+                nodes1 = []      
                 for node1 in nodes1:   
                     for node2 in nodes2:   
                         if (self.query_evaluator.check_path(node1[0], node2[0])):
@@ -290,11 +330,11 @@ class Linker:
                                 print (node_id, self.query_evaluator.get_node_attrs(node_id))   
                         else:   
                             print("No path exists between " + node1 + " and " + node2)   
-            elif (command_name == "SHOW"):
+            elif command_name == "SHOW":
                 self.gs.display()
-            elif (command_name == "VISUALIZE"):
+            elif command_name == "VISUALIZE":
                 self.query_evaluator.create_visual()   
-            elif (command_name == "NEIGHBOR"):
+            elif command_name == "NEIGHBOR":
                 item1 = attribute_list[0]   
                 nodes1 = self.query_evaluator.match(item1[2], None, None)   
                 if nodes == None:   
@@ -311,10 +351,30 @@ class Linker:
                             neighbors.append(neighbor_id, self.query_evaluator.get_node_attrs(neighbor_id))   
                             print bcolors.OKBLUE + "Neighbors for Node " + str(node_num) + " = " + neighbors + bcolors.ENDC   
                     node_num += 1
-            # elif (command_name = "HASEDGE"):   
-            #     item1 = attribute_list[0]   
-            #     item2 = attribute_list[1]   
-            #     self.query_evaluator()
+            elif command_name == "HASEDGE":   
+                item1 = attribute_list[0]   
+                item2 = attribute_list[1]   
+                nodes1 = self.query_evaluator.match(item1[2], None, None)   
+                nodes2 = self.query_evaluator.match(item2[2], None, None)      
+                for node1 in nodes1:   
+                    for node2 in nodes2:   
+                        if (self.query_evaluator.check_path(node1[0], node2[0])):   
+                            print bcolors.OKBLUE + "A direct edge exists between " + str(node1) + " and " + str(node2) + bcolors.ENDC   
+                        else:   
+                            print bcolors.FAIL + "No direct edge exists between " + str(node1) + " and " + str(node2) + bcolors.ENDC   
+            elif command_name == "COMMONNEIGHBORS":   
+                item1 = attribute_list[0]   
+                item2 = attribute_list[1]   
+                nodes1 = self.query_evaluator.match(item1[2], None, None)   
+                nodes2 = self.query_evaluator.match(item2[2], None, None)   
+                for node1 in nodes1:   
+                    for node2 in nodes2:   
+                        neighbor_iter = self.query_evaluator(node1[0], node2[0]) 
+                        neighbors = []  
+                        for x in neighbor_iter:   
+                            neighbors.append((x, self.query_evaluator.get_node_attrs(x)))   
+                        print bcolors.OKBLUE + "Common neighbors between " + str(node1) + " and " + str(node2) + " are " + str(neighbors) + bcolors.ENDC 
+
 
 
 
@@ -345,4 +405,3 @@ class Linker:
             #     self.gs.set_identifier(cur_id, self.query_evaluator.match(obj.get_attr(), None, None))
             # elif obj.command.upper() == "RETURN":
             #     print "Return val: " + str(self.gs.get_identifier(cur_id))   
-
