@@ -21,7 +21,7 @@ ID = n: a () ()
 
 
 CREATE          ID ATTR
-CREATEEDGE      ID ATTR REL ATTR ID ATTR
+CREATEEDGE      ID ATTR REL ATTR ID ATTR ...
 CREATEALLEDGE   ID ATTR ID ATTR ... ID ATTR REL ATTR
 MATCH           ID ATTR REL ATTR ID ATTR REL ATTR ID ATTR ...
 MODIFYNODE      ID ATTR ID ATTR BOOL
@@ -365,7 +365,10 @@ class Parser:
 
         # If we are currently on bool, store that value
         if (self.curr_obj.get_attr_type() == "b:"):
-            self.curr_obj.set_bool(int(lst[1]))
+            if (lst[0].lower() != "val" or (lst[1] != "0" and lst[1] != "1")):
+                self.error()
+            else:
+                self.curr_obj.set_bool(int(lst[1]))
 
     def add_pred(self):
         if (self.curr_word.lower() == "and" or self.curr_word.lower() == "or"):
@@ -393,7 +396,6 @@ class Parser:
         """
         Prints out an error and exits the program.
         """
-        print "TODO : ERROR MESSAGE HERE"
         self.errors = 1
         self.error_Message(self.curr_command)
         self.done = True
