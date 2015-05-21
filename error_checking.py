@@ -46,12 +46,38 @@ class Error_Checking:
         elif cmd == "CREATEEDGE":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
                     or self.has_bool_attr(attrList) or self.even(attrList) \
-                    or self.not_alt_node_edge(attrList)
+                    or self.not_alt_node_edge(attrList) or \
+                    (not self.last_node(attrList))
 
         elif cmd == "CREATEALLEDGE":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
                     or self.has_bool_attr(attrList) or (not self.all_node_last(attrList)) \
                     or (not self.last_edge(attrList))
+
+        elif cmd == "MATCH":
+            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
+                    or self.has_bool_attr(attrList) or self.not_alt_node_edge(attrList)
+
+        elif cmd == "MODIFYNODE":
+            err = (not self.changed_bool(cmdBool)) or self.not_empty_names(nameList) \
+                    or self.has_edge_attr(attrList) or self.not_length(3) \
+                    or (not self.last_bool(attrList)) or self.all_node_last(attrList)
+
+        elif cmd == "MODIFYEDGE":
+            err = (not self.changed_bool(cmdBool)) or self.not_empty_names(nameList) \
+                    or self.has_node_attr(attrList) or self.not_length(3) \
+                    or (not self.last_bool(attrList)) or self.all_edge_last(attrList)
+
+        elif cmd == "DELETENODE":
+            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
+                    or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
+                    or self.not_length(1)
+
+        elif cmd == "DELETEEDGE":
+            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
+                    or self.has_bool_attr(attrList) or self.has_node_attr(attrList) \
+                    or self.not_length(1)
+
 
         return err
 
@@ -124,6 +150,16 @@ class Error_Checking:
                 return False
         return True
 
+    def all_bool_last(self, attrList):
+        i = len(attrList)
+        for x in range(0, i - 1):
+            if attrList[x][0] != "b:":
+                return False
+        return True
+
+    def last_node(self, attrList):
+        i = len(attrList)
+        return attrList[i - 1][0] == "n:"
 
     def last_edge(self, attrList):
         i = len(attrList)
@@ -134,6 +170,11 @@ class Error_Checking:
         return attrList[i - 1][0] == "b:"
 
 
+    def two_nodes(self, attrList):
+        return attrList[0][0] == "n:" and attrList[1][0] == "n:"
+
+    def two_edges(self, attrList):
+        return attrList[0][0] == "e:" and attrList[1][0] == "e:"
 
 
 
