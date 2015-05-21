@@ -34,7 +34,7 @@ class Error_Checking:
         cmdBool = command.get_bool()
 
         # Start off with no errors
-        err = 0
+        err = False
 
         if (cmd == "CREATE"):
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
@@ -78,6 +78,42 @@ class Error_Checking:
                     or self.has_bool_attr(attrList) or self.has_node_attr(attrList) \
                     or self.not_length(1)
 
+        elif cmd == "RETURN":
+            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
+                    or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
+                    or (not self.only_id)
+
+        elif cmd == "HASPATH":
+            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
+                    or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
+                    or self.not_length(2) or (not self.two_nodes(attrList))
+
+        elif cmd == "CLEAR":
+            err = self.not_empty(attrList)
+
+        elif cmd == "SHORTESTPATH":
+            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
+                    or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
+                    or self.not_length(2) or (not self.two_nodes(attrList))
+
+        elif cmd == "NEIGHBOR":
+            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
+                    or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
+                    or self.not_length(1)
+
+        elif cmd == "HASEDGE":
+            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
+                    or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
+                    or self.not_length(2) or (not self.two_nodes(attrList))
+
+        elif cmd == "COMMONNEIGHBORS":
+            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
+                    or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
+                    or self.not_length(2) or (not self.two_nodes(attrList))
+
+        elif cmd == "SHOW":
+            err = self.not_empty(attrList)
+
 
         return err
 
@@ -93,6 +129,9 @@ class Error_Checking:
 
     def not_empty_names(self, names):
         return (names != [])
+
+    def not_empty(self, attrList):
+        return (not attrList == [])
 
 
     def has_edge_attr(self, attrList):
@@ -176,6 +215,11 @@ class Error_Checking:
     def two_edges(self, attrList):
         return attrList[0][0] == "e:" and attrList[1][0] == "e:"
 
+    def only_id(self, attrList):
+        for lst in attrList:
+            if len(lst[2]) != 0:
+                return False
+        return True
 
 
 
