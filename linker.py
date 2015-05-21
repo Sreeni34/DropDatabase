@@ -1,5 +1,6 @@
 from query_evaluator import QueryEvaluator
 from bcolors import bcolors
+from predicates import Predicates
 
 class Linker:
     """ A basic linker class. """
@@ -67,7 +68,7 @@ class Linker:
         self.list_objects = object_list;
         self.gs = gs
         self.query_evaluator = QueryEvaluator(gs)   
-        self.pred = Predicates(gs)   
+        # self.pred = Predicates(gs)   
 
     def PrintNodes(self, nodes):   
         """
@@ -162,9 +163,11 @@ class Linker:
             nodes = self.query_evaluator.match(item[2], None, None)   
             if (predicates != []):
                 for p in predicates:   
-                    filtered_ids = pred.filter(nodes, p[0], p[2], p[1])         
-            self.PrintNodes(nodes);    
-        elif item[0] == "e:":   
+                    filtered_ids = Predicates.filter(nodes, p[0], p[2], p[1])   
+            # if (filtered_ids != []):   
+
+            self.PrintNodes(nodes)    
+        elif item[0] == "e:":      
             edges = self.query_evaluator.match(None, None, item[2])   
             self.PrintEdges(edges)   
 
@@ -345,7 +348,7 @@ class Linker:
                     for node1 in nodes1:           
                         neighbor_id = self.query_evaluator.get_neighbors(node1[0])   
                         if (neighbor_id == []): 
-                            print bcolors.OKBLUE + "Neighbors for Node " + str(node_num) + " = " + "No neighbors for Node(s)" + bcolors.ENDC   
+                            print bcolors.FAIL + "Neighbors for Node " + str(node_num) + " = " + "No neighbors for Node(s)" + bcolors.ENDC   
                         else:   
                             neighbors = []   
                             neighbors.append(neighbor_id, self.query_evaluator.get_node_attrs(neighbor_id))   
