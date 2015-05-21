@@ -38,12 +38,22 @@ class Error_Checking:
 
         if (cmd == "CREATE"):
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
-                    or self.has_edge_attr(attrList)
-
+                    or self.has_edge_attr(attrList) or self.has_bool_attr(attrList)
             print "good"
             print nameList
             print attrList
-            return err
+
+        elif cmd == "CREATEEDGE":
+            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
+                    or self.has_bool_attr(attrList) or self.even(attrList) \
+                    or self.not_alt_node_edge(attrList)
+
+        elif cmd == "CREATEALLEDGE":
+            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
+                    or self.has_bool_attr(attrList) or (not self.all_node_last(attrList)) \
+                    or (not self.last_edge(attrList))
+
+        return err
 
 
     def print_command_objects(self):
@@ -70,3 +80,68 @@ class Error_Checking:
             if lst[0] == "n:":
                 return True
         return False
+
+    def has_bool_attr(self, attrList):
+        for lst in attrList:
+            if lst[0] == "b:":
+                return True
+        return False
+
+    def not_length(self, attrList, num):
+        return len(attrList) != num
+
+
+    def even(self, attrList):
+        return (len(attrList) % 2) == 0
+
+
+    def not_alt_node_edge(self, attrList):
+        # counter for odd and even
+        i = 1
+        for lst in attrList:
+            if (i % 2) == 1:
+                if lst[0] == "e:":
+                    return True
+                i += 1
+            else:
+                if lst[0] == "n:":
+                    return True
+                i += 1
+        return False
+
+    def all_node_last(self, attrList):
+        i = len(attrList)
+        for x in range(0, i - 1):
+            if attrList[x][0] != "n:":
+                return False
+        return True
+
+
+    def all_edge_last(self, attrList):
+        i = len(attrList)
+        for x in range(0, i - 1):
+            if attrList[x][0] != "e:":
+                return False
+        return True
+
+
+    def last_edge(self, attrList):
+        i = len(attrList)
+        return attrList[i - 1][0] == "e:"
+
+    def last_bool(self, attrList):
+        i = len(attrList)
+        return attrList[i - 1][0] == "b:"
+
+
+
+
+
+
+    # def only_one_node(self, attrList):
+
+
+
+    # def only_one_edge(self, attrList):
+
+    # def only_one_bool(self, attrList):
