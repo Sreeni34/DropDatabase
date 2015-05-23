@@ -5,6 +5,10 @@ class Predicates:
     an attribute less than a particular value.   
     """   
 
+    def __init__(self, gs):
+
+        self.gs = gs
+
     def __str2float(self, value):
         """
         Private helper function that tries to convert a string representing a 

@@ -68,7 +68,7 @@ class Linker:
         self.list_objects = object_list;
         self.gs = gs
         self.query_evaluator = QueryEvaluator(gs)   
-        # self.pred = Predicates(gs)   
+        self.pred = Predicates(gs)   
 
     def PrintNodes(self, nodes):   
         """
@@ -83,8 +83,20 @@ class Linker:
             print bcolors.OKGREEN + "NODE MATCHES:" + bcolors.ENDC   
             node_num = 1
             for node in nodes:  
-                print bcolors.OKBLUE + "Node " + str(node_num) + " = " + str(nodes) + bcolors.ENDC   
+                print bcolors.OKBLUE + "Node " + str(node_num) + " = " + str(node) + bcolors.ENDC   
                 node_num += 1   
+
+    def PrintNode_ids(self, node_ids):   
+        """
+        Prints a list of nodes.       
+
+        @type nodes: List 
+        @param nodes: Node tuples to be printed.     
+        """   
+        nodes = []
+        for node_id in node_ids:   
+            nodes.append((node_id, self.query_evaluator.get_node_attrs(node_id)))   
+        self.PrintNodes(nodes)   
 
     def PrintEdges(self, edges):   
         """
@@ -103,7 +115,7 @@ class Linker:
                     edge[0]), edge[2], 
                     self.query_evaluator.get_node_attrs(edge[1]))   
                 print bcolors.OKBLUE + "Edge " + str(edge_num) + " = " + str(edge_tup) + bcolors.ENDC   
-                edge_num += 1
+                edge_num += 1         
 
     def CreateNode(self, attribute_list):   
         """
@@ -161,19 +173,19 @@ class Linker:
         item = attribute_list[0]   
         if item[0] == "n:":   
             nodes = self.query_evaluator.match(item[2], None, None)   
+            node_ids = []   
+            for node in nodes:   
+                node_ids.append(node[0])   
             if (predicates != []):
-                for p in predicates:   
-                    filtered_ids = Predicates.filter(nodes, p[0], p[2], p[1])   
-            # if (filtered_ids != []):   
-
-            self.PrintNodes(nodes)    
+                filtered_nodes = self.Filter_Preds(nodes, predicates)
+            self.PrintNodes(filtered_nodes) 
         elif item[0] == "e:":      
             edges = self.query_evaluator.match(None, None, item[2])   
             self.PrintEdges(edges)   
 
     def Filter_Preds(self, nodeids, predicates):   
-        if len(predicates) < 2:   
-            return pred.filter(nodeids, predicates[0][0], predicates[0][2], predicates[0][1])   
+        if len(predicates) < 2:
+            return self.pred.filter(nodeids, predicates[0][0], predicates[0][2], predicates[0][1])   
         else:
             lenpred = len(predicates)
             counter = 0   
@@ -190,15 +202,18 @@ class Linker:
                 if x == 0:   
                     pred0 = pred_list[x]   
                     pred1 = pred_list[x + 1]
-                    filter1 = pred.filter(nodeids, pred0[0], pred0[2], pred0[1]) 
-                    filter2 = pred.filter(nodeids, pred1[0], pred1[2], pred1[1])
+                    filter1 = self.pred.filter(nodeids, pred0[0], pred0[2], pred0[1]) 
+                    filter2 = self.pred.filter(nodeids, pred1[0], pred1[2], pred1[1])
                     if bool_list[x] == 'AND':      
                         filtered_nodes = [val for val in filter1 if val in filter2]   
                     elif bool_list[x] == 'OR':   
-                        filtered_nodes = list(set(filter1 + filter2))   
+                        for fltr in filter2:   
+                            if fltr not in filter1:
+                                filter1.append(fltr)
+                        filtered_nodes = filter1    
                 else:   
                     pred = pred_list[x + 1]   
-                    fltr = pred.filter(filtered_nodes, pred[0], pred[2], pred[1])   
+                    fltr = self.pred.filter(filtered_nodes, pred[0], pred[2], pred[1])   
                     if bool_list[x] == 'AND':      
                         filtered_nodes = [val for val in filtered_nodes if val in fltr]   
                     elif bool_list[x] == 'OR':   
