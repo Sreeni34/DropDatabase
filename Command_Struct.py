@@ -26,8 +26,6 @@ class Command_Struct:
     NEIGHBOR        ID ATTR
     HASEDGE         ID ATTR ID ATTR
     COMMONNEIGHBORS ID ATTR ID ATTR
-    RESET
-    FLUSH
     SHOW
     VISUALIZE
 

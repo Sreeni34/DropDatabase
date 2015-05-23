@@ -250,9 +250,7 @@ class Parser:
         HASEDGE
         COMMONNEIGHBORS
         RETURN
-        CLEAR 
-        RESET
-        FLUSH
+        CLEAR
         SHOW
         VISUALIZE
 
@@ -268,7 +266,7 @@ class Parser:
             "match", "modifynode", "modifyedge", "deletenode", 
             "deleteedge", "haspath", "shortestpath", "neighbor", 
             "hasedge", "commmonneighbors", "return", "clear", 
-            "reset", "flush", "show", "visualize"]
+            "show", "visualize"]
 
         if (word.lower() in commands_list):
             return TOKEN_COMMAND

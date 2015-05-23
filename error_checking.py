@@ -20,8 +20,7 @@ class Error_Checking:
         for cmd in self.cmd_obj:
             print cmd.get_command()
             if self.any_errors(cmd):
-                print "WE HAVE AN ERROR"
-                print cmd.get_command()
+                print "ERROR in command " + cmd.get_command()
                 return True
         print "No errors"
         return False
@@ -60,23 +59,23 @@ class Error_Checking:
 
         elif cmd == "MODIFYNODE":
             err = (not self.changed_bool(cmdBool)) or self.not_empty_names(nameList) \
-                    or self.has_edge_attr(attrList) or self.not_length(3) \
-                    or (not self.last_bool(attrList)) or self.all_node_last(attrList)
+                    or self.has_edge_attr(attrList) or self.not_length(attrList, 3) \
+                    or (not self.last_bool(attrList)) or (not self.all_node_last(attrList))
 
         elif cmd == "MODIFYEDGE":
             err = (not self.changed_bool(cmdBool)) or self.not_empty_names(nameList) \
-                    or self.has_node_attr(attrList) or self.not_length(3) \
-                    or (not self.last_bool(attrList)) or self.all_edge_last(attrList)
+                    or self.has_node_attr(attrList) or self.not_length(attrList, 3) \
+                    or (not self.last_bool(attrList)) or (not self.all_edge_last(attrList))
 
         elif cmd == "DELETENODE":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
                     or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
-                    or self.not_length(1)
+                    or self.not_length(attrList, 1)
 
         elif cmd == "DELETEEDGE":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
                     or self.has_bool_attr(attrList) or self.has_node_attr(attrList) \
-                    or self.not_length(1)
+                    or self.not_length(attrList, 1)
 
         elif cmd == "RETURN":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
@@ -86,7 +85,7 @@ class Error_Checking:
         elif cmd == "HASPATH":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
                     or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
-                    or self.not_length(2) or (not self.two_nodes(attrList))
+                    or self.not_length(attrList, 2) or (not self.two_nodes(attrList))
 
         elif cmd == "CLEAR":
             err = self.not_empty(attrList)
@@ -94,22 +93,22 @@ class Error_Checking:
         elif cmd == "SHORTESTPATH":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
                     or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
-                    or self.not_length(2) or (not self.two_nodes(attrList))
+                    or self.not_length(attrList, 2) or (not self.two_nodes(attrList))
 
         elif cmd == "NEIGHBOR":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
                     or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
-                    or self.not_length(1)
+                    or self.not_length(attrList, 1)
 
         elif cmd == "HASEDGE":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
                     or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
-                    or self.not_length(2) or (not self.two_nodes(attrList))
+                    or self.not_length(attrList, 2) or (not self.two_nodes(attrList))
 
         elif cmd == "COMMONNEIGHBORS":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
                     or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
-                    or self.not_length(2) or (not self.two_nodes(attrList))
+                    or self.not_length(attrList, 2) or (not self.two_nodes(attrList))
 
         elif cmd == "SHOW":
             err = self.not_empty(attrList)
@@ -220,13 +219,3 @@ class Error_Checking:
             if len(lst[2]) != 0:
                 return False
         return True
-
-
-
-    # def only_one_node(self, attrList):
-
-
-
-    # def only_one_edge(self, attrList):
-
-    # def only_one_bool(self, attrList):

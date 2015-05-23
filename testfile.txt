@@ -63,3 +63,14 @@ create n: a Label:dog Name:good create n: b Label:dog Name:bad create n: c Label
 createedge n: a Label:dog e: b Type:friend n: c Label:person createedge n: c Label:person e: b Type:owner n: c Name:mild  createedge n: c Name:mild e: b Type:enemy n: c Label:dogcat
 match n: a Name:good e: b Type:friend n: b Name:kite e: c Type:owner n: c Label:catdog
 return n: a;
+
+
+create n: id1 Label:Dog Name:Chat
+create n: id2 Label:Cat Name:Whisk 
+createedge n: a Label:Dog e: rel Relation:Friend n: b Label:Cat;
+match n: bal Label:Dog;
+modifynode n: fst Name:Chat n: snd Name:Doggy b: oth val:1;
+modifynode n: fst Name:Doggy n: snd Name:Dogger b: oth val:1;
+modifyedge e: fst Relation:Friend e: snd Relation:Enemy b: oth val:1;
+deletenode n: a Label:Cat;
+deleteedge e: a Relation:Enemy;
