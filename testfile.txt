@@ -87,6 +87,7 @@ match n: val Salary<10000;
 
 create n: fst Name:Job Salary:5000 create n: snd Name:Bill Salary:3000 create n: thr Name:Jill Salary:1000 create n: for Name:Jack Salary:7000;
 match n: val Salary<10000;
+match n: val Salary>2000 and Salary<10000;
 
 
 
