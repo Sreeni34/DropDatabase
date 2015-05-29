@@ -211,7 +211,9 @@ class QueryEvaluator:
         """   
         nodes = self.match_node(node_attrs)   
         for node in nodes:   
-            self.g.remove_node(node[0])      
+            self.g.remove_node(node[0])   
+            
+            self.gs.delete_identifier(node)      
 
     def delete_rel(self, rel_attrs):   
         """ 

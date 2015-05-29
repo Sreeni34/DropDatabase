@@ -74,3 +74,35 @@ modifynode n: fst Name:Doggy n: snd Name:Dogger b: oth val:1;
 modifyedge e: fst Relation:Friend e: snd Relation:Enemy b: oth val:1;
 deletenode n: a Label:Cat;
 deleteedge e: a Relation:Enemy;
+
+
+
+
+
+
+
+
+
+
+Presentation Day Test files
+CREATE n: id1 Label:Boss Name:Donnie Salary:1000000;
+RETURN n:  id1;
+CREATE n: id2 Label:Employee Name:Sreeni Salary:50000;
+CREATEEDGE n: id1 Label:Boss e: id3 Relation:Manager n: id2 Label:Employee;
+SHOW;
+MATCH n: person Label:Employee;
+MODIFYNODE n: prev Name:Sreeni n: new Name:Ruthwick b: new val:1;
+DELETENODE n: fst Name:Ruthwick;
+CLEAR; 
+
+
+
+CREATE n: id1 Label:Boss Name:Donnie Salary:1000000
+RETURN n:  id1;
+CREATE n: id2 Label:Employee Name:Sreeni Salary:50000;
+CREATEEDGE n: id1 Label:Boss e: id3 Relation:Manager n: id2 Label:Employee;
+SHOW;
+MATCH n: person Label:Employee;
+MODIFYNODE n: prev Name:Sreeni n: new Name:Ruthwick b: new val:1;
+DELETENODE n: fst Name:Ruthwick;
+CLEAR; 

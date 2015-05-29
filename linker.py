@@ -173,12 +173,11 @@ class Linker:
         item = attribute_list[0]   
         if item[0] == "n:":   
             nodes = self.query_evaluator.match(item[2], None, None)   
-            node_ids = []   
-            for node in nodes:   
-                node_ids.append(node[0])   
             if (predicates != []):
                 filtered_nodes = self.Filter_Preds(nodes, predicates)
-            self.PrintNodes(filtered_nodes) 
+                self.PrintNodes(filtered_nodes)   
+            else:   
+                self.PrintNodes(nodes)
         elif item[0] == "e:":      
             edges = self.query_evaluator.match(None, None, item[2])   
             self.PrintEdges(edges)   

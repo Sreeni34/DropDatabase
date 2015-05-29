@@ -118,6 +118,20 @@ class GraphStructure:
             return self.identifier[id]
         return None   
 
+    def delete_identifier(self, node):
+        """
+        Returns the value for the given key in the dictionary. If
+        no key exists, we return None.
+
+        @type id: String
+        @param id: Key to look up in dictionary
+        @rtype: Anything or None
+        @return: Value for the key or None, if key is not present
+        """
+        for key_val in self.identifier.keys():
+            if self.identifier[key_val] == node:   
+                self.identifier.pop(key_val)    
+
     def clear_all(self):   
         self.id = 0
         # Internal dictionary to store variables and values
