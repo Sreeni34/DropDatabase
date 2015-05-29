@@ -13,12 +13,12 @@ class Error_Checking:
 
     def __init__(self, obj_list):
         self.cmd_obj = obj_list
-        self.print_command_objects()
+        #self.print_command_objects()
 
 
     def check_commands(self):
         for cmd in self.cmd_obj:
-            print cmd.get_command()
+            #print cmd.get_command()
             if self.any_errors(cmd):
                 print "ERROR in command " + cmd.get_command()
                 return True
@@ -38,10 +38,6 @@ class Error_Checking:
         if (cmd == "CREATE"):
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
                     or self.has_edge_attr(attrList) or self.has_bool_attr(attrList)
-            print "good"
-            print nameList
-            print attrList
-
         elif cmd == "CREATEEDGE":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
                     or self.has_bool_attr(attrList) or self.even(attrList) \

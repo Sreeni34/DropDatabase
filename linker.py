@@ -336,9 +336,9 @@ class Linker:
                 for node1 in nodes1:   
                     for node2 in nodes2:   
                         if (self.query_evaluator.check_path(node1[0], node2[0])):   
-                            print("A path exists between " + node1 + " and " + node2)   
+                            print("A path exists between " + str(node1) + " and " + str(node2))   
                         else:   
-                            print("No path exists between " + node1 + " and " + node2)   
+                            print("No path exists between " + str(node1) + " and " + str(node2))   
             elif command_name == "CLEAR":   
                 self.query_evaluator.clear()   
             elif command_name == "SHORTESTPATH":   
@@ -346,16 +346,15 @@ class Linker:
                 item2 = attribute_list[1]   
                 nodes1 = self.query_evaluator.match(item1[2], None, None)   
                 nodes2 = self.query_evaluator.match(item2[2], None, None)   
-                nodes1 = []      
                 for node1 in nodes1:   
                     for node2 in nodes2:   
                         if (self.query_evaluator.check_path(node1[0], node2[0])):
                             path_list = self.query_evaluator.get_shortest_path(node1[0], node2[0])
-                            print ("The nodes in the path between " + node1 + " and " + node2 + " are: ")   
+                            print ("The nodes in the path between " + str(node1) + " and " + str(node2) + " are: ")   
                             for node_id in path_list:   
                                 print (node_id, self.query_evaluator.get_node_attrs(node_id))   
                         else:   
-                            print("No path exists between " + node1 + " and " + node2)   
+                            print("No path exists between " + str(node1)+ " and " + str(node2))   
             elif command_name == "SHOW":
                 self.gs.display()
             elif command_name == "VISUALIZE":

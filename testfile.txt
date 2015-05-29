@@ -59,9 +59,27 @@ match n: fin Name:good e: b Type:friend n: b Name:kite e: c Type:owner n: c Labe
 return n: a;
 
 
+#Create the nodes
+
 create n: a Label:dog Name:good create n: b Label:dog Name:bad create n: c Label:catdog Name:mild create n: d Label:person Name:kite create n: e Label:dogcat Name:food
-createedge n: a Label:dog e: b Type:friend n: c Label:person createedge n: c Label:person e: b Type:owner n: c Name:mild  createedge n: c Name:mild e: b Type:enemy n: c Label:dogcat
+
+#Create the edges
+
+createedge n: a Label:dog e: b Type:friend n: c Label:person createedge n: c Label:person e: b Type:owner n: c Name:mild  createedge n: c Name:mild e: b Type:enemy n: c Label:dogcat createedge n: a Name:good e: b Type:friend n: c Name:bad
+
+#Match the edges
+
 match n: fin Name:good e: b Type:friend n: b Name:kite e: c Type:owner n: c Label:catdog
+
+#Check if there is a path between two nodes
+
+haspath n: node1 Label:dog n: node2 Name:kite;
+
+#Get the shortest path between two nodes
+
+shortestpath n: a Name:good n: b Name:kite;
+shortestpath n: a Name:good n: b Name:food;
+
 return n: a;
 
 
