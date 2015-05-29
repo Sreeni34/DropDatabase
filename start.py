@@ -65,12 +65,14 @@ class StartDatabase:
         # First check if state machine produced any error
         # If errors exist, then don't create linker
         if (parser.get_Errors()):
+            print "State machine Error"
             return True
 
         # Create error class instance
         errorCheck = Error_Checking(parser.get_object_list())
         # If there are errors, don't create linker 
         if errorCheck.check_commands():
+            print "Command state Error"
             return True       
 
         return False

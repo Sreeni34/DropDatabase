@@ -55,13 +55,13 @@ create n: e Label:dogcat Name:food
 createedge n: a Label:dog e: b Type:friend n: c Label:person
 createedge n: c Label:person e: b Type:owner n: c Name:mild 
 createedge n: c Name:mild e: b Type:enemy n: c Label:dogcat
-match n: a Name:good e: b Type:friend n: b Name:kite e: c Type:owner n: c Label:catdog
+match n: fin Name:good e: b Type:friend n: b Name:kite e: c Type:owner n: c Label:catdog
 return n: a;
 
 
 create n: a Label:dog Name:good create n: b Label:dog Name:bad create n: c Label:catdog Name:mild create n: d Label:person Name:kite create n: e Label:dogcat Name:food
 createedge n: a Label:dog e: b Type:friend n: c Label:person createedge n: c Label:person e: b Type:owner n: c Name:mild  createedge n: c Name:mild e: b Type:enemy n: c Label:dogcat
-match n: a Name:good e: b Type:friend n: b Name:kite e: c Type:owner n: c Label:catdog
+match n: fin Name:good e: b Type:friend n: b Name:kite e: c Type:owner n: c Label:catdog
 return n: a;
 
 
@@ -78,7 +78,15 @@ deleteedge e: a Relation:Enemy;
 
 
 
+# Predicate file
+create n: fst Name:Job Salary:5000;
+create n: snd Name:Bill Salary:3000;
+create n: thr Name:Jill Salary:1000;
+create n: for Name:Jack Salary:7000;
+match n: val Salary<10000;
 
+create n: fst Name:Job Salary:5000 create n: snd Name:Bill Salary:3000 create n: thr Name:Jill Salary:1000 create n: for Name:Jack Salary:7000;
+match n: val Salary<10000;
 
 
 
@@ -97,9 +105,7 @@ CLEAR;
 
 
 
-CREATE n: id1 Label:Boss Name:Donnie Salary:1000000
-RETURN n:  id1;
-CREATE n: id2 Label:Employee Name:Sreeni Salary:50000;
+CREATE n: id1 Label:Boss Name:Donnie Salary:1000000 CREATE n: id2 Label:Employee Name:Sreeni Salary:50000;
 CREATEEDGE n: id1 Label:Boss e: id3 Relation:Manager n: id2 Label:Employee;
 SHOW;
 MATCH n: person Label:Employee;

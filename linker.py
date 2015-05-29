@@ -170,16 +170,20 @@ class Linker:
         @param attribute_list: List of parsed objects, where each
         element is of the form "Type: Identifier dictionary_attributes".   
         """   
-        item = attribute_list[0]   
+        item = attribute_list[0] 
+        curr_id = item[1]  
         if item[0] == "n:":   
             nodes = self.query_evaluator.match(item[2], None, None)   
             if (predicates != []):
                 filtered_nodes = self.Filter_Preds(nodes, predicates)
+                self.gs.set_identifier(curr_id, filtered_nodes)
                 self.PrintNodes(filtered_nodes)   
             else:   
+                self.gs.set_identifier(curr_id, nodes)
                 self.PrintNodes(nodes)
         elif item[0] == "e:":      
-            edges = self.query_evaluator.match(None, None, item[2])   
+            edges = self.query_evaluator.match(None, None, item[2])
+            self.gs.set_identifier(curr_id, edges)   
             self.PrintEdges(edges)   
 
     def Filter_Preds(self, nodeids, predicates):   
@@ -229,11 +233,14 @@ class Linker:
         """   
         item1 = attribute_list[0]   
         item2 = attribute_list[1]   
+        curr_id = item1[1]
         if item1[0] == "n:":   
-            edges = self.query_evaluator.match(None, item1[2], item2[2])   
+            edges = self.query_evaluator.match(None, item1[2], item2[2])    
+            self.gs.set_identifier(curr_id, edges)   
             self.PrintEdges(edges)   
         else:   
-            edges = self.query_evaluator.match(None, item2[2], item1[2])   
+            edges = self.query_evaluator.match(None, item2[2], item1[2])
+            self.gs.set_identifier(curr_id, edges)   
             self.PrintEdges(edges)   
 
     def MatchThreeItems(self, attribute_list, predicates):   
@@ -248,6 +255,7 @@ class Linker:
         item2 = attribute_list[1]   
         item3 = attribute_list[2]   
         edges = self.query_evaluator.match(item1[2], item3[2], item2[2])   
+        self.gs.set_identifier(item1[1], edges)
         self.PrintEdges(edges)   
 
     def MatchChain(self, attribute_list, predicates):   
@@ -268,6 +276,7 @@ class Linker:
                 edge_attr_list.append(item[2])   
             counter += 1   
         nodes = self.query_evaluator.multi_match(node_attr_list, edge_attr_list)
+        self.gs.set_identifier(attribute_list[0][1], nodes)
         if nodes == None:   
              print bcolors.FAIL + "No matches found" + bcolors.ENDC  
         for node in nodes:   
