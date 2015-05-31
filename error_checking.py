@@ -13,7 +13,7 @@ class Error_Checking:
 
     def __init__(self, obj_list):
         self.cmd_obj = obj_list
-        #self.print_command_objects()
+        self.print_command_objects()
 
 
     def check_commands(self):

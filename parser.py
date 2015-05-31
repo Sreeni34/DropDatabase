@@ -101,6 +101,7 @@ class Parser:
 
         self.curr_state = STATE_INIT  # current state 
         self.curr_word = ""
+        self.curr_iden = ""
 
         self.curr_command = ""      # Used for error checking
         self.errors = 0             # Initialize to no errors
@@ -347,7 +348,7 @@ class Parser:
         """
         Insert the specified name into our current object.
         """
-
+        self.curr_iden = self.curr_word
         self.curr_obj.insert_attr_name(self.curr_word)
 
 
@@ -371,13 +372,13 @@ class Parser:
             self.curr_obj.insert_name(self.curr_word.upper())
         elif (">" in self.curr_word):
             lst = self.curr_word.split(">")
-            self.curr_obj.insert_name([lst[0], ">", lst[1]])
+            self.curr_obj.insert_name([lst[0], ">", lst[1], self.curr_iden])
         elif ("<" in self.curr_word):
             lst = self.curr_word.split("<")
-            self.curr_obj.insert_name([lst[0], "<", lst[1]])
+            self.curr_obj.insert_name([lst[0], "<", lst[1], self.curr_iden])
         elif ("=" in self.curr_word):
             lst = self.curr_word.split("=")
-            self.curr_obj.insert_name([lst[0], "=", lst[1]])
+            self.curr_obj.insert_name([lst[0], "=", lst[1], self.curr_iden])
         else:
             self.error()
 
