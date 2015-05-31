@@ -158,7 +158,7 @@ class Parser:
 
 
         # STATE_NAME
-        state_machine[STATE_NAME][TOKEN_COMMAND] = (STATE_ERROR, self.error)
+        state_machine[STATE_NAME][TOKEN_COMMAND] = (STATE_COMMAND, self.project_cmd_obj)
         state_machine[STATE_NAME][TOKEN_NODE] = (STATE_NODE, self.create_node)
         state_machine[STATE_NAME][TOKEN_NAME] = (STATE_ERROR, self.error)
         state_machine[STATE_NAME][TOKEN_ATTR] = (STATE_ATTR, self.add_attr)
@@ -267,7 +267,7 @@ class Parser:
             "match", "modifynode", "modifyedge", "deletenode", 
             "deleteedge", "haspath", "shortestpath", "neighbor", 
             "hasedge", "commmonneighbors", "return", "clear", 
-            "show", "visualize"]
+            "show", "visualize", "project"]
 
         if (word.lower() in commands_list):
             return TOKEN_COMMAND
@@ -315,6 +315,13 @@ class Parser:
         self.obj_list.append(self.curr_obj)
 
         self.curr_command = command
+
+    def project_cmd_obj(self):
+        if (self.curr_command.lower() != "project"):
+            self.error();
+        else:
+            self.create_cmd_obj();
+
 
 
     def create_node(self):
