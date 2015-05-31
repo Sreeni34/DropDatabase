@@ -317,9 +317,17 @@ class Parser:
         self.curr_command = command
 
     def project_cmd_obj(self):
+        """
+        Check if the command is a project. If the command is
+        a project, then we are allowed to enter a command after
+        the list of project values in the project command. If the
+        command is not project, then we toss and error
+        """
+
         if (self.curr_command.lower() != "project"):
             self.error();
         else:
+            # Since this structure is valid, create a new command
             self.create_cmd_obj();
 
 
@@ -460,9 +468,11 @@ class Parser:
         """
         
         for word in self.words:
-            # print "this is the word: " + word
-            if (self.done):
-                # print "Error occurred in parser."
+            if (self.done or (self.words[len(self.words) - 1] == word)):
+                # Do a last update on the names for match commands
+                for i in range(0, len(self.obj_list)):
+                    if self.obj_list[i].get_command() == "MATCH":
+                        self.obj_list[i].fix_names()
                 break
             
             self.curr_word = word

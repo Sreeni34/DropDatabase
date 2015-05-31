@@ -91,6 +91,28 @@ class Command_Struct:
 
         return len(self.name)
 
+    def fix_names(self):
+        prevElem = self.name[0]
+        newLst = []
+        i = -1   # Counter for newLst last element
+        prevIden = ""
+        for elem in self.name:
+            # First check if and is supplied
+            if elem == "AND" or elem == "OR":
+                # Append it to the previous list
+                newLst[i].append(elem)
+            elif prevIden != elem[3]:
+                i += 1
+                # Add new list item to lst
+                newLst.insert(i, [elem])
+                # Set a new identifier
+                prevIden = elem[3]
+            else:
+                # Previous element contains same identifier
+                # Add the element to the end of the last list
+                newLst[i].append(elem)
+        self.name = newLst
+
 ##
 ##  Methods for self.attr
 ##
