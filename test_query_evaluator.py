@@ -340,7 +340,7 @@ class TestQueryEvaluator(unittest.TestCase):
         """
         gs = GraphStructure()
         q = QueryEvaluator(gs)
-        pred = Predicates()
+        pred = Predicates(gs)
         attrs1 = {'Label' : 'Person', 'Name' : 'Alice', 'Salary' : '500'}
         attrs2 = {'Label' : 'Person', 'Name' : 'Bob', 'Salary' : '1000'}
         attrs3 = {'Label' : 'Person', 'Name' : 'John', 'Salary' : '20000'}

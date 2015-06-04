@@ -148,16 +148,15 @@ class Linker:
         for item in attribute_list:
             if (counter % 3) == 0:   
                 nodes1 = self.query_evaluator.match_node(item[2])
-            elif (counter % 2) == 1:
+            elif (counter % 3) == 1:
                 edge_identifier = item[1]
                 edge_attrs = item[2]   
             elif (counter % 3) == 2:   
-                nodes2 = self.query_evaluator.match_node(item[2])   
+                nodes2 = self.query_evaluator.match_node(item[2]) 
                 for node1 in nodes1:
                     for node2 in nodes2:  
-                        self.gs.set_identifier(edge_identifier, 
-                            self.query_evaluator.add_relationship(node1,
-                             node2, edge_attrs))
+                        self.query_evaluator.add_relationship(node1,
+                             node2, edge_attrs)
             counter += 1   
 
     def MatchSingleItem(self, attribute_list, predicates):   
@@ -244,7 +243,12 @@ class Linker:
             self.gs.set_identifier(curr_id, edges)   
             self.PrintEdges(edges)   
         else:   
-            edges = self.query_evaluator.match_node_rel(item2[2], item1[2], None)
+            filtered_nodes = None   
+            if (predicates != []):   
+                nodes = self.query_evaluator.match_node(item2[2])
+                filtered_nodes = self.Filter_Preds(nodes, predicates[0])      
+            edges = self.query_evaluator.match_node_rel(item2[2], item1[2], 
+                filtered_nodes)
             self.gs.set_identifier(curr_id, edges)   
             self.PrintEdges(edges)   
 
@@ -259,8 +263,20 @@ class Linker:
         item1 = attribute_list[0]   
         item2 = attribute_list[1]   
         item3 = attribute_list[2]   
+        filtered_nodes1 = None
+        filtered_nodes2 = None   
+        print predicates   
+        if (len(predicates) == 2):  
+            nodes1 = self.query_evaluator.match_node(item1[2]) 
+            nodes2 = self.query_evaluator.match_node(item3[2])   
+            if (item1[1] == predicates[0][0][3]):      
+                filtered_nodes1 = self.Filter_Preds(nodes1, predicates[0])   
+                filtered_nodes2 = self.Filter_Preds(nodes2, predicates[1])   
+            else:   
+                filtered_nodes1 = self.Filter_Preds(nodes1, predicates[1])   
+                filtered_nodes2 = self.Filter_Preds(nodes2, predicates[0])   
         edges = self.query_evaluator.match_node_node_rel(item1[2], item3[2], 
-            item2[2], None, None)   
+            item2[2], filtered_nodes1, filtered_nodes2)   
         self.gs.set_identifier(item1[1], edges)
         self.PrintEdges(edges)   
 
@@ -319,12 +335,14 @@ class Linker:
                 nodes_modified = attribute_list[0]   
                 attrs_changed = attribute_list[1]   
                 modify_boolean = attribute_list[2]   
-                self.query_evaluator.modify_node(nodes_modified[2], attrs_changed[2], (modify_boolean[2])["val"])     
+                self.query_evaluator.modify_node(nodes_modified[2], attrs_changed[2], int ((modify_boolean[2])['val']))     
             elif command_name == "MODIFYEDGE":   
                 edges_modified = attribute_list[0]   
                 attrs_changed = attribute_list[1]   
                 modify_boolean = attribute_list[2]
-                self.query_evaluator.modify_rel(edges_modified[2], attrs_changed[2], (modify_boolean[2])["val"])    
+                print "Boolean val"
+                print (modify_boolean[2])['val']
+                self.query_evaluator.modify_rel(edges_modified[2], attrs_changed[2], int ((modify_boolean[2])['val']))    
             elif command_name == "DELETENODE":   
                 node_deleted = attribute_list[0]   
                 self.query_evaluator.delete_node(node_deleted[2])   
