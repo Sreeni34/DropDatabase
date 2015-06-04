@@ -153,7 +153,7 @@ HERE IS A TEST FOR EACH OF THE METHODS
     REL ATTR = e: a b:c
     ID ATTR = n: a a:b
     BOOL = b: a val:0/1 - 1 means add the attribute, and 0 means delete the attribute
-    ID = n: a () ()
+    ID = n: a
     PRED = a(pred)b
 
     CREATE          ID ATTR ...
@@ -164,15 +164,23 @@ HERE IS A TEST FOR EACH OF THE METHODS
     DELETENODE      ID ATTR
     DELETEEDGE      REL ATTR
     RETURN          ID ID ...
+
     HASPATH         ID ATTR ID ATTR
-    CLEAR
     SHORTESTPATH    ID ATTR ID ATTR
     NEIGHBOR        ID ATTR
     HASEDGE         ID ATTR ID ATTR
     COMMONNEIGHBORS ID ATTR ID ATTR
+
     SHOW
+    CLEAR
     VISUALIZE
+
     PROJECT         ID ATTR 
+
+
+
+EXAMPLES FOR SHOW
+show;
 
 
 EXAMPLES FOR CREATE
@@ -182,11 +190,13 @@ create n: id2 Animal:Cat Name:Whisk n: id3 Animal:Cat Name:Furry Age:10;
 -- In one line for easy copy and paste
 create n: id1 Animal:Dog Name:Ruff Age:5 create n: id2 Animal:Cat Name:Whisk n: id3 Animal:Cat Name:Furry Age:10;
 
+
 EXAMPLES FOR CREATEEDGE
 createedge n: id1 Animal:Dog e: rel1 Relation:Enemy n: id2 Animal:Cat;
 createedge n: id1 Name:Whisk e: rel1 Relation:Friend n: id2 Name:Furry;
 createedge n: id2 Name:Furry e: rel2 Relation:Older n: id3 Name:Ruff;
 
+-- In one line for easy copy and paste
 createedge n: id1 Animal:Dog e: rel1 Relation:Enemy n: id2 Animal:Cat createedge n: id1 Name:Whisk e: rel1 Relation:Friend n: id2 Name:Furry createedge n: id2 Name:Furry e: rel2 Relation:Older n: id3 Name:Ruff;
 
 
@@ -200,26 +210,62 @@ match n: id1 Animal:Dog e: id2 Relation:Enemy n: id3 Age:10 e: id4 Relation:Olde
 EXAMPLES FOR MATCH WITH PREDICATE
 
 
+EXAMPLES FOR HASPATH
+haspath n: id1 Name:Ruff n: id2 Name:Furry;
+
+
+EXAMPLES FOR SHORTESTPATH
+shortestpath n: id1 Name:Ruff n: id2 Name:Furry;
+
+
+EXAMPLES FOR NEIGHBOR
+neighbor n: id1 Name:Ruff;
+
+
+EXAMPLES FOR HASEDGE
+hasedge n: id1 Name:Ruff n: id2 Name:Furry;
+hasedge n: id1 Name:Whisk n: id2 Name:Ruff;
+
+
+EXAMPLES FOR COMMONNEIGHBORS
+commonneighbors n: id1 Name:Ruff n: id2 Name:Furry;
+commonneighbors n: id1 Name:Whisk n: id2 Name:Ruff;
+
+
+
+EXAMPLES FOR VISUALIZE
+visualize;
+
+
+
 EXAMPLES FOR MODIFYNODE
 modifynode n: id1 Animal:Dog n: id2 Animal:Lion b: id3 val:1;
 modifynode n: id1 Animal:Cat n: id2 Skill:Leap b: id3 val:1;
 modifynode n: id1 Animal:Lion n: id2 Animal:Lion b: id3 val:0;
 
+-- In one line for easy copy and paste
+modifynode n: id1 Animal:Dog n: id2 Animal:Lion b: id3 val:1 modifynode n: id1 Animal:Cat n: id2 Skill:Leap b: id3 val:1 modifynode n: id1 Animal:Lion n: id2 Animal:Lion b: id3 val:0;
+
 
 EXAMPLES FOR MODIFYEDGE
 modifyedge e: id1 Relation:Enemy e: id2 Relation:Neutral b: id3 val:1;
 modifyedge e: id1 Relation:Friend e: id2 YearsKnown:1 b: id3 val:1;
+modifyedge e: id1 Relation:Friend e: id2 Relation:Friend b: id3 val:0;
 
+-- In one line for easy copy and paste
+modifyedge e: id1 Relation:Enemy e: id2 Relation:Neutral b: id3 val:1 modifyedge e: id1 Relation:Friend e: id2 YearsKnown:1 b: id3 val:1 modifyedge e: id1 Relation:Friend e: id2 Relation:Friend b: id3 val:0;
 
 EXAMPLES FOR DELETENODE
 deletenode n: id1 Name:Whisk;
 
 
 EXAMPLES FOR DELETEEDGE
-deleteedge e: id1 Relation:Friend;
+deleteedge e: id1 Relation:Older;
 
 
 EXAMPLES FOR RETURN
+return n: id1;
+
 
 
 

@@ -264,7 +264,7 @@ class Parser:
 
         commands_list = ["create", "createedge", "match", "modifynode", 
             "modifyedge", "deletenode", "deleteedge", "haspath", 
-            "shortestpath", "neighbor", "hasedge", "commmonneighbors", 
+            "shortestpath", "neighbor", "hasedge", "commonneighbors", 
             "return", "clear", "show", "visualize", "project"]
 
         if (word.lower() in commands_list):
@@ -381,6 +381,11 @@ class Parser:
                 self.curr_obj.set_bool(int(lst[1]))
 
     def add_pred(self):
+        """
+        Insert the predicate into the names list of our
+        current object. If the current word does not contain any
+        predicate information, an error is tossed.
+        """
         if (self.curr_word.lower() == "and" or self.curr_word.lower() == "or"):
             self.curr_obj.insert_name(self.curr_word.upper())
         elif (">" in self.curr_word):
