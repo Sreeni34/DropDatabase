@@ -7,6 +7,7 @@ import networkx as nx
 from utilities import Utilities
 from BatchExecute import BatchExecute
 from error_checking import Error_Checking
+import readline
 
 class StartDatabase:
     """
@@ -89,14 +90,15 @@ class StartDatabase:
                 self.gs.display()
 
             commands = []
-            sys.stdout.write(">>> ")
+            #sys.stdout.write(">>> ")
+            command = raw_input(">>> ")
             while True:
-                command = raw_input()
+                #command = raw_input(">>> ")
                 if (len(command) != 0 and command[-1] == ";"):
                     commands.append(command)
                     break
                 commands.append(command)
-                sys.stdout.write("... ")
+                command = raw_input("... ")
             command_str = " ".join(commands)
 
             # Start the parser and parse the commands
