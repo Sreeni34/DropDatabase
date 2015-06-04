@@ -40,9 +40,7 @@ class Error_Checking:
                     or self.has_edge_attr(attrList) or self.has_bool_attr(attrList)
         elif cmd == "CREATEEDGE":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
-                    or self.has_bool_attr(attrList) or self.even(attrList) \
-                    or self.not_alt_node_edge(attrList) or \
-                    (not self.last_node(attrList))
+                    or self.has_bool_attr(attrList) or (not self.last_node(attrList))
 
         elif cmd == "CREATEALLEDGE":
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
@@ -153,6 +151,9 @@ class Error_Checking:
 
     def even(self, attrList):
         return (len(attrList) % 2) == 0
+
+    def odd(self, attrList):
+        return (not self.even(attrList))
 
 
     def not_alt_node_edge(self, attrList):
