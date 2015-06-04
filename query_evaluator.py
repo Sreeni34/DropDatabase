@@ -284,10 +284,10 @@ class QueryEvaluator:
         edges = self.match_rel(rel_attrs)   
         for edge in edges:   
             current_edge_attrs = self.g[edge[0]][edge[1]]   
-            if not update_type:   
+            if (not update_type):   
                 key_values = rel_change.keys()
                 for key_val in key_values:   
-                    current_edge_attrs.pop(key_val)   
+                    current_edge_attrs.pop(key_val) 
                 self.g[edge[0]][edge[1]] = current_edge_attrs   
             else:   
                 attr_keys = rel_change.keys()
