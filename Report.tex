@@ -1,0 +1,120 @@
+\documentclass{article}
+
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage[margin=1in]{geometry}
+
+\begin{document}
+
+
+\title{MicroDB Graph Database}
+
+\author{Sreenivas Appasani \\ Ajay Mandlekar \\ Ruthwick Pathireddy \\ Sathwick Pathireddy \\
+\\ CS123 Database Systems Project
+\\ \it{California Institute of Technology}}
+
+\maketitle
+
+\section{Motivation}
+
+Information is connected in the world and relationships are a central aspect of modeling such data. Traditional Relational Database Management Systems (RDBMS) model relationships through join-like operations, which are computationally intensive. There needs to be an efficient way to express relationships between large sets of data. Graph databases fulfill such a need and are a powerful alternative to relational databases. 
+
+\section{Query Language}
+
+MicroDB's Query Language supports both basic and commonly-used graph queries as listed below:
+\begin{itemize}
+	\item Create, modify, and delete nodes.
+	\item Create, modify, and delete edges.
+	\item Query for arbitrary length node-edge path relationships.
+	\item Determine if a path exists between two nodes. 
+	\item Find the shortest path between two nodes. 
+\end{itemize}
+
+% Mention that nodes are internally dictionaries with ids, edges are etc..
+
+\subsection{Internal Data Structures}
+
+Our graph database utilizes the networkx package \cite{nx} to maintain a graph representation in memory during an active database session. The graph infrastructure provided by this package is used to create and manipulate nodes and edges during an interactive user session. 
+
+\subsection{Nodes}
+
+Internally, each node is assigned a unique identifier, which is just a number. Each node's attributes is stored in a dictionary with attribute names as keys and attributes as values. When a query returns a set of nodes, the nodes are returned as a list of tuple pairs which contain its unique identifier and its dictionary of attributes. 
+
+\subsubsection{Example Queries}
+
+\noindent The following query creates a node which has attributes "Label", "Name", and "Salary".  
+
+\begin{center} \textbf{CREATE n: id1 Label:Boss Name:Donnie Salary:1000000;} \end{center}
+
+\noindent In this query, "id1" is simply a local identifier that can be used to refer to the created node by the user. The user can view the results that are stored in any given identifier by using the RETURN command (for example, RETURN id1;). Another useful command for viewing the current contents of the in-memory graph is the SHOW command. It might be a good idea to run a SHOW command after every one of the following commands. \\
+
+\noindent The following query modifies the existing node's attributes. 
+
+\begin{center} \textbf{MODIFYNODE n: prev Name:Donnie n: new Name:Ruthwick b: new val:1;} \end{center}
+
+\noindent In this case, only the "Name" attribute is modified. It should be noted that this command will match on all nodes whose "Name" attribute is "Donnie" and update their "Name" attribute to be "Ruthwick". This allows for a simple mechanism to update several related nodes at once. The important part of the "b:" portion of the query is the value of 1. This value is a boolean flag that indicates whether the attribute is to be updated or deleted. If this flag had been set to 0, the "Name" attribute would have been deleted (the new "Name" value would have been irrelevant). The other fields present in the "b:" part of the query are dummy fields that are necessary for the parser. Note that both "prev" and "new" are both identifiers just as "id1" in the create node query above.  
+
+\noindent The following query deletes the node.
+
+\begin{center} \textbf{DELETENODE n: fst Name:Donnie;} \end{center}
+
+\noindent In particular, the query deletes all nodes whose "Name" attribute is "Donnie". Once again, "fst" is used as an identifier. However, the identifier serves no purpose here. It is included for ease of parsing. 
+
+\subsection{Edges}
+
+\noindent Internally, each edge is stored in a dictionary that uses the two node identifiers as a key and the relationship attributes as a value. When an edge is queried, the result is represented as a tuple triple which consists of two node identifiers and a dictionary of attributes that describe the relationship. The keys in the dictionary are edge attribute names and the values are the edge attributes. 
+
+\subsubsection{Example Queries}
+
+\noindent Let's continue the previous example. We first create a second node.
+
+\begin{center} \textbf{CREATE n: id2 Label:Employee Name:Sreeni Salary:50000;} \end{center}
+
+\noindent Then, we create an edge between the nodes. 
+
+\begin{center} \textbf{CREATEEDGE n: id1 Label:Boss e: id3 Relation:Manager n: id2 Label:Employee;} \end{center}
+
+\noindent The command creates an edge between all nodes whose "Label" attribute is "Boss" and all nodes whose "Label" attribute is "Employee". The edge has an attribute called "Relation" and the value is set to "Manager". Note that this is a directed edge from the first node to the second node. 
+
+\noindent The following query modifies the edge by changing its attribute.
+
+\begin{center} \textbf{MODIFYEDGE e: fst Relation:Manager e: snd Relation:Co-worker b: oth val:1;} \end{center}
+
+\noindent This command works just like the MODIFYNODE command. It updates all edges with "Relation" fields equal to "Manager" to set their fields to "Co-worker". 
+
+\noindent The following query deletes the edge we just created. 
+
+\begin{center} \textbf{DELETEEDGE e: a Relation:Co-worker;} \end{center}
+
+\noindent This command deletes all edges whose "Relation" field is equal to "Co-worker". 
+
+\subsection{Match Query}
+
+Match queries are used to query for arbitrary length node-edge-node relationships. It can also be used to query for a single type of node or a single type of edge. 
+
+\subsection{Graph Functionality}
+
+
+\section{Database System Architecture}
+
+\subsection{Parser}
+
+\subsection{Graph Storage}
+
+\subsection{Linker}
+
+\subsection{Query Evaluator}
+
+\section{Results}
+
+\section{References}
+
+% put link to the repository 
+
+\begin{thebibliography}{10}
+
+\bibitem{nx} Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, ?Exploring network structure, dynamics, and function using NetworkX?, in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11?15, Aug 2008
+
+\end{thebibliography}
+
+\end{document}
