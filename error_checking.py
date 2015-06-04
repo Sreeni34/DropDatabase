@@ -43,8 +43,7 @@ class Error_Checking:
                     or self.has_bool_attr(attrList) or (not self.last_node(attrList))
 
         elif cmd == "MATCH":
-            err = self.changed_bool(cmdBool) or self.has_bool_attr(attrList) \
-                    or self.not_alt_node_edge(attrList)
+            err = self.changed_bool(cmdBool) or self.has_bool_attr(attrList)
 
         elif cmd == "MODIFYNODE":
             err = (not self.changed_bool(cmdBool)) or self.not_empty_names(nameList) \
