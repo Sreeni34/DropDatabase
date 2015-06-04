@@ -173,9 +173,9 @@ class Linker:
         item = attribute_list[0] 
         curr_id = item[1]  
         if item[0] == "n:":   
-            nodes = self.query_evaluator.match(item[2], None, None)   
+            nodes = self.query_evaluator.match_node(item[2])   
             if (predicates != []):
-                filtered_nodes = self.Filter_Preds(nodes, predicates)
+                filtered_nodes = self.Filter_Preds(nodes, predicates[0])
                 self.gs.set_identifier(curr_id, filtered_nodes)
                 self.PrintNodes(filtered_nodes)   
             else:   
@@ -194,7 +194,7 @@ class Linker:
             counter = 0   
             pred_list = []   
             bool_list = []   
-            for item in predicates:   
+            for item in predicates: 
                 if (counter) % 2 == 0:   
                     pred_list.append(item)   
                 elif (counter) % 2 == 1:   
@@ -234,12 +234,17 @@ class Linker:
         item1 = attribute_list[0]   
         item2 = attribute_list[1]   
         curr_id = item1[1]
-        if item1[0] == "n:":   
-            edges = self.query_evaluator.match(None, item1[2], item2[2])    
+        if item1[0] == "n:":         
+            filtered_nodes = None
+            if (predicates != []):   
+                nodes = self.query_evaluator.match_node(item1[2])
+                filtered_nodes = self.Filter_Preds(nodes, predicates[0])   
+            edges = self.query_evaluator.match_node_rel(item1[2], item2[2], 
+                filtered_nodes)    
             self.gs.set_identifier(curr_id, edges)   
             self.PrintEdges(edges)   
         else:   
-            edges = self.query_evaluator.match(None, item2[2], item1[2])
+            edges = self.query_evaluator.match_node_rel(item2[2], item1[2], None)
             self.gs.set_identifier(curr_id, edges)   
             self.PrintEdges(edges)   
 
@@ -254,7 +259,8 @@ class Linker:
         item1 = attribute_list[0]   
         item2 = attribute_list[1]   
         item3 = attribute_list[2]   
-        edges = self.query_evaluator.match(item1[2], item3[2], item2[2])   
+        edges = self.query_evaluator.match_node_node_rel(item1[2], item3[2], 
+            item2[2], None, None)   
         self.gs.set_identifier(item1[1], edges)
         self.PrintEdges(edges)   
 
