@@ -99,6 +99,7 @@ class QueryEvaluator:
         @return: Edge tuples in the format (node1_id, node2_id, edge_attributes)        
         """   
 
+        nodes1 = []
         if (Filtered_nodes1 != None):   
             nodes1 = Filtered_nodes1
         else:
@@ -109,13 +110,17 @@ class QueryEvaluator:
             # Finds all neighbors of node satisfying node 2 attributes
             neighbors = self.filter_nodes(self.g.neighbors(node[0]), node2_attrs)
             if (Filtered_nodes2 != None):   
-                neighbors = [val for val in neighbors if val in Filtered_nodes2]
+                Filtered_nodes2ids = []   
+                for node in Filtered_nodes2:   
+                    Filtered_nodes2ids.append(node[0])
+                neighbors = [val for val in neighbors if val in Filtered_nodes2ids]
             for node2_id in neighbors:
                 # Iterates through out edges of first node
+                in_edges = self.g.in_edges(node[0], data=True)   
                 out_edges = self.g.out_edges(node[0], data=True)
                 for edge in edges:   
-                    if edge in out_edges and node2_id in edge:   
-                        node_rels.append(edge)   
+                    if (edge in in_edges or edge in out_edges) and node2_id in edge:   
+                        node_rels.append(edge) 
         return node_rels
 
     def filter_nodes(self, node_id_lst, node_attrs):
@@ -376,7 +381,7 @@ class QueryEvaluator:
             i += 1
         return consolidated_list
     
-    def multi_match(self, node_attr_list, rel_attr_list):   
+    def multi_match(self, node_attr_list, rel_attr_list, predicates, predOrder):   
         """ 
         Determines if there is a chain of nodes described by the node_attr_list   
         and rel_attr_list in the graph. Then returns the first and last node   
@@ -396,6 +401,11 @@ class QueryEvaluator:
         i = 0   
         edge_list = {}   
         for x in range(len(node_attr_list) - 1):   
+            # if (x in predOrder):   
+            #     nodes1 = self.match_node(node_attr_list[x]) 
+            #     PredAttrs1 = self.linker.getPredAttrs(predicates[0])
+            #     prednodes1 = self.linker.PredNodeFilters(nodes1, PredAttrs1)   
+            #     filtered_nodes1 = self.linker.Filter_Preds(prednodes1, predicates[0])  
             edges = self.match_node_node_rel(node_attr_list[x], 
                 node_attr_list[x + 1], rel_attr_list[x], None, None)   
             # Break out if no match exists between the nodes and relationship

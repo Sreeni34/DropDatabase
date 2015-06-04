@@ -159,6 +159,26 @@ class Linker:
                              node2, edge_attrs)
             counter += 1   
 
+    def PredNodeFilters(self, nodes, keyvals):  
+        filtered_nodes = [] 
+        for node in nodes:   
+            allpreds = True    
+            for keyval in keyvals:      
+                if keyval not in node[1].keys():   
+                    allpreds = False   
+            if allpreds:   
+                filtered_nodes.append(node)
+        return filtered_nodes
+
+    def getPredAttrs (self, predicates):   
+        counter = 0
+        PredAttrList = []
+        for item in predicates:   
+            if (counter) % 2 == 0:   
+                PredAttrList.append(item[0])   
+            counter += 1   
+        return PredAttrList
+
     def MatchSingleItem(self, attribute_list, predicates):   
         """
         Matches a single item, either a node or a relationship, by   
@@ -172,9 +192,11 @@ class Linker:
         item = attribute_list[0] 
         curr_id = item[1]  
         if item[0] == "n:":   
-            nodes = self.query_evaluator.match_node(item[2])   
-            if (predicates != []):
-                filtered_nodes = self.Filter_Preds(nodes, predicates[0])
+            nodes = self.query_evaluator.match_node(item[2])    
+            if (predicates != []):   
+                PredAttrs = self.getPredAttrs(predicates[0])
+                prednodes = self.PredNodeFilters(nodes, PredAttrs)
+                filtered_nodes = self.Filter_Preds(prednodes, predicates[0])
                 self.gs.set_identifier(curr_id, filtered_nodes)
                 self.PrintNodes(filtered_nodes)   
             else:   
@@ -237,20 +259,25 @@ class Linker:
             filtered_nodes = None
             if (predicates != []):   
                 nodes = self.query_evaluator.match_node(item1[2])
-                filtered_nodes = self.Filter_Preds(nodes, predicates[0])   
+                PredAttrs = self.getPredAttrs(predicates[0])
+                prednodes = self.PredNodeFilters(nodes, PredAttrs)
+                filtered_nodes = self.Filter_Preds(prednodes, predicates[0])   
             edges = self.query_evaluator.match_node_rel(item1[2], item2[2], 
-                filtered_nodes)    
+                filtered_nodes)  
             self.gs.set_identifier(curr_id, edges)   
             self.PrintEdges(edges)   
         else:   
             filtered_nodes = None   
             if (predicates != []):   
                 nodes = self.query_evaluator.match_node(item2[2])
+                PredAttrs = self.getPredAttrs(predicates[0])
+                prednodes = self.PredNodeFilters(nodes, PredAttrs)
                 filtered_nodes = self.Filter_Preds(nodes, predicates[0])      
             edges = self.query_evaluator.match_node_rel(item2[2], item1[2], 
                 filtered_nodes)
             self.gs.set_identifier(curr_id, edges)   
             self.PrintEdges(edges)   
+
 
     def MatchThreeItems(self, attribute_list, predicates):   
         """
@@ -265,20 +292,49 @@ class Linker:
         item3 = attribute_list[2]   
         filtered_nodes1 = None
         filtered_nodes2 = None   
-        print predicates   
         if (len(predicates) == 2):  
             nodes1 = self.query_evaluator.match_node(item1[2]) 
             nodes2 = self.query_evaluator.match_node(item3[2])   
-            if (item1[1] == predicates[0][0][3]):      
-                filtered_nodes1 = self.Filter_Preds(nodes1, predicates[0])   
-                filtered_nodes2 = self.Filter_Preds(nodes2, predicates[1])   
+            PredAttrs1 = self.getPredAttrs(predicates[0])
+            prednodes1 = self.PredNodeFilters(nodes1, PredAttrs1)   
+            PredAttrs2 = self.getPredAttrs(predicates[1])
+            prednodes2 = self.PredNodeFilters(nodes2, PredAttrs2)
+            filtered_nodes1 = self.Filter_Preds(prednodes1, predicates[0])  
+            filtered_nodes2 = self.Filter_Preds(prednodes2, predicates[1])
+        elif (len(predicates) == 1):   
+            nodes1 = self.query_evaluator.match_node(item1[2]) 
+            nodes2 = self.query_evaluator.match_node(item3[2])   
+            if (item1[1] == predicates[0][0][3]):   
+                PredAttrs = self.getPredAttrs(predicates[0])
+                prednodes = self.PredNodeFilters(nodes1, PredAttrs)      
+                filtered_nodes1 = self.Filter_Preds(prednodes, predicates[0])   
             else:   
-                filtered_nodes1 = self.Filter_Preds(nodes1, predicates[1])   
-                filtered_nodes2 = self.Filter_Preds(nodes2, predicates[0])   
+                PredAttrs = self.getPredAttrs(predicates[0])
+                prednodes = self.PredNodeFilters(nodes2, PredAttrs)   
+                filtered_nodes2 = self.Filter_Preds(prednodes, predicates[0]) 
         edges = self.query_evaluator.match_node_node_rel(item1[2], item3[2], 
             item2[2], filtered_nodes1, filtered_nodes2)   
         self.gs.set_identifier(item1[1], edges)
         self.PrintEdges(edges)   
+
+    def getIdList(self, attribute_list): 
+        counter = 0  
+        IdList = []
+        for item in attribute_list: 
+            if (counter % 2) == 0:   
+                idList.append(item[1])   
+        return IdList
+
+    def getPredOrder(self, attribute_list, predicates):   
+        IdList = self.getIdList(attribute_list)   
+        predIdList = []
+        PredOrder = []
+        for pred in predicates:   
+            predIdList.append(pred[0][3])   
+        for predId in predIdList:   
+            PredOrder.append(IdList.index(predId))   
+        return PredOrder
+
 
     def MatchChain(self, attribute_list, predicates):   
         """
@@ -296,8 +352,11 @@ class Linker:
                 node_attr_list.append(item[2])   
             elif (counter) % 2 == 1:   
                 edge_attr_list.append(item[2])   
-            counter += 1   
-        nodes = self.query_evaluator.multi_match(node_attr_list, edge_attr_list)
+            counter += 1 
+        predOrder = []  
+        if predicates != []:   
+            predOrder = self.getPredOrder(attribute_list, predicates)
+        nodes = self.query_evaluator.multi_match(node_attr_list, edge_attr_list, predicates, predOrder)
         self.gs.set_identifier(attribute_list[0][1], nodes)
         if nodes == None:   
              print bcolors.FAIL + "No matches found" + bcolors.ENDC  
