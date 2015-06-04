@@ -152,13 +152,12 @@ CLEAR;
 HERE IS A TEST FOR EACH OF THE METHODS
     REL ATTR = e: a b:c
     ID ATTR = n: a a:b
-    BOOL = b: a val:0/1
+    BOOL = b: a val:0/1 - 1 means add the attribute, and 0 means delete the attribute
     ID = n: a () ()
     PRED = a(pred)b
 
     CREATE          ID ATTR ...
-    CREATEEDGE      ID ATTR REL ATTR ID ATTR ID ATTR REL ATTR ID ATTR ...
-    CREATEALLEDGE   ID ATTR ID ATTR ... ID ATTR REL ATTR
+    CREATEEDGE      ID ATTR REL ATTR ID ATTR ...
     MATCH           ID ATTR (PRED) REL ATTR (PRED) ID ATTR REL ATTR (PRED) ID ATTR ...
     MODIFYNODE      ID ATTR ID ATTR BOOL
     MODIFYEDGE      REL ATTR REL ATTR BOOL
@@ -173,18 +172,43 @@ HERE IS A TEST FOR EACH OF THE METHODS
     COMMONNEIGHBORS ID ATTR ID ATTR
     SHOW
     VISUALIZE
+    PROJECT         ID ATTR 
 
 
 EXAMPLES FOR CREATE
 create n: id1 Animal:Dog Name:Ruff Age:5;
 create n: id2 Animal:Cat Name:Whisk n: id3 Animal:Cat Name:Furry Age:10;
 
+-- In one line for easy copy and paste
 create n: id1 Animal:Dog Name:Ruff Age:5 create n: id2 Animal:Cat Name:Whisk n: id3 Animal:Cat Name:Furry Age:10;
 
 EXAMPLES FOR CREATEEDGE
 createedge n: id1 Animal:Dog e: rel1 Relation:Enemy n: id2 Animal:Cat;
-createedge n: id1 Name:Whisk e: rel1 Relation:Friend n: id2 Name:Furry n: id3 Name:Furry e: rel2 Relation:Older n: id4 Name:Ruff n: id3 Name:Furry e: rel2 Relation:yOUNGER n: id4 Name:Ruff;
+createedge n: id1 Name:Whisk e: rel1 Relation:Friend n: id2 Name:Furry;
 createedge n: id2 Name:Furry e: rel2 Relation:Older n: id3 Name:Ruff;
 
-EXAMPLES FOR CREATEALLEDGE
+createedge n: id1 Animal:Dog e: rel1 Relation:Enemy n: id2 Animal:Cat createedge n: id1 Name:Whisk e: rel1 Relation:Friend n: id2 Name:Furry createedge n: id2 Name:Furry e: rel2 Relation:Older n: id3 Name:Ruff;
 
+
+EXAMPLES FOR MATCH WITHOUT PREDICATE
+match n: id1 Animal:Dog;
+match n: id1 Animal:Dog e: id2 Relation:Enemy n: id3 Age:10;
+match n: id1 Animal:Dog e: id2 Relation:Enemy n: id3 Age:10 e: id4 Relation:Older n: id5 Age:5;
+
+
+EXAMPLES FOR MATCH WITH PREDICATE
+
+
+EXAMPLES FOR MODIFYNODE
+modifynode n: id1 Animal:Dog n: id2 Animal:Lion b: id3 val:1;
+modifynode n: id1 Animal:Cat n: id2 Skill:Leap b: id3 val:0;
+modifynode n: id1 Animal:Lion n: id2 Animal:Lion b: id3 val:0;
+
+
+EXAMPLES FOR MODIGYEDGE
+modifyedge e: id1 Relation:Enemy e: id2 Relation:Neutral b: id3 val:1;
+modifyedge e: id1 Relation:Friend e: id2 YearsKnown:1 b: id3 val:1;
+
+
+EXAMPLES FOR PROJECT 
+project N: 

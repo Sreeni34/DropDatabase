@@ -239,7 +239,6 @@ class Parser:
 
         CREATE
         CREATEEDGE
-        CREATEALLEDGE
         MATCH 
         MODIFYNODE
         MODIFYEDGE
@@ -263,11 +262,10 @@ class Parser:
         @return: An integer which represents a specific token command
         """
 
-        commands_list = ["create", "createedge", "createalledge", 
-            "match", "modifynode", "modifyedge", "deletenode", 
-            "deleteedge", "haspath", "shortestpath", "neighbor", 
-            "hasedge", "commmonneighbors", "return", "clear", 
-            "show", "visualize", "project"]
+        commands_list = ["create", "createedge", "match", "modifynode", 
+            "modifyedge", "deletenode", "deleteedge", "haspath", 
+            "shortestpath", "neighbor", "hasedge", "commmonneighbors", 
+            "return", "clear", "show", "visualize", "project"]
 
         if (word.lower() in commands_list):
             return TOKEN_COMMAND
@@ -472,7 +470,8 @@ class Parser:
                 # Do a last update on the names for match commands
                 for i in range(0, len(self.obj_list)):
                     if self.obj_list[i].get_command() == "MATCH":
-                        self.obj_list[i].fix_names()
+                        if (self.obj_list[i].get_names_size() != 0):
+                            self.obj_list[i].fix_names()
                 break
             
             self.curr_word = word

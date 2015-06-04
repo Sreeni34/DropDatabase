@@ -42,11 +42,6 @@ class Error_Checking:
             err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
                     or self.has_bool_attr(attrList) or (not self.last_node(attrList))
 
-        elif cmd == "CREATEALLEDGE":
-            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
-                    or self.has_bool_attr(attrList) or (not self.all_node_last(attrList)) \
-                    or (not self.last_edge(attrList))
-
         elif cmd == "MATCH":
             err = self.changed_bool(cmdBool) or self.has_bool_attr(attrList) \
                     or self.not_alt_node_edge(attrList)

@@ -110,6 +110,9 @@ class Command_Struct:
         return len(self.name)
 
     def fix_names(self):
+        print "this is names " 
+        print self.name
+        self.print_Class()
         prevElem = self.name[0]
         newLst = []
         i = -1   # Counter for newLst last element
