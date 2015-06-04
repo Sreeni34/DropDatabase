@@ -192,6 +192,7 @@ createedge n: id1 Animal:Dog e: rel1 Relation:Enemy n: id2 Animal:Cat createedge
 
 EXAMPLES FOR MATCH WITHOUT PREDICATE
 match n: id1 Animal:Dog;
+match e: id2 Relation:Enemy;
 match n: id1 Animal:Dog e: id2 Relation:Enemy n: id3 Age:10;
 match n: id1 Animal:Dog e: id2 Relation:Enemy n: id3 Age:10 e: id4 Relation:Older n: id5 Age:5;
 
@@ -201,13 +202,25 @@ EXAMPLES FOR MATCH WITH PREDICATE
 
 EXAMPLES FOR MODIFYNODE
 modifynode n: id1 Animal:Dog n: id2 Animal:Lion b: id3 val:1;
-modifynode n: id1 Animal:Cat n: id2 Skill:Leap b: id3 val:0;
+modifynode n: id1 Animal:Cat n: id2 Skill:Leap b: id3 val:1;
 modifynode n: id1 Animal:Lion n: id2 Animal:Lion b: id3 val:0;
 
 
-EXAMPLES FOR MODIGYEDGE
+EXAMPLES FOR MODIFYEDGE
 modifyedge e: id1 Relation:Enemy e: id2 Relation:Neutral b: id3 val:1;
 modifyedge e: id1 Relation:Friend e: id2 YearsKnown:1 b: id3 val:1;
+
+
+EXAMPLES FOR DELETENODE
+deletenode n: id1 Name:Whisk;
+
+
+EXAMPLES FOR DELETEEDGE
+deleteedge e: id1 Relation:Friend;
+
+
+EXAMPLES FOR RETURN
+
 
 
 EXAMPLES FOR PROJECT 
