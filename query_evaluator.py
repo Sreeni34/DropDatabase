@@ -68,7 +68,7 @@ class QueryEvaluator:
         return self.match_node_node_rel(node1_attrs, node2_attrs, {})   
 
 
-    def match_node_rel(self, node_attrs, rel_attrs):   
+    def match_node_rel(self, node_attrs, rel_attrs, Filtered_nodes1=None):   
         """ 
         Finds the nodes that have relationships with nodes that have the   
         specified node attributes
@@ -80,9 +80,11 @@ class QueryEvaluator:
         @rtype: list of tuples
         @return: Edge tuples in the format (node1_id, node2_id, edge_attributes)        
         """   
-        return self.match_node_node_rel(node_attrs, {}, rel_attrs)
+        return self.match_node_node_rel(node_attrs, {}, rel_attrs, 
+            Filtered_nodes1, None)
 
-    def match_node_node_rel(self, node1_attrs, node2_attrs, rel_attrs):   
+    def match_node_node_rel(self, node1_attrs, node2_attrs, rel_attrs, 
+        Filtered_nodes1=None, Filtered_nodes2=None):   
         """ 
         Finds the nodes that have relationships with both nodes that have the   
         specified node 1 and node 2 attributes, respectively      
@@ -97,19 +99,23 @@ class QueryEvaluator:
         @return: Edge tuples in the format (node1_id, node2_id, edge_attributes)        
         """   
 
-        nodes1 = self.match_node(node1_attrs)   
+        if (Filtered_nodes1 != None):   
+            nodes1 = Filtered_nodes1
+        else:
+            nodes1 = self.match_node(node1_attrs)   
         edges = self.match_rel(rel_attrs)   
         node_rels = []
         for node in nodes1:
             # Finds all neighbors of node satisfying node 2 attributes
             neighbors = self.filter_nodes(self.g.neighbors(node[0]), node2_attrs)
+            if (Filtered_nodes2 != None):   
+                neighbors = [val for val in neighbors if val in Filtered_nodes2]
             for node2_id in neighbors:
                 # Iterates through out edges of first node
                 out_edges = self.g.out_edges(node[0], data=True)
                 for edge in edges:   
                     if edge in out_edges and node2_id in edge:   
                         node_rels.append(edge)   
-
         return node_rels
 
     def filter_nodes(self, node_id_lst, node_attrs):
@@ -390,7 +396,8 @@ class QueryEvaluator:
         i = 0   
         edge_list = {}   
         for x in range(len(node_attr_list) - 1):   
-            edges = self.match(node_attr_list[x], node_attr_list[x + 1], rel_attr_list[x])   
+            edges = self.match_node_node_rel(node_attr_list[x], 
+                node_attr_list[x + 1], rel_attr_list[x], None, None)   
             # Break out if no match exists between the nodes and relationship
             if edges == []:
                 edge_list = {}
