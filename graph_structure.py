@@ -120,13 +120,11 @@ class GraphStructure:
 
     def delete_identifier(self, node):
         """
-        Returns the value for the given key in the dictionary. If
-        no key exists, we return None.
+        Delete key for the given value in the dictionary. If
+        no key exists, nothing happens.
 
-        @type id: String
-        @param id: Key to look up in dictionary
-        @rtype: Anything or None
-        @return: Value for the key or None, if key is not present
+        @type node: String
+        @param node: Value to remove in the dictionary
         """
         for key_val in self.identifier.keys():
             if self.identifier[key_val] == node:   
