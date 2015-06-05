@@ -15,7 +15,7 @@ Commands are terminated by a space followed by a semicolon. For example:
 >>> Create n: a asdf:12;
 ```
 
-Here are some examples of usage:  
+Here are some examples of usage (Look at testfile.txt for more examples):  
 ```
 >>> create n: a b:c;
 Unique node id: 1
@@ -40,29 +40,29 @@ Identifier
 ##Query Language   
 The query language takes the form:   
 ```
-    CREATE          ID ATTR
+    CREATE          ID ATTR ...
     CREATEEDGE      ID ATTR REL ATTR ID ATTR
-    MATCH           ID ATTR REL ATTR ID ATTR REL ATTR ID ATTR ...
+    MATCH           ID ATTR (PRED) REL ATTR ID ATTR (PRED) REL ATTR ID ATTR ...
     MODIFYNODE      ID ATTR ID ATTR BOOL
     MODIFYEDGE      REL ATTR REL ATTR BOOL
     DELETENODE      ID ATTR
     DELETEEDGE      REL ATTR
     RETURN          ID ID ...
+
     HASPATH         ID ATTR ID ATTR
-    CLEAR
     SHORTESTPATH    ID ATTR ID ATTR
     NEIGHBOR        ID ATTR
     HASEDGE         ID ATTR ID ATTR
-    COMMONNEIGHBORS ID ATTR ID ATTR
-    RESET
-    FLUSH
+
     SHOW
-    VISUALIZE   
+    CLEAR
+    VISUALIZE
       
     REL ATTR = e: a b:c
     ID ATTR = n: a a:b
-    BOOL = b: a val:0/1
-    ID = n: a () () 
+    BOOL = b: a val:0/1 - 1 means add the attribute, and 0 means delete the attribute
+    ID = n: a
+    PRED = a(pred)b
 ```
 
 

@@ -19,7 +19,6 @@ class Error_Checking:
         is an error return True, otherwise return False.
         """
         for cmd in self.cmd_obj:
-            #print cmd.get_command()
             if self.any_errors(cmd):
                 print "ERROR in command " + cmd.get_command()
                 return True
@@ -101,12 +100,10 @@ class Error_Checking:
                     or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
                     or self.not_length(attrList, 2) or (not self.two_nodes(attrList))
 
-        elif cmd == "COMMONNEIGHBORS":
-            err = self.changed_bool(cmdBool) or self.not_empty_names(nameList) \
-                    or self.has_bool_attr(attrList) or self.has_edge_attr(attrList) \
-                    or self.not_length(attrList, 2) or (not self.two_nodes(attrList))
-
         elif cmd == "SHOW":
+            err = self.not_empty(attrList)
+
+        elif cmd == "VISUALIZE":
             err = self.not_empty(attrList)
 
         return err

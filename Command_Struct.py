@@ -4,56 +4,6 @@ class Command_Struct:
     and arguments entered by the user. 
     """
 
-    """
-    REL ATTR = e: a b:c
-    ID ATTR = n: a a:b
-    BOOL = b: a val:0/1
-    ID = n: a
-    PRED = a(pred)b
-
-    CREATE          ID ATTR ...
-    CREATEEDGE      ID ATTR REL ATTR ID ATTR ...
-    CREATEALLEDGE   ID ATTR ID ATTR ... ID ATTR REL ATTR
-    MATCH           ID ATTR REL ATTR ID ATTR REL ATTR ID ATTR ...
-    MODIFYNODE      ID ATTR ID ATTR BOOL
-    MODIFYEDGE      REL ATTR REL ATTR BOOL
-    DELETENODE      ID ATTR
-    DELETEEDGE      REL ATTR
-    RETURN          ID ID ...
-    HASPATH         ID ATTR ID ATTR
-    CLEAR
-    SHORTESTPATH    ID ATTR ID ATTR
-    NEIGHBOR        ID ATTR
-    HASEDGE         ID ATTR ID ATTR
-    COMMONNEIGHBORS ID ATTR ID ATTR
-    SHOW
-    VISUALIZE
-
-
-    CREATE          ID ATTR
-    CREATEEDGE      ID ATTR REL ATTR ID ATTR ...
-    MATCH           ID ATTR REL ATTR ID ATTR REL ATTR ID ATTR ...
-    MODIFYNODE      ID ATTR ID ATTR BOOL
-    MODIFYEDGE      REL ATTR REL ATTR BOOL
-    DELETENODE      ID ATTR
-    DELETEEDGE      REL ATTR
-    RETURN          ID ID ...
-    HASPATH         ID ATTR ID ATTR
-    CLEAR
-    SHORTESTPATH    ID ATTR ID ATTR
-    NEIGHBOR        ID ATTR
-    HASEDGE         ID ATTR ID ATTR
-    COMMONNEIGHBORS ID ATTR ID ATTR
-    SHOW
-    VISUALIZE
-
-    # EXTRA
-    PRED            match n: a b:c d:e b<5 d>10
-
-    AGG             [id attr (<, >, =) id attr () val ...]
-    """
-
-
     def __init__(self, command):
         """
         Constructor that takes in name of command to create and
@@ -62,15 +12,8 @@ class Command_Struct:
         """
         self.command = command
         self.name = []
-        self.attr = []  # List of List [type, id, dict(key - attr1, val - attr2)]
+        self.attr = [] 
         self.bool = -1
-
-        # [[type, id, {attr1:attr2, attr3:attr4}], 
-        #  [type2, id2, {attr5:attr6, attr7:attr8}]]
-        # [[n:, a, {b:c, d:e, e:f}], [e:, b, {c:d, e:f, f:g}]]
-
-        # List of List[type, identifier, dictionary(key-attr1, value-attr2)]
-
 
 ##
 ##  Methods for self.name
@@ -110,9 +53,6 @@ class Command_Struct:
         return len(self.name)
 
     def fix_names(self):
-        print "this is names " 
-        print self.name
-        self.print_Class()
         prevElem = self.name[0]
         newLst = []
         i = -1   # Counter for newLst last element

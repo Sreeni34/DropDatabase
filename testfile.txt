@@ -1,3 +1,125 @@
+HERE IS THE FORMAT FOR EACH OF THE METHODS
+    REL ATTR = e: a b:c
+    ID ATTR = n: a a:b
+    BOOL = b: a val:0/1 - 1 means add the attribute, and 0 means delete the attribute
+    ID = n: a
+    PRED = a(pred)b
+
+    CREATE          ID ATTR ...
+    CREATEEDGE      ID ATTR REL ATTR ID ATTR
+    MATCH           ID ATTR (PRED) REL ATTR ID ATTR (PRED) REL ATTR ID ATTR ...
+    MODIFYNODE      ID ATTR ID ATTR BOOL
+    MODIFYEDGE      REL ATTR REL ATTR BOOL
+    DELETENODE      ID ATTR
+    DELETEEDGE      REL ATTR
+    RETURN          ID ID ...
+
+    HASPATH         ID ATTR ID ATTR
+    SHORTESTPATH    ID ATTR ID ATTR
+    NEIGHBOR        ID ATTR
+    HASEDGE         ID ATTR ID ATTR
+
+    SHOW
+    CLEAR
+    VISUALIZE
+
+----------------------------EXAMPLES-----------------------------------
+EXAMPLES FOR SHOW
+show;
+
+
+EXAMPLES FOR CREATE
+create n: id1 Animal:Dog Name:Ruff Age:5;
+create n: id2 Animal:Cat Name:Whisk n: id3 Animal:Cat Name:Furry Age:10;
+
+-- In one line for easy copy and paste
+create n: id1 Animal:Dog Name:Ruff Age:5 create n: id2 Animal:Cat Name:Whisk n: id3 Animal:Cat Name:Furry Age:10;
+
+
+EXAMPLES FOR CREATEEDGE
+createedge n: id1 Animal:Dog e: rel1 Relation:Enemy n: id2 Animal:Cat;
+createedge n: id1 Name:Whisk e: rel1 Relation:Friend n: id2 Name:Furry;
+createedge n: id2 Name:Furry e: rel2 Relation:Older n: id3 Name:Ruff;
+
+-- In one line for easy copy and paste
+createedge n: id1 Animal:Dog e: rel1 Relation:Enemy n: id2 Animal:Cat createedge n: id1 Name:Whisk e: rel1 Relation:Friend n: id2 Name:Furry createedge n: id2 Name:Furry e: rel2 Relation:Older n: id3 Name:Ruff;
+
+
+EXAMPLES FOR RETURN
+return n: id1;
+
+
+EXAMPLES FOR MATCH WITHOUT PREDICATE
+match n: id1 Animal:Dog;
+match e: id2 Relation:Enemy;
+match n: id1 Animal:Dog e: id2 Relation:Enemy n: id3 Age:10;
+match n: id1 Animal:Dog e: id2 Relation:Enemy n: id3 Age:10 e: id4 Relation:Older n: id5 Age:5;
+
+
+EXAMPLES FOR MATCH WITH PREDICATE
+match n: id1 Age>2;
+match n: id1 Animal:Dog Age>2;
+match n: id1 Animal:Cat e: id2 Relation:Enemy n: id3 Animal:Dog Age<10 AND Age>4;
+match n: id1 Animal:Cat e: id2 Relation:Enemy n: id3 Animal:Dog Age<4 OR Age>11;
+match n: id1 Animal:Cat e: id2 Relation:Enemy n: id3 Animal:Dog Age=5;
+
+
+EXAMPLES FOR HASPATH
+haspath n: id1 Name:Ruff n: id2 Name:Furry;
+
+
+EXAMPLES FOR SHORTESTPATH
+shortestpath n: id1 Name:Ruff n: id2 Name:Furry;
+
+
+EXAMPLES FOR NEIGHBOR
+neighbor n: id1 Name:Ruff;
+
+
+EXAMPLES FOR HASEDGE
+hasedge n: id1 Name:Ruff n: id2 Name:Furry;
+hasedge n: id1 Name:Whisk n: id2 Name:Ruff;
+
+
+EXAMPLES FOR VISUALIZE
+visualize;
+
+
+EXAMPLES FOR MODIFYNODE
+modifynode n: id1 Animal:Dog n: id2 Animal:Lion b: id3 val:1;
+modifynode n: id1 Animal:Cat n: id2 Skill:Leap b: id3 val:1;
+modifynode n: id1 Animal:Lion n: id2 Animal:Lion b: id3 val:0;
+
+-- In one line for easy copy and paste
+modifynode n: id1 Animal:Dog n: id2 Animal:Lion b: id3 val:1 modifynode n: id1 Animal:Cat n: id2 Skill:Leap b: id3 val:1 modifynode n: id1 Animal:Lion n: id2 Animal:Lion b: id3 val:0;
+
+
+EXAMPLES FOR MODIFYEDGE
+modifyedge e: id1 Relation:Enemy e: id2 Relation:Neutral b: id3 val:1;
+modifyedge e: id1 Relation:Friend e: id2 YearsKnown:1 b: id3 val:1;
+modifyedge e: id1 Relation:Friend e: id2 Relation:Friend b: id3 val:0;
+
+-- In one line for easy copy and paste
+modifyedge e: id1 Relation:Enemy e: id2 Relation:Neutral b: id3 val:1 modifyedge e: id1 Relation:Friend e: id2 YearsKnown:1 b: id3 val:1 modifyedge e: id1 Relation:Friend e: id2 Relation:Friend b: id3 val:0;
+
+
+EXAMPLES FOR DELETENODE
+deletenode n: id1 Name:Whisk;
+
+
+EXAMPLES FOR DELETEEDGE
+deleteedge e: id1 Relation:Older;
+
+
+EXAMPLES FOR CLEAR
+clear;
+
+
+
+
+----------------------------------------------------------------
+HERE ARE OTHER QUERIES THAT YOU CAN TEST OUT AS WELL
+
 
 # Create 3 nodes, match edge from two to one
 create n: a Label:dog 
@@ -6,9 +128,10 @@ create n: c Label:catdog
 createedge n: a Label:dog e: b Type:Label n: c Label:catdog 
 modifynode n: a Label:dog n: a Label:catdog b: a val:1;
 
-
+-- In one line for easy copy and paste
 create n: a Label:dog create n: b Label:dog create n: c Label:catdog createedge n: a Label:dog e: b Type:Label n: c Label:catdog modifynode n: a Label:dog n: a Label:catdog b: a val:1;
 clear;
+
 
 # Test modifyedge
 create n: a Label:dog 
@@ -17,13 +140,11 @@ create n: c Label:catdog
 createedge n: a Label:dog e: b Type:Label n: c Label:catdog 
 modifyedge e: b Type:Label e: a Type:animal b: a val:1;
 
+-- In one line for easy copy and paste
 create n: a Label:dog create n: b Label:dog create n: c Label:catdog createedge n: a Label:dog e: b Type:Label n: c Label:catdog 
-
-clear;
 
 
 # Basic query
-
 create n: a Label:dog Name:good
 create n: b Label:dog Name:bad
 create n: c Label:catdog Name:mild
@@ -37,6 +158,7 @@ match n: f Name:mild e: f Type:owner
 match e: f Type:friend
 clear
 
+-- In several lines for easy copy and paste
 create n: a Label:dog Name:good create n: b Label:dog Name:bad create n: c Label:catdog Name:mild create n: d Label:person Name:kite create n: e Label:person Name:food
 createedge n: a Label:dog e: b Type:friend n: c Label:person createedge n: a Label:dog e: b Type:enemy n: c Label:catdog createedge n: a Name:food e: b Type:owner n: c Name:mild
 match n: f Label:dog e: f Type:enemy
@@ -60,29 +182,24 @@ return n: a;
 
 
 #Create the nodes
-
 create n: a Label:dog Name:good create n: b Label:dog Name:bad create n: c Label:catdog Name:mild create n: d Label:person Name:kite create n: e Label:dogcat Name:food
 
 #Create the edges
-
 createedge n: a Label:dog e: b Type:friend n: c Label:person createedge n: c Label:person e: b Type:owner n: c Name:mild  createedge n: c Name:mild e: b Type:enemy n: c Label:dogcat createedge n: a Name:good e: b Type:friend n: c Name:bad
 
 #Match the edges
-
 match n: fin Name:good e: b Type:friend n: b Name:kite e: c Type:owner n: c Label:catdog
 
 #Check if there is a path between two nodes
-
 haspath n: node1 Label:dog n: node2 Name:kite;
 
 #Get the shortest path between two nodes
-
 shortestpath n: a Name:good n: b Name:kite;
 shortestpath n: a Name:good n: b Name:food;
-
 return n: a;
 
 
+# Other test cases
 create n: id1 Label:Dog Name:Chat
 create n: id2 Label:Cat Name:Whisk 
 createedge n: a Label:Dog e: rel Relation:Friend n: b Label:Cat;
@@ -103,15 +220,13 @@ create n: thr Name:Jill Salary:1000;
 create n: for Name:Jack Salary:7000;
 match n: val Salary<10000;
 
+-- In several lines for easy copy and paste
 create n: fst Name:Job Salary:5000 create n: snd Name:Bill Salary:3000 create n: thr Name:Jill Salary:1000 create n: for Name:Jack Salary:7000;
 match n: val Salary<10000;
 match n: val Salary>2000 and Salary<10000;
 
 
-
-
-
-Presentation Day Test files
+# Presentation Day Test files
 CREATE n: id1 Label:Boss Name:Donnie Salary:1000000;
 RETURN n:  id1;
 CREATE n: id2 Label:Employee Name:Sreeni Salary:50000;
@@ -122,8 +237,7 @@ MODIFYNODE n: prev Name:Sreeni n: new Name:Ruthwick b: new val:1;
 DELETENODE n: fst Name:Ruthwick;
 CLEAR; 
 
-
-
+-- In several lines for easy copy and paste
 CREATE n: id1 Label:Boss Name:Donnie Salary:1000000 CREATE n: id2 Label:Employee Name:Sreeni Salary:50000;
 CREATEEDGE n: id1 Label:Boss e: id3 Relation:Manager n: id2 Label:Employee;
 SHOW;
@@ -131,143 +245,3 @@ MATCH n: person Label:Employee;
 MODIFYNODE n: prev Name:Sreeni n: new Name:Ruthwick b: new val:1;
 DELETENODE n: fst Name:Ruthwick;
 CLEAR; 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-HERE IS A TEST FOR EACH OF THE METHODS
-    REL ATTR = e: a b:c
-    ID ATTR = n: a a:b
-    BOOL = b: a val:0/1 - 1 means add the attribute, and 0 means delete the attribute
-    ID = n: a
-    PRED = a(pred)b
-
-    CREATE          ID ATTR ...
-    CREATEEDGE      ID ATTR REL ATTR ID ATTR ...
-    MATCH           ID ATTR (PRED) REL ATTR (PRED) ID ATTR REL ATTR (PRED) ID ATTR ...
-    MODIFYNODE      ID ATTR ID ATTR BOOL
-    MODIFYEDGE      REL ATTR REL ATTR BOOL
-    DELETENODE      ID ATTR
-    DELETEEDGE      REL ATTR
-    RETURN          ID ID ...
-
-    HASPATH         ID ATTR ID ATTR
-    SHORTESTPATH    ID ATTR ID ATTR
-    NEIGHBOR        ID ATTR
-    HASEDGE         ID ATTR ID ATTR
-    COMMONNEIGHBORS ID ATTR ID ATTR
-
-    SHOW
-    CLEAR
-    VISUALIZE
-
-    PROJECT         ID ATTR 
-
-
-
-EXAMPLES FOR SHOW
-show;
-
-
-EXAMPLES FOR CREATE
-create n: id1 Animal:Dog Name:Ruff Age:5;
-create n: id2 Animal:Cat Name:Whisk n: id3 Animal:Cat Name:Furry Age:10;
-
--- In one line for easy copy and paste
-create n: id1 Animal:Dog Name:Ruff Age:5 create n: id2 Animal:Cat Name:Whisk n: id3 Animal:Cat Name:Furry Age:10;
-
-
-EXAMPLES FOR CREATEEDGE
-createedge n: id1 Animal:Dog e: rel1 Relation:Enemy n: id2 Animal:Cat;
-createedge n: id1 Name:Whisk e: rel1 Relation:Friend n: id2 Name:Furry;
-createedge n: id2 Name:Furry e: rel2 Relation:Older n: id3 Name:Ruff;
-
--- In one line for easy copy and paste
-createedge n: id1 Animal:Dog e: rel1 Relation:Enemy n: id2 Animal:Cat createedge n: id1 Name:Whisk e: rel1 Relation:Friend n: id2 Name:Furry createedge n: id2 Name:Furry e: rel2 Relation:Older n: id3 Name:Ruff;
-
-
-EXAMPLES FOR MATCH WITHOUT PREDICATE
-match n: id1 Animal:Dog;
-match e: id2 Relation:Enemy;
-match n: id1 Animal:Dog e: id2 Relation:Enemy n: id3 Age:10;
-match n: id1 Animal:Dog e: id2 Relation:Enemy n: id3 Age:10 e: id4 Relation:Older n: id5 Age:5;
-
-
-EXAMPLES FOR MATCH WITH PREDICATE
-
-
-EXAMPLES FOR HASPATH
-haspath n: id1 Name:Ruff n: id2 Name:Furry;
-
-
-EXAMPLES FOR SHORTESTPATH
-shortestpath n: id1 Name:Ruff n: id2 Name:Furry;
-
-
-EXAMPLES FOR NEIGHBOR
-neighbor n: id1 Name:Ruff;
-
-
-EXAMPLES FOR HASEDGE
-hasedge n: id1 Name:Ruff n: id2 Name:Furry;
-hasedge n: id1 Name:Whisk n: id2 Name:Ruff;
-
-
-EXAMPLES FOR COMMONNEIGHBORS
-commonneighbors n: id1 Name:Ruff n: id2 Name:Furry;
-commonneighbors n: id1 Name:Whisk n: id2 Name:Ruff;
-
-
-
-EXAMPLES FOR VISUALIZE
-visualize;
-
-
-
-EXAMPLES FOR MODIFYNODE
-modifynode n: id1 Animal:Dog n: id2 Animal:Lion b: id3 val:1;
-modifynode n: id1 Animal:Cat n: id2 Skill:Leap b: id3 val:1;
-modifynode n: id1 Animal:Lion n: id2 Animal:Lion b: id3 val:0;
-
--- In one line for easy copy and paste
-modifynode n: id1 Animal:Dog n: id2 Animal:Lion b: id3 val:1 modifynode n: id1 Animal:Cat n: id2 Skill:Leap b: id3 val:1 modifynode n: id1 Animal:Lion n: id2 Animal:Lion b: id3 val:0;
-
-
-EXAMPLES FOR MODIFYEDGE
-modifyedge e: id1 Relation:Enemy e: id2 Relation:Neutral b: id3 val:1;
-modifyedge e: id1 Relation:Friend e: id2 YearsKnown:1 b: id3 val:1;
-modifyedge e: id1 Relation:Friend e: id2 Relation:Friend b: id3 val:0;
-
--- In one line for easy copy and paste
-modifyedge e: id1 Relation:Enemy e: id2 Relation:Neutral b: id3 val:1 modifyedge e: id1 Relation:Friend e: id2 YearsKnown:1 b: id3 val:1 modifyedge e: id1 Relation:Friend e: id2 Relation:Friend b: id3 val:0;
-
-EXAMPLES FOR DELETENODE
-deletenode n: id1 Name:Whisk;
-
-
-EXAMPLES FOR DELETEEDGE
-deleteedge e: id1 Relation:Older;
-
-
-EXAMPLES FOR RETURN
-return n: id1;
-
-
-
-
-EXAMPLES FOR PROJECT 
-project N: 

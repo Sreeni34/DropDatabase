@@ -1,48 +1,5 @@
 import sys
-# if below is commented NEED TO CALL rlwrap with script
-# import readline 
 from Command_Struct import Command_Struct
-
-# TODO: support for both strings and numbers 
-# TODO: MATCH query support for multiple nodes, edges 
-
-# Format: CREATE obj_name attr1_name:attr1 ...
-# rule: can't have ':' in attributes!
-
-
-
-# Full List of Commands
-
-"""
-REL ATTR = e: a b:c
-ID ATTR = n: a a:b
-BOOL = b: a val:0/1
-ID = n: a () ()
-
-
-CREATE          ID ATTR
-CREATEEDGE      ID ATTR REL ATTR ID ATTR ...
-CREATEALLEDGE   ID ATTR ID ATTR ... ID ATTR REL ATTR
-MATCH           ID ATTR REL ATTR ID ATTR REL ATTR ID ATTR ...
-MODIFYNODE      ID ATTR ID ATTR BOOL
-MODIFYEDGE      REL ATTR REL ATTR BOOL
-DELETENODE      ID ATTR
-DELETEEDGE      REL ATTR
-RETURN          ID ID ...
-HASPATH         ID ATTR ID ATTR
-CLEAR
-SHORTESTPATH    ID ATTR ID ATTR
-NEIGHBOR        ID ATTR
-HASEDGE         ID ATTR ID ATTR
-COMMONNEIGHBORS ID ATTR ID ATTR
-SHOW
-
-# EXTRA
-AGG             [id attr (<, >, =) id attr () val ...]
-"""
-
-
-
 
 
 # The following finite state machine is used by the parser to
@@ -51,8 +8,6 @@ AGG             [id attr (<, >, =) id attr () val ...]
 # machine, error checking would be a lot more extensive for
 # the parser. There is an error class that is responsible 
 # for enforcing correct syntax given a specific commands.
-
-
 
 
 # Global token and state definitions. 
@@ -158,7 +113,7 @@ class Parser:
 
 
         # STATE_NAME
-        state_machine[STATE_NAME][TOKEN_COMMAND] = (STATE_COMMAND, self.project_cmd_obj)
+        state_machine[STATE_NAME][TOKEN_COMMAND] = (STATE_ERROR, self.error)
         state_machine[STATE_NAME][TOKEN_NODE] = (STATE_NODE, self.create_node)
         state_machine[STATE_NAME][TOKEN_NAME] = (STATE_ERROR, self.error)
         state_machine[STATE_NAME][TOKEN_ATTR] = (STATE_ATTR, self.add_attr)
@@ -234,28 +189,7 @@ class Parser:
         """
         This method takes in a word entered by the user and 
         returns token specifying the next execuation step. 
-
-        NOTE: The following list of commands represents TOKEN_COMMAND:
-
-        CREATE
-        CREATEEDGE
-        MATCH 
-        MODIFYNODE
-        MODIFYEDGE
-        DELETENODE
-        DELETEEDGE
-        HASPATH
-        SHORTESTPATH
-        NEIGHBOR
-        HASEDGE
-        COMMONNEIGHBORS
-        RETURN
-        CLEAR
-        SHOW
-        VISUALIZE
-
-
-
+        
         @type word: string
         @param word: The word to convert to token
         @rtype: Integer
@@ -264,8 +198,8 @@ class Parser:
 
         commands_list = ["create", "createedge", "match", "modifynode", 
             "modifyedge", "deletenode", "deleteedge", "haspath", 
-            "shortestpath", "neighbor", "hasedge", "commonneighbors", 
-            "return", "clear", "show", "visualize", "project"]
+            "shortestpath", "neighbor", "hasedge", "return", "clear", 
+            "show", "visualize"]
 
         if (word.lower() in commands_list):
             return TOKEN_COMMAND
@@ -313,21 +247,6 @@ class Parser:
         self.obj_list.append(self.curr_obj)
 
         self.curr_command = command
-
-    def project_cmd_obj(self):
-        """
-        Check if the command is a project. If the command is
-        a project, then we are allowed to enter a command after
-        the list of project values in the project command. If the
-        command is not project, then we toss and error
-        """
-
-        if (self.curr_command.lower() != "project"):
-            self.error();
-        else:
-            # Since this structure is valid, create a new command
-            self.create_cmd_obj();
-
 
 
     def create_node(self):

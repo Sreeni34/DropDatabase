@@ -107,7 +107,7 @@ class StartDatabase:
                 parser = Parser(real_command)
                 parser.run()
             else:
-                print "ERRORRRRRRRRRRRRRRRRRRRRR"
+                print "ERROR INVALID QUERY"
             
 
             # Check if user entered any errors in query.
@@ -118,11 +118,6 @@ class StartDatabase:
             # Else, print the error
             else:
                 print "Invalid Query"
-            #print "what"
-            #linker = Linker(parser.get_object_list(), self.gs)
-            #print "cool"
-            #linker.execute()
-            #print "done"
 
 
     def exit(self):
