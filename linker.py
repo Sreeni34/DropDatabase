@@ -322,7 +322,8 @@ class Linker:
         IdList = []
         for item in attribute_list: 
             if (counter % 2) == 0:   
-                idList.append(item[1])   
+                IdList.append(item[1])  
+            counter += 1 
         return IdList
 
     def getPredOrder(self, attribute_list, predicates):   
@@ -352,15 +353,27 @@ class Linker:
                 node_attr_list.append(item[2])   
             elif (counter) % 2 == 1:   
                 edge_attr_list.append(item[2])   
-            counter += 1 
-        predOrder = []  
+            counter += 1   
+        predOrder = []     
+        filtered_nodes = [None] * len(node_attr_list)
+        print node_attr_list
         if predicates != []:   
-            predOrder = self.getPredOrder(attribute_list, predicates)
-        nodes = self.query_evaluator.multi_match(node_attr_list, edge_attr_list, predicates, predOrder)
-        self.gs.set_identifier(attribute_list[0][1], nodes)
+            predOrder = self.getPredOrder(attribute_list, predicates)  
+            print predOrder
+            for x in predOrder:   
+                nodes1 = self.query_evaluator.match_node(node_attr_list[x])   
+                PredAttrs1 = self.getPredAttrs(predicates[0])
+                prednodes1 = self.PredNodeFilters(nodes1, PredAttrs1)   
+                filtered_nodes1 = self.Filter_Preds(prednodes1, predicates[0])
+                #print filtered_nodes1  
+                filtered_nodes[x] = filtered_nodes1   
+                predicates.pop(0)
+        nodes = self.query_evaluator.multi_match(node_attr_list, edge_attr_list, 
+            filtered_nodes)
+        self.gs.set_identifier(attribute_list[0][1], nodes)      
         if nodes == None:   
              print bcolors.FAIL + "No matches found" + bcolors.ENDC  
-        for node in nodes:   
+        else:
             print bcolors.OKGREEN + "NODE MATCHES:" + bcolors.ENDC   
             node_num = 1
             for node in nodes:
@@ -398,9 +411,7 @@ class Linker:
             elif command_name == "MODIFYEDGE":   
                 edges_modified = attribute_list[0]   
                 attrs_changed = attribute_list[1]   
-                modify_boolean = attribute_list[2]
-                print "Boolean val"
-                print (modify_boolean[2])['val']
+                modify_boolean = attribute_list[2]   
                 self.query_evaluator.modify_rel(edges_modified[2], attrs_changed[2], int ((modify_boolean[2])['val']))    
             elif command_name == "DELETENODE":   
                 node_deleted = attribute_list[0]   
@@ -444,20 +455,21 @@ class Linker:
                 self.query_evaluator.create_visual()   
             elif command_name == "NEIGHBOR":
                 item1 = attribute_list[0]   
-                nodes1 = self.query_evaluator.match(item1[2], None, None)   
+                nodes = self.query_evaluator.match(item1[2], None, None)   
                 if nodes == None:   
                     print bcolors.FAIL + "No Node matches found" + bcolors.ENDC   
                 else:   
                     print bcolors.OKGREEN + "NODE Neighbors:" + bcolors.ENDC   
                     node_num = 1       
-                    for node1 in nodes1:           
-                        neighbor_id = self.query_evaluator.get_neighbors(node1[0])   
-                        if (neighbor_id == []): 
+                    for node1 in nodes:           
+                        neighbor_ids = self.query_evaluator.get_neighbors(node1[0])   
+                        if (neighbor_ids == []): 
                             print bcolors.FAIL + "Neighbors for Node " + str(node_num) + " = " + "No neighbors for Node(s)" + bcolors.ENDC   
                         else:   
                             neighbors = []   
-                            neighbors.append(neighbor_id, self.query_evaluator.get_node_attrs(neighbor_id))   
-                            print bcolors.OKBLUE + "Neighbors for Node " + str(node_num) + " = " + neighbors + bcolors.ENDC   
+                            for neighbor_id in neighbor_ids:
+                                neighbors.append((neighbor_id, self.query_evaluator.get_node_attrs(neighbor_id)))   
+                            print bcolors.OKBLUE + "Neighbors for Node " + str(node_num) + " = " + str(neighbors) + bcolors.ENDC   
                     node_num += 1
             elif command_name == "HASEDGE":   
                 item1 = attribute_list[0]   
@@ -469,19 +481,7 @@ class Linker:
                         if (self.query_evaluator.check_path(node1[0], node2[0])):   
                             print bcolors.OKBLUE + "A direct edge exists between " + str(node1) + " and " + str(node2) + bcolors.ENDC   
                         else:   
-                            print bcolors.FAIL + "No direct edge exists between " + str(node1) + " and " + str(node2) + bcolors.ENDC   
-            elif command_name == "COMMONNEIGHBORS":   
-                item1 = attribute_list[0]   
-                item2 = attribute_list[1]   
-                nodes1 = self.query_evaluator.match(item1[2], None, None)   
-                nodes2 = self.query_evaluator.match(item2[2], None, None)   
-                for node1 in nodes1:   
-                    for node2 in nodes2:   
-                        neighbor_iter = self.query_evaluator(node1[0], node2[0]) 
-                        neighbors = []  
-                        for x in neighbor_iter:   
-                            neighbors.append((x, self.query_evaluator.get_node_attrs(x)))   
-                        print bcolors.OKBLUE + "Common neighbors between " + str(node1) + " and " + str(node2) + " are " + str(neighbors) + bcolors.ENDC 
+                            print bcolors.FAIL + "No direct edge exists between " + str(node1) + " and " + str(node2) + bcolors.ENDC    
 
 
 

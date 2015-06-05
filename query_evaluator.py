@@ -381,7 +381,7 @@ class QueryEvaluator:
             i += 1
         return consolidated_list
     
-    def multi_match(self, node_attr_list, rel_attr_list, predicates, predOrder):   
+    def multi_match(self, node_attr_list, rel_attr_list, filtered_nodes):   
         """ 
         Determines if there is a chain of nodes described by the node_attr_list   
         and rel_attr_list in the graph. Then returns the first and last node   
@@ -401,13 +401,8 @@ class QueryEvaluator:
         i = 0   
         edge_list = {}   
         for x in range(len(node_attr_list) - 1):   
-            # if (x in predOrder):   
-            #     nodes1 = self.match_node(node_attr_list[x]) 
-            #     PredAttrs1 = self.linker.getPredAttrs(predicates[0])
-            #     prednodes1 = self.linker.PredNodeFilters(nodes1, PredAttrs1)   
-            #     filtered_nodes1 = self.linker.Filter_Preds(prednodes1, predicates[0])  
             edges = self.match_node_node_rel(node_attr_list[x], 
-                node_attr_list[x + 1], rel_attr_list[x], None, None)   
+                node_attr_list[x + 1], rel_attr_list[x], filtered_nodes[x], filtered_nodes[x + 1])   
             # Break out if no match exists between the nodes and relationship
             if edges == []:
                 edge_list = {}
@@ -462,20 +457,7 @@ class QueryEvaluator:
         @rtype: Array
         @return: Array of neighbors' node_ids                      
         """   
-        return self.g.neighbors(node_id)   
-
-    def get_common_neighbors(self, node1_id, node2_id):   
-        """ 
-        Get the common neighbors of two nodes
-
-        @type node1_id: Integer   
-        @param node1_id: Id of the first node   
-        @type node2_id: Integer   
-        @param node2_id: Id of the second node     
-        @rtype: iterator
-        @return: iterator of the common neighbors of u and v in the graph                      
-        """   
-        return nx.common_neighbors(self.g, node1_id, node2_id)   
+        return self.g.neighbors(node_id)     
 
     def clear(self):   
         """ 
