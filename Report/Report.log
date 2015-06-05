@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  5 JUN 2015 01:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  5 JUN 2015 01:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -311,48 +311,49 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 28.
  [1
 
-{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
-
-Underfull \hbox (badness 10000) in paragraph at lines 171--172
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 171--172
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
+LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 130.
+ [3]
+Underfull \hbox (badness 10000) in paragraph at lines 193--194
 
  []
 
-<fileflow.jpg, id=126, 1354.05875pt x 964.60374pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 193--194
+
+ []
+
+<fileflow.jpg, id=136, 1354.05875pt x 964.60374pt>
 File: fileflow.jpg Graphic file (type jpg)
  <use fileflow.jpg>
-Package pdftex.def Info: fileflow.jpg used on input line 173.
+Package pdftex.def Info: fileflow.jpg used on input line 195.
 (pdftex.def)             Requested size: 455.24408pt x 324.31071pt.
 
-Overfull \hbox (0.48906pt too wide) in paragraph at lines 173--174
+Overfull \hbox (0.48906pt too wide) in paragraph at lines 195--196
 [][] 
  []
 
-[4 <./fileflow.jpg>]
+[4] [5 <./fileflow.jpg>]
 Missing character: There is no ä in font cmr10!
- [5]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 250.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 272.
  [6]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 250.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 272.
  (./Report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 250.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 250.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 272.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 272.
 Package rerunfilecheck Info: File `Report.out' has not changed.
 (rerunfilecheck)             Checksum: 74552F25589C17A8047F1FFE529DADE0;1512.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 250.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 272.
  ) 
 Here is how much of TeX's memory you used:
- 5670 strings out of 493117
- 84485 string characters out of 6135433
+ 5689 strings out of 493117
+ 84617 string characters out of 6135433
  176990 words of memory out of 5000000
- 9065 multiletter control sequences out of 15000+600000
+ 9066 multiletter control sequences out of 15000+600000
  8757 words of font info for 31 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 29i,7n,32p,842b,429s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 29i,7n,32p,842b,464s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></
@@ -362,10 +363,10 @@ local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/l
 ocal/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/lo
 cal/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/loc
 al/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on Report.pdf (6 pages, 203649 bytes).
+Output written on Report.pdf (6 pages, 204667 bytes).
 PDF statistics:
- 180 PDF objects out of 1000 (max. 8388607)
- 160 compressed objects within 2 object streams
- 34 named destinations out of 1000 (max. 500000)
+ 203 PDF objects out of 1000 (max. 8388607)
+ 183 compressed objects within 2 object streams
+ 52 named destinations out of 1000 (max. 500000)
  198 words of extra memory for PDF output out of 10000 (max. 10000000)
 
