@@ -90,9 +90,81 @@ Internally, each node is assigned a unique identifier, which is just a number. E
 
 \subsection{Match Query}
 
-Match queries are used to query for arbitrary length node-edge-node relationships. It can also be used to query for a single type of node or a single type of edge. 
+\noindent Match queries are used to query for arbitrary length node-edge-node relationships. It can also be used to query for a single type of node or a single type of edge. The internal process used to match a single node or single edge simply involves a networks dictionary lookup. For arbitrary length relationships, we implemented an algorithm that repeatedly utilizes set intersection on node-edge-node triples in the path until we collapse the nodes to our desired result.
+
+\subsubsection{Example Queries}
+
+\noindent The following query matches a single node with the following attributes.
+
+\begin{center} \textbf{MATCH n: id1 Animal:Dog;} \end{center}
+
+\begin{center} \textit{The command finds nodes with the attribute key "Animal" whose value is "Dog".} \end{center}
+
+\noindent The following query matches a single edge with the following attributes.
+
+\begin{center} \textbf{MATCH e: id2 Relation:Enemy;} \end{center}
+
+\begin{center} \textit{The command finds edges that contain an attribute key "Relation" whose value is "Enemy".} \end{center}
+
+\noindent The following query matches a node-edge-node path with some attributes.
+
+\begin{center} \textbf{MATCH n: id1 Animal:Dog e: id2 Relation:Enemy n: id3 Age:10;} \end{center}
+
+\begin{center} \textit{The command finds nodes that not only have the attribute dictionary {"Animal" : "Dog"} but is also connected to an edge with "Relation" type Enemy which is connected to another node with an attribute dictionary {"Age":10}. } \end{center}
 
 \subsection{Graph Functionality}
+
+In addition to basic creation, deletion, and matching of nodes and edges, MicroDB provides functionality to perform common graph operations. Most of these operations are implemented as an abstraction on top of the graph library operations the networkx package provides. Other operations are provided to ease user experience during an interactive session.   
+
+\subsubsection{Example Operations}
+
+\noindent The following operation determines is a path exists between two nodes specified by the given attributes. 
+
+\begin{center} \textbf{HASPATH n: id1 Name:Ruff n: id2 Name:Furry;} \end{center} 
+
+\begin{center} \textit{In this query, we want to find out if there is a path between a node with name "Ruff" and a node with name "Furry".} \end{center}
+
+\noindent The following operation displays the shortest path between the two nodes if it exists. If no path exists, a message is displayed to the user.
+
+\begin{center} \textbf{SHORTESTPATH n: id1 Name:Ruff n: id2 Name:Furry;} \end{center} 
+
+\begin{center} \textit{In this query, we display the shortest path between a node with name "Ruff" and a node with name "Furry".} \end{center}
+
+\noindent The following operation returns a all neighbors of nodes that contain some specific attributes.
+
+\begin{center} \textbf{NEIGHBOR n: id1 Name:Ruff;} \end{center} 
+
+\begin{center} \textit{In this query, we want to know all the neighbors of the node with name "Ruff".} \end{center}
+
+\noindent The following operation determines if an edge exists between two nodes specified by the given attributes.
+
+\begin{center} \textbf{HASEDGE n: id1 Name:Ruff n: id2 Name:Furry;} \end{center} 
+
+\begin{center} \textit{In this query, we want to know if there is a directed edge from the node with name "Ruff" to the node with name "Furry".} \end{center}
+
+\noindent The following operation displays the common neighbors, or mutual nodes, between two nodes specified by the given attributes.
+
+\begin{center} \textbf{COMMONNEIGHBORS n: id1 Name:Ruff n: id2 Name:Furry;} \end{center} 
+
+\begin{center} \textit{The query displays nodes that are connected to both nodes with the name "Ruff" and nodes with the name "Furry".} \end{center}
+
+\noindent The following operation returns the value stored in an identifier.
+
+\begin{center} \textbf{RETURN n: id1;} \end{center} 
+
+\begin{center} \textit{The operation displays the value stored in the identifier id1.} \end{center}
+
+\noindent The following operation returns the value stored in an identifier.
+
+\begin{center} \textbf{RETURN n: id1;} \end{center} 
+
+\noindent The operation displays the value stored in the identifier id1. \\
+
+
+
+
+
+
 
 
 \section{Database System Architecture}
@@ -113,7 +185,7 @@ Match queries are used to query for arbitrary length node-edge-node relationship
 
 \begin{thebibliography}{10}
 
-\bibitem{nx} Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, ?Exploring network structure, dynamics, and function using NetworkX?, in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11?15, Aug 2008
+\bibitem{nx} Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, "Exploring network structure, dynamics, and function using NetworkX", in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11-15, Aug 2008
 
 \end{thebibliography}
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  4 JUN 2015 01:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  4 JUN 2015 21:29
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -215,29 +215,34 @@ Underfull \hbox (badness 10000) in paragraph at lines 49--50
 [1
 
 {/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2]
+[2] [3]
+Underfull \hbox (badness 10000) in paragraph at lines 161--162
+
+ []
+
 Missing character: There is no ä in font cmr10!
- [3] (./Report.aux) ) 
+[4] (./Report.aux) ) 
 Here is how much of TeX's memory you used:
- 2075 strings out of 493117
- 29929 string characters out of 6135433
- 97563 words of memory out of 5000000
- 5532 multiletter control sequences out of 15000+600000
- 8242 words of font info for 29 fonts, out of 8000000 for 9000
+ 2077 strings out of 493117
+ 29950 string characters out of 6135433
+ 98563 words of memory out of 5000000
+ 5533 multiletter control sequences out of 15000+600000
+ 8588 words of font info for 30 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  38i,6n,32p,801b,230s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2014/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr17.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmti12.pfb>
-Output written on Report.pdf (3 pages, 104103 bytes).
+</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmr12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmr17.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mti10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+ti12.pfb>
+Output written on Report.pdf (4 pages, 123955 bytes).
 PDF statistics:
- 42 PDF objects out of 1000 (max. 8388607)
- 29 compressed objects within 1 object stream
+ 49 PDF objects out of 1000 (max. 8388607)
+ 34 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
