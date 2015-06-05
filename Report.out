@@ -1,0 +1,24 @@
+\BOOKMARK [1][-]{section.1}{Motivation}{}% 1
+\BOOKMARK [1][-]{section.2}{Query Language}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Internal Data Structures}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Nodes}{section.2}% 4
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Example Queries}{subsection.2.2}% 5
+\BOOKMARK [2][-]{subsection.2.3}{Edges}{section.2}% 6
+\BOOKMARK [3][-]{subsubsection.2.3.1}{Example Queries}{subsection.2.3}% 7
+\BOOKMARK [2][-]{subsection.2.4}{Match Query}{section.2}% 8
+\BOOKMARK [3][-]{subsubsection.2.4.1}{Example Queries}{subsection.2.4}% 9
+\BOOKMARK [2][-]{subsection.2.5}{Graph Functionality}{section.2}% 10
+\BOOKMARK [3][-]{subsubsection.2.5.1}{Example Operations}{subsection.2.5}% 11
+\BOOKMARK [1][-]{section.3}{Database System Architecture}{}% 12
+\BOOKMARK [2][-]{subsection.3.1}{Overview}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.2}{User Interface}{section.3}% 14
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Files}{subsection.3.2}% 15
+\BOOKMARK [2][-]{subsection.3.3}{Parser}{section.3}% 16
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Files}{subsection.3.3}% 17
+\BOOKMARK [2][-]{subsection.3.4}{Linker}{section.3}% 18
+\BOOKMARK [3][-]{subsubsection.3.4.1}{Files}{subsection.3.4}% 19
+\BOOKMARK [2][-]{subsection.3.5}{Query Evaluator}{section.3}% 20
+\BOOKMARK [3][-]{subsubsection.3.5.1}{Files}{subsection.3.5}% 21
+\BOOKMARK [2][-]{subsection.3.6}{Graph Storage}{section.3}% 22
+\BOOKMARK [3][-]{subsubsection.3.6.1}{Files}{subsection.3.6}% 23
+\BOOKMARK [2][-]{subsection.3.7}{Testing}{section.3}% 24
