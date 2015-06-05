@@ -16,7 +16,7 @@ class Project:
         edge is a tuple consisting of two node ids and a dictionary
         of attributes. 
         @type attrs: List of strings
-        @param attr: List of attributes to project on. 
+        @param attrs: List of attributes to project on. 
         @rtype: List 
         @return: Projected list of nodes or edges. 
         """
@@ -39,7 +39,7 @@ class Project:
         @param theList: List of nodes. Each node is a tuple consisting of a 
         node id and a dictionary of attributes.
         @type attrs: List of strings
-        @param attr: List of attributes to project on. 
+        @param attrs: List of attributes to project on. 
         @rtype: List 
         @return: Projected list of nodes. 
         """
@@ -59,7 +59,7 @@ class Project:
         @param theList: List of edges. Each node is a tuple consisting of two
         node ids and a dictionary of attributes.
         @type attrs: List of strings
-        @param attr: List of attributes to project on. 
+        @param attrs: List of attributes to project on. 
         @rtype: List 
         @return: Projected list of edges. 
         """
