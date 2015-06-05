@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  4 JUN 2015 21:32
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  4 JUN 2015 21:55
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -207,60 +207,50 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 26.
+ [1
 
-Underfull \hbox (badness 10000) in paragraph at lines 49--50
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
 
- []
-
-[1
-
-{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 161--162
+Underfull \hbox (badness 10000) in paragraph at lines 169--170
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 171--172
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 171--172
+Underfull \hbox (badness 10000) in paragraph at lines 169--170
 
  []
 
 <fileflow.jpg, id=20, 1354.05875pt x 964.60374pt>
 File: fileflow.jpg Graphic file (type jpg)
  <use fileflow.jpg>
-Package pdftex.def Info: fileflow.jpg used on input line 173.
+Package pdftex.def Info: fileflow.jpg used on input line 171.
 (pdftex.def)             Requested size: 455.24408pt x 324.31071pt.
 
-Overfull \hbox (0.48906pt too wide) in paragraph at lines 173--174
+Overfull \hbox (0.48906pt too wide) in paragraph at lines 171--172
 [][] 
  []
 
-[4] [5 <./fileflow.jpg>]
+[4 <./fileflow.jpg>]
 Missing character: There is no ä in font cmr10!
- [6] (./Report.aux) ) 
+ [5] [6] (./Report.aux) ) 
 Here is how much of TeX's memory you used:
- 2084 strings out of 493117
- 30051 string characters out of 6135433
- 98563 words of memory out of 5000000
- 5538 multiletter control sequences out of 15000+600000
+ 2085 strings out of 493117
+ 30060 string characters out of 6135433
+ 99566 words of memory out of 5000000
+ 5539 multiletter control sequences out of 15000+600000
  8588 words of font info for 30 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,6n,32p,801b,230s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2014/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr17.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmti10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mti12.pfb>
-Output written on Report.pdf (6 pages, 190517 bytes).
+ 38i,6n,32p,842b,230s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2014/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmr12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr17.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmti10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmti12.pfb>
+Output written on Report.pdf (6 pages, 195794 bytes).
 PDF statistics:
  56 PDF objects out of 1000 (max. 8388607)
  38 compressed objects within 1 object stream

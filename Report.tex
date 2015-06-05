@@ -46,19 +46,19 @@ Internally, each node is assigned a unique identifier, which is just a number. E
 
 \begin{center} \textbf{CREATE n: id1 Label:Boss Name:Donnie Salary:1000000;} \end{center}
 
-\noindent In this query, "id1" is simply a local identifier that can be used to refer to the created node by the user. The user can view the results that are stored in any given identifier by using the RETURN command (for example, RETURN id1;). Another useful command for viewing the current contents of the in-memory graph is the SHOW command. It might be a good idea to run a SHOW command after every one of the following commands. \\
+\begin{center} \textit{In this query, "id1" is simply a local identifier that can be used to refer to the created node by the user. The user can view the results that are stored in any given identifier by using the RETURN command (for example, RETURN id1;). Another useful command for viewing the current contents of the in-memory graph is the SHOW command. It might be a good idea to run a SHOW command after every one of the following commands.} \end{center}
 
 \noindent The following query modifies the existing node's attributes. 
 
 \begin{center} \textbf{MODIFYNODE n: prev Name:Donnie n: new Name:Ruthwick b: new val:1;} \end{center}
 
-\noindent In this case, only the "Name" attribute is modified. It should be noted that this command will match on all nodes whose "Name" attribute is "Donnie" and update their "Name" attribute to be "Ruthwick". This allows for a simple mechanism to update several related nodes at once. The important part of the "b:" portion of the query is the value of 1. This value is a boolean flag that indicates whether the attribute is to be updated or deleted. If this flag had been set to 0, the "Name" attribute would have been deleted (the new "Name" value would have been irrelevant). The other fields present in the "b:" part of the query are dummy fields that are necessary for the parser. Note that both "prev" and "new" are both identifiers just as "id1" in the create node query above.  
+\begin{center} \textit{In this case, only the "Name" attribute is modified. It should be noted that this command will match on all nodes whose "Name" attribute is "Donnie" and update their "Name" attribute to be "Ruthwick". This allows for a simple mechanism to update several related nodes at once. The important part of the "b:" portion of the query is the value of 1. This value is a boolean flag that indicates whether the attribute is to be updated or deleted. If this flag had been set to 0, the "Name" attribute would have been deleted (the new "Name" value would have been irrelevant). The other fields present in the "b:" part of the query are dummy fields that are necessary for the parser. Note that both "prev" and "new" are both identifiers just as "id1" in the create node query above.} \end{center}
 
 \noindent The following query deletes the node.
 
 \begin{center} \textbf{DELETENODE n: fst Name:Donnie;} \end{center}
 
-\noindent In particular, the query deletes all nodes whose "Name" attribute is "Donnie". Once again, "fst" is used as an identifier. However, the identifier serves no purpose here. It is included for ease of parsing. 
+\begin{center} \textit{In particular, the query deletes all nodes whose "Name" attribute is "Donnie". Once again, "fst" is used as an identifier. However, the identifier serves no purpose here. It is included for ease of parsing.} \end{center}
 
 \subsection{Edges}
 
@@ -74,19 +74,19 @@ Internally, each node is assigned a unique identifier, which is just a number. E
 
 \begin{center} \textbf{CREATEEDGE n: id1 Label:Boss e: id3 Relation:Manager n: id2 Label:Employee;} \end{center}
 
-\noindent The command creates an edge between all nodes whose "Label" attribute is "Boss" and all nodes whose "Label" attribute is "Employee". The edge has an attribute called "Relation" and the value is set to "Manager". Note that this is a directed edge from the first node to the second node. 
+\begin{center} \textit{The command creates an edge between all nodes whose "Label" attribute is "Boss" and all nodes whose "Label" attribute is "Employee". The edge has an attribute called "Relation" and the value is set to "Manager". Note that this is a directed edge from the first node to the second node.} \end{center}
 
 \noindent The following query modifies the edge by changing its attribute.
 
 \begin{center} \textbf{MODIFYEDGE e: fst Relation:Manager e: snd Relation:Co-worker b: oth val:1;} \end{center}
 
-\noindent This command works just like the MODIFYNODE command. It updates all edges with "Relation" fields equal to "Manager" to set their fields to "Co-worker". 
+\begin{center} \textit{This command works just like the MODIFYNODE command. It updates all edges with "Relation" fields equal to "Manager" to set their fields to "Co-worker".} \end{center}
 
 \noindent The following query deletes the edge we just created. 
 
 \begin{center} \textbf{DELETEEDGE e: a Relation:Co-worker;} \end{center}
 
-\noindent This command deletes all edges whose "Relation" field is equal to "Co-worker". 
+\begin{center} \textit{This command deletes all edges whose "Relation" field is equal to "Co-worker".} \end{center}
 
 \subsection{Match Query}
 
@@ -142,25 +142,23 @@ In addition to basic creation, deletion, and matching of nodes and edges, MicroD
 
 \begin{center} \textit{In this query, we want to know if there is a directed edge from the node with name "Ruff" to the node with name "Furry".} \end{center}
 
-\noindent The following operation displays the common neighbors, or mutual nodes, between two nodes specified by the given attributes.
-
-\begin{center} \textbf{COMMONNEIGHBORS n: id1 Name:Ruff n: id2 Name:Furry;} \end{center} 
-
-\begin{center} \textit{The query displays nodes that are connected to both nodes with the name "Ruff" and nodes with the name "Furry".} \end{center}
-
 \noindent The following operation returns the value stored in an identifier.
 
 \begin{center} \textbf{RETURN n: id1;} \end{center} 
 
 \begin{center} \textit{The operation displays the value stored in the identifier id1.} \end{center}
 
-\noindent The following operation returns the value stored in an identifier.
+\noindent The following operation displays the nodes, edges, and identifiers in the current session of the user.
 
-\begin{center} \textbf{RETURN n: id1;} \end{center} 
+\begin{center} \textbf{SHOW;} \end{center} 
 
-\noindent The operation displays the value stored in the identifier id1. \\
+\noindent The following operation clear all the contents of MicroDB.
 
+\begin{center} \textbf{CLEAR;} \end{center} 
 
+\noindent The following operation plots the contents of MicroDB using the matplotlib\cite{matplot} library.
+
+\begin{center} \textbf{VISUALIZE;} \end{center} 
 
 
 
@@ -246,6 +244,22 @@ The following diagram describes interactions between major components of the sys
 \begin{thebibliography}{10}
 
 \bibitem{nx} Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, "Exploring network structure, dynamics, and function using NetworkX", in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11-15, Aug 2008
+
+\bibitem{matplot} @Article{Hunter:2007,
+  Author    = {Hunter, J. D.},
+  Title     = {Matplotlib: A 2D graphics environment},
+  Journal   = {Computing In Science \& Engineering},
+  Volume    = {9},
+  Number    = {3},
+  Pages     = {90--95},
+  abstract  = {Matplotlib is a 2D graphics package used for Python
+  for application development, interactive scripting, and
+  publication-quality image generation across user
+  interfaces and operating systems.},
+  publisher = {IEEE COMPUTER SOC},
+  year      = 2007
+}
+
 
 \end{thebibliography}
 
